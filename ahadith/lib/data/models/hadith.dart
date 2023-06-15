@@ -1,6 +1,22 @@
 class Hadith {
   String? id;
   String? title;
+  List<String>? translations;
+
+  Hadith(
+      {this.id,
+        this.title,
+        this.translations,});
+
+  Hadith.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    translations = json['translations'].cast<String>();
+    }
+}
+class DetailedHadith {
+  String? id;
+  String? title;
   String? hadeeth;
   String? attribution;
   String? grade;
@@ -11,7 +27,7 @@ class Hadith {
   List<WordsMeanings>? wordsMeanings;
   String? reference;
 
-  Hadith(
+  DetailedHadith(
       {this.id,
         this.title,
         this.hadeeth,
@@ -24,7 +40,7 @@ class Hadith {
         this.wordsMeanings,
         this.reference});
 
-  Hadith.fromJson(Map<String, dynamic> json) {
+  DetailedHadith.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     hadeeth = json['hadeeth'];
@@ -42,25 +58,6 @@ class Hadith {
     }
     reference = json['reference'];
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['hadeeth'] = this.hadeeth;
-    data['attribution'] = this.attribution;
-    data['grade'] = this.grade;
-    data['explanation'] = this.explanation;
-    data['hints'] = this.hints;
-    data['categories'] = this.categories;
-    data['translations'] = this.translations;
-    if (this.wordsMeanings != null) {
-      data['words_meanings'] =
-          this.wordsMeanings!.map((v) => v.toJson()).toList();
-    }
-    data['reference'] = this.reference;
-    return data;
-  }
 }
 
 class WordsMeanings {
@@ -72,12 +69,5 @@ class WordsMeanings {
   WordsMeanings.fromJson(Map<String, dynamic> json) {
     word = json['word'];
     meaning = json['meaning'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['word'] = this.word;
-    data['meaning'] = this.meaning;
-    return data;
   }
 }

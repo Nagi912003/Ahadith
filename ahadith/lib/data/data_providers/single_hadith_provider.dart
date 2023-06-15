@@ -2,10 +2,10 @@ import 'package:dio/dio.dart';
 
 import 'package:ahadith/constants/strings.dart';
 
-class CategoriesDataProvider {
+class SingleHadithDataProvider {
   late Dio dio;
 
-  CategoriesDataProvider() {
+  SingleHadithDataProvider() {
     BaseOptions options = BaseOptions(
       baseUrl: baseUrl,
       receiveDataWhenStatusError: true,
@@ -15,12 +15,19 @@ class CategoriesDataProvider {
     dio = Dio(options);
   }
 
-  Future<List<dynamic>> getAllCategories() async {
+  Future<Map<String, dynamic>> getHadith({required String hadithId}) async {
     try {
-      Response response = await dio.get('/categories/list/?language=$lang');
+      Response response = await dio.get('/hadeeths/one/?language=$lang&id=$hadithId');
       return response.data;
     } catch (e) {
-      return [];
+      print('------------------------error in SHProvider------------------------: $e');
+      return {};
     }
   }
+  // void close() {
+  //   dio.close;
+  // }
+  // dispose() {
+  //   dio.close;
+  // }
 }
