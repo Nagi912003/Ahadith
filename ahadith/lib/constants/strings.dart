@@ -5,3 +5,4 @@ String lang = 'ar';
 const String categoriesScreen = '/categories_screen';
 const String ahadithScreen = '/ahadith_screen';
 const String hadithDetailedScreen = '/hadith_detailed_screen';
+const String favoritesScreen = '/favorites_screen';

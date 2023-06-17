@@ -33,7 +33,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       appBar: AppBar(
         title: _isSearching ? _buildSearchField() : _buildAppBarTitle(),
         leading: _isSearching ? const BackButton() : _buildReload(),
-        actions: _buildAppBarActions(),
+        actions: [_buildAppBarActions()],
         //title: const Text('الفئات و الاحاديث'),
         // titleSpacing: 20,
         centerTitle: true,
@@ -42,9 +42,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           fontSize: 30,
           fontWeight: FontWeight.bold,
         ),
+        backgroundColor: Colors.transparent,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(left: 8.0,right: 8.0),
         child: OfflineBuilder(
           connectivityBuilder: (
             BuildContext context,
@@ -63,6 +64,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           ),
         ),
       ),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: _buildAppBarActions(),
+      ),
+      backgroundColor: Colors.transparent,
     );
   }
 
@@ -118,14 +125,14 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           ? categories.length
           : searchResult.length,
       itemBuilder: (context, index) {
-        return _CategoryItem(_searchController.text.isEmpty
+        return _categoryItem(_searchController.text.isEmpty
             ? categories[index]
             : searchResult[index]);
       },
     );
   }
 
-  Widget _CategoryItem(Category category) {
+  Widget _categoryItem(Category category) {
     return Card(
       child: ListTile(
         title: Text(category.title!),
@@ -185,24 +192,21 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     setState(() {});
   }
 
-  List<Widget> _buildAppBarActions() {
+  Widget _buildAppBarActions() {
     if (_isSearching) {
-      return [
-        IconButton(
+      return IconButton(
           icon: const Icon(Icons.clear),
           onPressed: () {
             _clearSearchQuery();
             Navigator.pop(context);
           },
-        ),
-      ];
+        );
     } else {
-      return [
+      return
         IconButton(
           icon: const Icon(Icons.search),
           onPressed: _startSearch,
-        ),
-      ];
+        );
     }
   }
 

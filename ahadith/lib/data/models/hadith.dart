@@ -70,4 +70,9 @@ class WordsMeanings {
     word = json['word'];
     meaning = json['meaning'];
   }
+
+  @override
+  String toString() {
+    return '$word: $meaning \n';
+  }
 }

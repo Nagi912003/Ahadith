@@ -1,3 +1,4 @@
+import 'package:ahadith/data/data_providers/favorites_and_saved_provider/favorites_and_saved.dart';
 import 'package:ahadith/business_logic/hadiths_cubit/hadiths_cubit.dart';
 import 'package:ahadith/business_logic/single_hadith_cubit/single_hadith_cubit.dart';
 import 'package:ahadith/data/data_providers/hadiths_data_provider.dart';
@@ -5,9 +6,11 @@ import 'package:ahadith/data/data_providers/single_hadith_provider.dart';
 import 'package:ahadith/data/repositories/hadiths_repository.dart';
 import 'package:ahadith/data/repositories/single_hadith_repository.dart';
 import 'package:ahadith/presentation/Screens/hadith_detailed_screen/UI/hadith_detailed_screen.dart';
+import 'package:ahadith/presentation/Screens/home_screen/home_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'constants/strings.dart';
 import 'data/data_providers/categories_data_provider.dart';
@@ -18,6 +21,7 @@ import 'data/repositories/categories_repository.dart';
 import 'business_logic/categories_cubit/categories_cubit.dart';
 import 'presentation/Screens/ahadith_screen/UI/ahadith_screen.dart';
 import 'presentation/Screens/categories_screen/UI/categories_screen.dart';
+import 'presentation/Screens/favorites_screen/UI/favorites_screens.dart';
 
 class AppRouter {
   late CategoriesRepository categoriesRepository;
@@ -38,10 +42,7 @@ class AppRouter {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => categoriesCubit,
-            child: const CategoriesScreen(),
-          ),
+          builder: (_) => const MyHomePage(),
         );
 
       case categoriesScreen:
@@ -66,11 +67,30 @@ class AppRouter {
         case hadithDetailedScreen:
           final hadith = settings.arguments as Hadith;
           return MaterialPageRoute(
-            builder: (_) => BlocProvider<SingleHadithCubit>.value(
-              value: SingleHadithCubit(SingleHadithRepository(SingleHadithDataProvider())),
+            builder:(context) => MultiProvider(
+              providers: [
+                BlocProvider<SingleHadithCubit>.value(
+                  value: SingleHadithCubit(SingleHadithRepository(SingleHadithDataProvider())),
+                ),
+                ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
+                  value: Provider.of<FavoritesAndSavedProvider>(context),
+                ),
+              ],
               child: HadithDetailedScreen(hadith: hadith,),
             ),
           );
+
+          case favoritesScreen:
+            return MaterialPageRoute(
+              builder: (context) => MultiProvider(
+                providers: [
+                  ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
+                    value: Provider.of<FavoritesAndSavedProvider>(context),
+                  ),
+                ],
+                child: const FavoritesScreen(),
+              ),
+            );
 
       default:
         return MaterialPageRoute(builder: (_) => const PageNotFound());

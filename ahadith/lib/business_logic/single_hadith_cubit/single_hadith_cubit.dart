@@ -1,8 +1,8 @@
-import 'package:ahadith/data/models/hadith.dart';
 import 'package:bloc/bloc.dart';
 
-
 import '../../data/repositories/single_hadith_repository.dart';
+import 'package:ahadith/data/models/hadith.dart';
+
 import 'single_hadith_state.dart';
 
 class SingleHadithCubit extends Cubit<SingleHadithState> {

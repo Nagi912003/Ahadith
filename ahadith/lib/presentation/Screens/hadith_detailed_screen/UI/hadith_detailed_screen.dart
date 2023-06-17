@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:ahadith/business_logic/single_hadith_cubit/single_hadith_state.dart';
 import 'package:ahadith/data/models/hadith.dart';
 
+import 'package:ahadith/business_logic/single_hadith_cubit/single_hadith_state.dart';
+import '../../../../data/data_providers/favorites_and_saved_provider/favorites_and_saved.dart';
 import '../../../../business_logic/single_hadith_cubit/single_hadith_cubit.dart';
+
+import 'package:ahadith/presentation/Screens/hadith_detailed_screen/Widgets/hadith_detailed_screen_widgets.dart';
 
 class HadithDetailedScreen extends StatefulWidget {
   const HadithDetailedScreen({super.key, required this.hadith});
@@ -28,155 +32,60 @@ class _HadithDetailedScreenState extends State<HadithDetailedScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final fASProvider = Provider.of<FavoritesAndSavedProvider>(context,listen: false);
+    BlocProvider.of<SingleHadithCubit>(context)
+        .getHadith(hadithId: widget.hadith.id!);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.hadith.title!),
-        // titleSpacing: 20,
-        centerTitle: true,
-        titleTextStyle: TextStyle(
-          color: Colors.black87,
-          fontSize: 20.sp,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
+      appBar: appbar(context,widget.hadith.title!),
       body: BlocBuilder<SingleHadithCubit, SingleHadithState>(
         builder: (context, state) {
           if (state is SingleHadithLoaded) {
+            bool isFavorite = fASProvider.isFavorite(state.hadith.id!);
+            bool isSaved = fASProvider.isSaved(state.hadith.id!);
             return SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.all(12.0.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Card(
-                      margin: EdgeInsets.zero,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text(
-                          state.hadith.hadeeth! + state.hadith.attribution!,
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
+                    buildCard('', state.hadith.hadeeth! + state.hadith.attribution!, true),
                     SizedBox(height: 20.h),
+                    hadithGrade(state.hadith.grade!),
+                    SizedBox(height: 10.h),
+                    buildCard('التفسير : ', state.hadith.explanation!, false),
+                    if (state.hadith.wordsMeanings!.isNotEmpty)
+                      SizedBox(height: 10.h),
+                    if (state.hadith.wordsMeanings!.isNotEmpty)
+                      buildCard(': معانى الكلمات\n ', state.hadith.wordsMeanings!.toList().toString(), false),
+                    SizedBox(height: 10.h),
+                    buildCard(': الدروس المستفادة\n ', state.hadith.hints.toString(), false),
+                    SizedBox(height: 10.h),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(
-                          state.hadith.grade!,
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.deepPurple,
-                            overflow: TextOverflow.clip,
-                          ),
-                        ),
-                        Text(
-                          ' حديث',
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
-                          ),
-                        ),
+                        buildButton('', favoriteIcon(isFavorite), () async => {
+                                  fASProvider
+                                      .toggleFavorite(state.hadith.id!,state.hadith),
+                                  snakeBarFavoriteMessage(isFavorite,context),
+                                  setState(() {
+                                    isFavorite = !isFavorite;
+                                  }),
+                                }, false),
+                        buildButton('', saveIcon(isSaved), () => {
+                                  setState(() {
+                                    isSaved = !isSaved;
+                                    fASProvider.toggleSaved(state.hadith.id!);
+                                  }),
+                                  snakeBarSavedMessage(isSaved,context),
+                                }, false),
+                        buildButton('اظهار السند', const Icon(Icons.favorite),
+                            showReference(state.hadith.reference!,context), true),
                       ],
                     ),
-                    SizedBox(height: 10.h),
-                    Card(
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: RichText(
-                          textAlign: TextAlign.end,
-                          text: TextSpan(
-                            text: 'التفسير : ',
-                            style: TextStyle(
-                              fontSize: 20.sp,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.deepPurple,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: state.hadith.explanation!,
-                                style: TextStyle(
-                                  fontSize: 19.sp,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    MaterialButton(
-                      padding: EdgeInsets.zero,
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text(
-                              'السند',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.deepPurple,
-                                fontSize: 25.sp,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            content: Text(
-                              state.hadith.reference!,
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                fontSize: 17.sp,
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text(
-                                  'حسناً',
-                                  style: TextStyle(
-                                    fontSize: 20.sp,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.deepPurple,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      child: Container(
-                        margin: EdgeInsets.zero,
-                        padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 5, bottom: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.deepPurple, width: 1)
-                        ),
-                        child: const Text(
-                          'اظهار السند',
-                          style: TextStyle(
-                            fontSize: 22,
-                            color: Colors.black87
-                          ),
-                        ),
-                      ),
-                    ),
-
+                    SizedBox(height: 50.h),
                   ],
                 ),
               ),
-            );
-          } else if (state is SingleHadithLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
             );
           } else if (state is SingleHadithError) {
             return Center(

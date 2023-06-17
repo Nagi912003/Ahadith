@@ -10,10 +10,4 @@ class SingleHadithRepository {
     final h = await _singleHadithDataProvider.getHadith(hadithId: hadithId,);
     return DetailedHadith.fromJson(h);
   }
-  // void close() {
-  //   _singleHadithDataProvider.close;
-  // }
-  // dispose() {
-  //   _singleHadithDataProvider.close;
-  // }
 }
