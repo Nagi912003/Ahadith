@@ -48,38 +48,39 @@ class _HadithDetailedScreenState extends State<HadithDetailedScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    buildCard('', state.hadith.hadeeth! + state.hadith.attribution!, true),
+                    buildCard('', state.hadith.hadeeth! + state.hadith.attribution!, true,context),
                     SizedBox(height: 20.h),
-                    hadithGrade(state.hadith.grade!),
+                    hadithGrade(state.hadith.grade!, context),
                     SizedBox(height: 10.h),
-                    buildCard('التفسير : ', state.hadith.explanation!, false),
+                    buildCard('التفسير : ', state.hadith.explanation!, false,context),
                     if (state.hadith.wordsMeanings!.isNotEmpty)
                       SizedBox(height: 10.h),
                     if (state.hadith.wordsMeanings!.isNotEmpty)
-                      buildCard(': معانى الكلمات\n ', state.hadith.wordsMeanings!.toList().toString(), false),
+                      buildCard(': معانى الكلمات\n ', state.hadith.wordsMeanings!.toList().toString(), false,context),
                     SizedBox(height: 10.h),
-                    buildCard(': الدروس المستفادة\n ', state.hadith.hints.toString(), false),
+                    buildCard(': الدروس المستفادة\n ', state.hadith.hints.toString(), false,context),
                     SizedBox(height: 10.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        buildButton('', favoriteIcon(isFavorite), () async => {
+                        buildButton('', favoriteIcon(isFavorite, context), () async => {
                                   fASProvider
                                       .toggleFavorite(state.hadith.id!,state.hadith),
+                          print('favorite IDs after toggle favorites--->>${fASProvider.favoriteIDs}'),
                                   snakeBarFavoriteMessage(isFavorite,context),
                                   setState(() {
                                     isFavorite = !isFavorite;
                                   }),
-                                }, false),
-                        buildButton('', saveIcon(isSaved), () => {
+                                }, false, context),
+                        buildButton('', saveIcon(isSaved, context), () => {
                                   setState(() {
                                     isSaved = !isSaved;
                                     fASProvider.toggleSaved(state.hadith.id!);
                                   }),
                                   snakeBarSavedMessage(isSaved,context),
-                                }, false),
+                                }, false, context),
                         buildButton('اظهار السند', const Icon(Icons.favorite),
-                            showReference(state.hadith.reference!,context), true),
+                            showReference(state.hadith.reference!,context), true, context),
                       ],
                     ),
                     SizedBox(height: 50.h),

@@ -1,34 +1,28 @@
 import 'package:ahadith/presentation/Screens/home_screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-import 'app_router.dart';
+import 'presentation/routes/app_router.dart';
 
-import 'data/data_providers/categories_data_provider.dart';
-import 'data/repositories/categories_repository.dart';
 import 'data/data_providers/favorites_and_saved_provider/favorites_and_saved.dart';
 
-import 'business_logic/categories_cubit/categories_cubit.dart';
-
-import 'presentation/Screens/categories_screen/UI/categories_screen.dart';
 
 
 
-void main() {
-  // // Set the system UI overlay style
-  // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-  //   statusBarColor: Colors.transparent, // Make the status bar transparent
-  //   statusBarBrightness: Brightness.dark, // Dark text for status bar icons
-  // ));
-  // Set the system UI overlay mode
-  //SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive, overlays: []);
-  // const SystemUiOverlayStyle(
-  //   statusBarColor: Colors.transparent, // Make the status bar transparent
-  //   statusBarBrightness: Brightness.dark, // Dark text for status bar icons
-  // );
+void main() async{
+  //init hive
+  await Hive.initFlutter();
+
+  //open box
+  await Hive.openBox('favorites');
+  // await Hive.box('favorites').clear();
+  print('open box favorites--------------------------------------------------------');
+  print('in box favorites>>>>>>>>>>--------${Hive.box('favorites').values}----------------------------------------');
+
 
   runApp(const MyApp());
 }
@@ -52,10 +46,97 @@ class MyApp extends StatelessWidget {
             ],
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
+
               theme: ThemeData(
-                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+                brightness: Brightness.light,
+                //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
                 useMaterial3: true,
+
+                appBarTheme: AppBarTheme(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Theme.of(context).primaryColor,
+                  titleTextStyle: GoogleFonts.gulzar(
+                    color: Colors.black87,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                textTheme: TextTheme(
+                  bodyLarge: GoogleFonts.gulzar(
+                    color: Colors.black87,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  bodyMedium: GoogleFonts.gulzar(
+                    color: Colors.black87,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  bodySmall: GoogleFonts.amiri(
+                    color: Colors.black87,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  titleLarge: GoogleFonts.rakkas(
+                    color: Colors.black87,
+                    fontSize: 25.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                cardTheme: const CardTheme(
+                  shadowColor: Colors.black,
+                  elevation: 0,
+                ),
+                cardColor: Colors.grey[100],
               ),
+
+              darkTheme: ThemeData(
+                useMaterial3: true,
+                brightness: Brightness.dark,
+                appBarTheme: AppBarTheme(
+                  backgroundColor: Colors.black12,
+                  foregroundColor: Theme.of(context).primaryColor,
+                  titleTextStyle: GoogleFonts.gulzar(
+                    color: Colors.white,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                textTheme: TextTheme(
+                  bodyLarge: GoogleFonts.gulzar(
+                    color: Colors.white,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  bodyMedium: GoogleFonts.gulzar(
+                    color: Colors.white,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  bodySmall: GoogleFonts.amiri(
+                    color: Colors.white,
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  titleLarge: GoogleFonts.rakkas(
+                    color: Colors.white,
+                    fontSize: 25.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                cardTheme: const CardTheme(
+                  shadowColor: Colors.white,
+                  elevation: 0,
+                ),
+                cardColor: Colors.black45,
+              ),
+
+              themeMode: ThemeMode.system,
+
               home: const MyHomePage(),
 
 

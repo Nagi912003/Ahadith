@@ -15,7 +15,6 @@ class AhadithScreen extends StatefulWidget {
 }
 
 class _AhadithScreenState extends State<AhadithScreen> {
-
   late List ahadith;
   int page = 1;
 
@@ -23,41 +22,43 @@ class _AhadithScreenState extends State<AhadithScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 1));
-    BlocProvider.of<HadithsCubit>(context).getAllHadith(categoryId: widget.category.id!);
+    BlocProvider.of<HadithsCubit>(context)
+        .getAllHadith(categoryId: widget.category.id!);
   }
 
   void getMoreData() {
-    BlocProvider.of<HadithsCubit>(context).getAllHadith(categoryId: widget.category.id!, page: (page+1).toString());
+    BlocProvider.of<HadithsCubit>(context).getAllHadith(
+        categoryId: widget.category.id!, page: (page + 1).toString());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        foregroundColor:
+            MediaQuery.of(context).platformBrightness == Brightness.light
+                ? Colors.deepPurple
+                : Colors.deepPurple.shade100,
+
         title: Text(widget.category.title!),
         // titleSpacing: 20,
         centerTitle: true,
-        titleTextStyle: const TextStyle(
-          color: Colors.black87,
-          fontSize: 30,
-          fontWeight: FontWeight.bold,
-        ),
+        titleTextStyle: Theme.of(context).textTheme.titleLarge,
       ),
-      body: BlocBuilder<HadithsCubit,HadithsState>(
+      body: BlocBuilder<HadithsCubit, HadithsState>(
         builder: (context, state) {
           if (state is HadithsLoaded) {
             ahadith = state.hadiths;
             return _buildAhadithList();
-          }else if (state is HadithsLoadedMore){
+          } else if (state is HadithsLoadedMore) {
             ahadith.addAll(state.hadiths);
             page++;
             return _buildAhadithList();
-          }else if (state is HadithsLoading) {
+          } else if (state is HadithsLoading) {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          }
-          else if (state is HadithsError) {
+          } else if (state is HadithsError) {
             return Center(
               child: Text(state.message),
             );
@@ -78,16 +79,16 @@ class _AhadithScreenState extends State<AhadithScreen> {
 
   Widget _buildAhadithList() {
     return ListView.builder(
+      physics: const BouncingScrollPhysics(),
       itemCount: ahadith.length,
       itemBuilder: (context, index) {
         return Card(
+          color: Theme.of(context).cardColor,
           child: ListTile(
-            title: Text(ahadith[index].title!),
+            title: Text(ahadith[index].title!, style: Theme.of(context).textTheme.bodySmall,),
             onTap: () {
-              Navigator.of(context).pushNamed(
-                  hadithDetailedScreen,
-                  arguments: ahadith[index]!
-              );
+              Navigator.of(context)
+                  .pushNamed(hadithDetailedScreen, arguments: ahadith[index]!);
             },
           ),
         );

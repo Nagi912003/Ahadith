@@ -24,6 +24,13 @@ class _MyHomePageState extends State<MyHomePage> {
   final PageController _pageController = PageController();
 
   @override
+  void didChangeDependencies() {
+    // Provider.of<FavoritesAndSavedProvider>(context).clearFavorites();
+    Provider.of<FavoritesAndSavedProvider>(context).fitchFavorites();
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
@@ -50,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           BlurredContainer(
             child: Container(
-              color: Colors.white,
+              // color: Colors.black,
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: Image.asset('assets/images/watercolor.png',
@@ -75,20 +82,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
                 child: const FavoritesScreen(),
               ),
-              Container(
-                child: const Center(
-                  child: Text('saved'),
-                ),
-              ),
             ],
           ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 0.0,
-        backgroundColor: Colors.transparent,
+        //backgroundColor: Colors.black,
         currentIndex: _currentIndex,
-        selectedItemColor: Theme.of(context).primaryColor,
+        selectedItemColor: Colors.deepPurple,
         unselectedItemColor: Colors.grey,
         onTap: _onNavItemTapped,
         items: const [
@@ -99,10 +101,6 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
             label: 'المفضلة',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Saved',
           ),
         ],
       ),

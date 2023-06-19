@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_offline/flutter_offline.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../business_logic/categories_cubit/categories_cubit.dart';
 import '../../../../business_logic/categories_cubit/categories_state.dart';
 
 import '../../../../constants/strings.dart';
 import '../../../../data/models/category.dart';
+import '../widgets/categories_screen_widgets.dart';
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key});
@@ -28,24 +30,25 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    BlocProvider.of<CategoriesCubit>(context).getAllCategories();
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: _isSearching ? _buildSearchField() : _buildAppBarTitle(),
-        leading: _isSearching ? const BackButton() : _buildReload(),
-        actions: [_buildAppBarActions()],
-        //title: const Text('الفئات و الاحاديث'),
-        // titleSpacing: 20,
-        centerTitle: true,
-        titleTextStyle: const TextStyle(
-          color: Colors.black87,
-          fontSize: 30,
-          fontWeight: FontWeight.bold,
-        ),
-        backgroundColor: Colors.transparent,
-      ),
+      appBar: _isSearching
+          ? AppBar(
+              title: _buildSearchField(),
+              leading: const BackButton(),
+              actions: [_buildAppBarActions()],
+              backgroundColor: Colors.transparent,
+              titleTextStyle: Theme.of(context).appBarTheme.titleTextStyle,
+            )
+          : null,
       body: Padding(
-        padding: const EdgeInsets.only(left: 8.0,right: 8.0),
+        padding: EdgeInsets.only(left: 8.0.w, right: 8.0.w),
         child: OfflineBuilder(
           connectivityBuilder: (
             BuildContext context,
@@ -54,9 +57,28 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           ) {
             final bool connected = connectivity != ConnectivityResult.none;
             if (connected) {
-              return _buildBlocWidget();
+              return Stack(
+                children: [
+                  Align(
+                    alignment: Alignment(0, 1.h),
+                    child: SizedBox(
+                      height: 0.9.sh,
+                      width: 1.sw,
+                      //color: Colors.deepPurple,
+                        child: _buildBlocWidget(),
+                    ),
+                  ),
+                  if(!_isSearching)Align(
+                    alignment: Alignment(0.88.w, -0.88.h),
+                    child: Text(
+                      appName,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                ],
+              );
             } else {
-              return _buildNoInternetWidget();
+              return buildNoInternetWidget(context);
             }
           },
           child: const Center(
@@ -64,35 +86,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           ),
         ),
       ),
-
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         child: _buildAppBarActions(),
       ),
       backgroundColor: Colors.transparent,
-    );
-  }
-
-  Widget _buildNoInternetWidget() {
-    return Center(
-      child: Container(
-          color: Colors.white,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 20),
-              Image.asset("assets/images/undraw_connected_world_wuay.png"),
-              const Text(
-                //"can't connect .. check the internet",
-                "...حدث مشكلة في الاتصال",
-                style: TextStyle(
-                  fontSize: 22,
-                  color: Colors.deepPurple,
-                  //color: MyColors.mySecondary,
-                ),
-              ),
-            ],
-          )),
     );
   }
 
@@ -121,51 +119,17 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
   Widget _buildCategoriesList() {
     return ListView.builder(
+      physics: const BouncingScrollPhysics(),
       itemCount: _searchController.text.isEmpty
           ? categories.length
           : searchResult.length,
       itemBuilder: (context, index) {
-        return _categoryItem(_searchController.text.isEmpty
-            ? categories[index]
-            : searchResult[index]);
+        return categoryItem(
+            _searchController.text.isEmpty
+                ? categories[index]
+                : searchResult[index],
+            context);
       },
-    );
-  }
-
-  Widget _categoryItem(Category category) {
-    return Card(
-      child: ListTile(
-        title: Text(category.title!),
-        onTap: () {
-          Navigator.of(context).pushNamed(
-            ahadithScreen,
-            arguments: category,
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildAppBarTitle() {
-    return const Text(
-      'الفئات و الاحاديث',
-      style: TextStyle(
-        color: Colors.black87,
-        fontSize: 30,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
-
-  Widget _buildReload() {
-    return TextButton(
-      onPressed: () {
-        BlocProvider.of<CategoriesCubit>(context).getAllCategories();
-      },
-      child: const Icon(
-        Icons.refresh,
-        size: 20,
-      ),
     );
   }
 
@@ -174,7 +138,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       controller: _searchController,
       autofocus: true,
       decoration: const InputDecoration(
-        hintText: 'Search by title...',
+        hintText: 'Search by category...',
         border: InputBorder.none,
         hintStyle: TextStyle(color: Colors.white30),
       ),
@@ -195,18 +159,17 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   Widget _buildAppBarActions() {
     if (_isSearching) {
       return IconButton(
-          icon: const Icon(Icons.clear),
-          onPressed: () {
-            _clearSearchQuery();
-            Navigator.pop(context);
-          },
-        );
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          _clearSearchQuery();
+          Navigator.pop(context);
+        },
+      );
     } else {
-      return
-        IconButton(
-          icon: const Icon(Icons.search),
-          onPressed: _startSearch,
-        );
+      return IconButton(
+        icon: const Icon(Icons.search),
+        onPressed: _startSearch,
+      );
     }
   }
 

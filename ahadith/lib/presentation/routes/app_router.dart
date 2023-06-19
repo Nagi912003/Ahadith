@@ -7,21 +7,22 @@ import 'package:ahadith/data/repositories/hadiths_repository.dart';
 import 'package:ahadith/data/repositories/single_hadith_repository.dart';
 import 'package:ahadith/presentation/Screens/hadith_detailed_screen/UI/hadith_detailed_screen.dart';
 import 'package:ahadith/presentation/Screens/home_screen/home_screen.dart';
+import 'package:ahadith/presentation/Screens/saved_screen/UI/saved_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
-import 'constants/strings.dart';
-import 'data/data_providers/categories_data_provider.dart';
-import 'data/models/category.dart';
-import 'data/models/hadith.dart';
-import 'data/repositories/categories_repository.dart';
+import '../../constants/strings.dart';
+import '../../data/data_providers/categories_data_provider.dart';
+import '../../data/models/category.dart';
+import '../../data/models/hadith.dart';
+import '../../data/repositories/categories_repository.dart';
 
-import 'business_logic/categories_cubit/categories_cubit.dart';
-import 'presentation/Screens/ahadith_screen/UI/ahadith_screen.dart';
-import 'presentation/Screens/categories_screen/UI/categories_screen.dart';
-import 'presentation/Screens/favorites_screen/UI/favorites_screens.dart';
+import '../../business_logic/categories_cubit/categories_cubit.dart';
+import '../Screens/ahadith_screen/UI/ahadith_screen.dart';
+import '../Screens/categories_screen/UI/categories_screen.dart';
+import '../Screens/favorites_screen/UI/favorites_screens.dart';
 
 class AppRouter {
   late CategoriesRepository categoriesRepository;
@@ -89,6 +90,18 @@ class AppRouter {
                   ),
                 ],
                 child: const FavoritesScreen(),
+              ),
+            );
+
+          case savedScreen:
+            return MaterialPageRoute(
+              builder: (context) => MultiProvider(
+                providers: [
+                  ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
+                    value: Provider.of<FavoritesAndSavedProvider>(context),
+                  ),
+                ],
+                child: const SavedScreen(),
               ),
             );
 

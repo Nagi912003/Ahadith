@@ -3,18 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 AppBar appbar(BuildContext context, String title) {
   return AppBar(
-    title: Text(title),
+    title: Text(title, style: Theme.of(context).textTheme.titleLarge),
     // titleSpacing: 20,
     centerTitle: true,
-    titleTextStyle: TextStyle(
-      color: Colors.black87,
-      fontSize: 20.sp,
-      fontWeight: FontWeight.bold,
-    ),
+    titleTextStyle: Theme.of(context).textTheme.titleLarge,
   );
 }
 
-Widget hadithGrade(String hadithGrade) {
+Widget hadithGrade(String hadithGrade, BuildContext context) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.end,
     children: [
@@ -22,8 +18,9 @@ Widget hadithGrade(String hadithGrade) {
         hadithGrade,
         style: TextStyle(
           fontSize: 20.sp,
-          fontWeight: FontWeight.normal,
-          color: Colors.deepPurple,
+          color: MediaQuery.of(context).platformBrightness == Brightness.light
+              ? Colors.deepPurple
+              : Colors.deepPurple.shade100,
           overflow: TextOverflow.clip,
         ),
       ),
@@ -32,16 +29,17 @@ Widget hadithGrade(String hadithGrade) {
         style: TextStyle(
           fontSize: 20.sp,
           fontWeight: FontWeight.bold,
-          color: Colors.black87,
+          color: Theme.of(context).textTheme.bodyMedium?.color,
         ),
       ),
     ],
   );
 }
 
-Widget buildCard(String title, String content, bool isHadith) {
+Widget buildCard(
+    String title, String content, bool isHadith, BuildContext context) {
   return Card(
-    color: isHadith ? null : Colors.white,
+    color: isHadith ? Colors.deepPurple.shade100 : Theme.of(context).cardColor,
     child: Padding(
       padding: const EdgeInsets.all(12.0),
       child: RichText(
@@ -49,17 +47,26 @@ Widget buildCard(String title, String content, bool isHadith) {
         text: TextSpan(
           text: title,
           style: TextStyle(
-            fontSize: 20.sp,
+            fontFamily: Theme.of(context).textTheme.bodyMedium?.fontFamily,
+            fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
             fontWeight: FontWeight.bold,
-            color: Colors.deepPurple,
+            color: MediaQuery.of(context).platformBrightness == Brightness.light
+                ? Colors.deepPurple
+                : Colors.deepPurple.shade100,
           ),
           children: [
             TextSpan(
               text: content,
               style: TextStyle(
+                fontFamily: Theme.of(context).textTheme.bodySmall?.fontFamily,
                 fontSize: isHadith ? 18.sp : 19.sp,
                 fontWeight: isHadith ? FontWeight.bold : FontWeight.normal,
-                color: isHadith ? Colors.black : Colors.black87,
+                color: isHadith
+                    ? Colors.black
+                    : Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.color, //isHadith ? Colors.black : Colors.black87,
               ),
             ),
           ],
@@ -69,7 +76,8 @@ Widget buildCard(String title, String content, bool isHadith) {
   );
 }
 
-Widget buildButton(String title, Icon icon, onPressed, bool hasText) {
+Widget buildButton(
+    String title, Icon icon, onPressed, bool hasText, BuildContext context) {
   return MaterialButton(
     padding: EdgeInsets.zero,
     onPressed: onPressed,
@@ -79,14 +87,27 @@ Widget buildButton(String title, Icon icon, onPressed, bool hasText) {
       margin: EdgeInsets.zero,
       padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 5, bottom: 5),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.deepPurple, width: 1)),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(
+          color: MediaQuery.of(context).platformBrightness == Brightness.light
+              ? Colors.deepPurple
+              : Colors.deepPurple.shade100,
+          width: 1,
+        ),
+      ),
       child: hasText
           ? Text(
-        title,
-        textAlign: TextAlign.center,
-        style: const TextStyle(fontSize: 22, color: Colors.black87),
-      )
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 22,
+                fontFamily: Theme.of(context).textTheme.titleLarge?.fontFamily,
+                color: MediaQuery.of(context).platformBrightness ==
+                        Brightness.light
+                    ? Colors.deepPurple
+                    : Colors.deepPurple.shade100,
+              ),
+            )
           : icon,
     ),
   );
@@ -133,24 +154,27 @@ Function showReference(String reference, BuildContext context) {
   };
 }
 
-Widget  _showSnakeBar(String message, BuildContext context) {
+Widget _showSnakeBar(String message, BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        content: Text(
-          message,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20.sp,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: Colors.deepPurple.withOpacity(0.6),
-        duration: const Duration(seconds: 2),
+    SnackBar(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
       ),
-    );
+      content: Text(
+        message,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 20.sp,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      backgroundColor:
+          MediaQuery.of(context).platformBrightness == Brightness.light
+              ? Colors.deepPurple.withOpacity(0.6)
+              : Colors.deepPurple.shade100.withOpacity(0.6),
+      duration: const Duration(seconds: 2),
+    ),
+  );
   return Container();
 }
 
@@ -168,26 +192,30 @@ Widget snakeBarFavoriteMessage(bool isFavorite, BuildContext context) {
 Widget snakeBarSavedMessage(bool isSaved, BuildContext context) {
   try {
     return isSaved
-        ? _showSnakeBar('تمت اضافة الحديث الى المحفوظات',context)
-        : _showSnakeBar('تمت ازالة الحديث من المحفوظات',context);
+        ? _showSnakeBar('تمت اضافة الحديث الى المحفوظات', context)
+        : _showSnakeBar('تمت ازالة الحديث من المحفوظات', context);
   } catch (e) {
     print('Error showing Snackbar: $e');
     return Container();
   }
 }
 
-Icon favoriteIcon(bool isFavorite) {
+Icon favoriteIcon(bool isFavorite, BuildContext context) {
   return Icon(
     isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-    color: Colors.deepPurple,
+    color: MediaQuery.of(context).platformBrightness == Brightness.light
+        ? Colors.deepPurple
+        : Colors.deepPurple.shade100,
     size: 30.sp,
   );
 }
 
-Icon saveIcon(bool isSaved) {
+Icon saveIcon(bool isSaved, BuildContext context) {
   return Icon(
     isSaved ? Icons.save : Icons.save_alt_outlined,
-    color: Colors.deepPurple,
+    color: MediaQuery.of(context).platformBrightness == Brightness.light
+        ? Colors.deepPurple
+        : Colors.deepPurple.shade100,
     size: 30.sp,
   );
 }
