@@ -7,7 +7,7 @@ import 'package:ahadith/data/repositories/hadiths_repository.dart';
 import 'package:ahadith/data/repositories/single_hadith_repository.dart';
 import 'package:ahadith/presentation/Screens/hadith_detailed_screen/UI/hadith_detailed_screen.dart';
 import 'package:ahadith/presentation/Screens/home_screen/home_screen.dart';
-import 'package:ahadith/presentation/Screens/saved_screen/UI/saved_screen.dart';
+import 'package:ahadith/presentation/Screens/saved/saved_categories_screen/UI/saved_categories_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,19 +54,32 @@ class AppRouter {
           ),
         );
 
-      case ahadithScreen:
-        final category = settings.arguments as Category;
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider<HadithsCubit>.value(
-            value: hadithsCubit,
-            child: AhadithScreen(
-              category: category,
+        case ahadithScreen:
+          final category = settings.arguments as Category;
+          return MaterialPageRoute(
+            builder:(context) => MultiProvider(
+              providers: [
+                BlocProvider<SingleHadithCubit>.value(
+                  value: SingleHadithCubit(SingleHadithRepository(SingleHadithDataProvider())),
+                ),
+                ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
+                  value: Provider.of<FavoritesAndSavedProvider>(context),
+                ),
+                BlocProvider<HadithsCubit>.value(
+                  value: hadithsCubit,
+                ),
+              ],
+              child: AhadithScreen(
+                category: category,
+              ),
             ),
-          ),
-        );
+          );
 
         case hadithDetailedScreen:
-          final hadith = settings.arguments as Hadith;
+          final args = settings.arguments as Map<String,dynamic>;
+          final hadith = args['hadith'] as Hadith;
+          final categoryTitle = args['categoryTitle'] as String;
+          final index = args['index'] as int;
           return MaterialPageRoute(
             builder:(context) => MultiProvider(
               providers: [
@@ -77,7 +90,7 @@ class AppRouter {
                   value: Provider.of<FavoritesAndSavedProvider>(context),
                 ),
               ],
-              child: HadithDetailedScreen(hadith: hadith,),
+              child: HadithDetailedScreen(hadith: hadith,categoryTitle: categoryTitle, hadithIndex: index,),
             ),
           );
 

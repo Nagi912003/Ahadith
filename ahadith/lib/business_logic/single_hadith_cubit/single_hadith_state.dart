@@ -20,3 +20,17 @@ class SingleHadithLoaded extends SingleHadithState {
 
   SingleHadithLoaded(this.hadith);
 }
+
+class SingleHadithsLoaded extends SingleHadithState {
+  final List<DetailedHadith> hadiths;
+
+  SingleHadithsLoaded(this.hadiths);
+}
+
+class SingleHadithsLoading extends SingleHadithState {}
+
+class SingleHadithsError extends SingleHadithState {
+  final String message;
+
+  SingleHadithsError(this.message);
+}

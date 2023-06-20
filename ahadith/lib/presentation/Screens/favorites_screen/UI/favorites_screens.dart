@@ -1,10 +1,11 @@
-import 'package:ahadith/data/models/hadith.dart';
-import 'package:ahadith/presentation/Screens/favorites_screen/widgets/blurry_background_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
+import 'package:ahadith/data/models/hadith.dart';
 import 'package:ahadith/data/data_providers/favorites_and_saved_provider/favorites_and_saved.dart';
+
+import 'package:ahadith/presentation/Screens/favorites_screen/widgets/blurry_background_widget.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
@@ -37,59 +38,71 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     final favoriteItems = favoritesProvider.favoriteItems;
     final favoritesCount = favoritesProvider.favoriteCount;
     return Scaffold(
+      drawerEnableOpenDragGesture: true,
+      drawerEdgeDragWidth: 100.w,
+
       key: scaffoldKey,
       backgroundColor: Colors.transparent,
+
       body: Stack(
         children: [
           favoritesCount != 0
               ? PageView.builder(
-            physics: const BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   controller: _pageController,
                   scrollDirection: Axis.vertical,
                   itemCount: favoritesCount,
                   itemBuilder: (context, index) {
                     return FavoriteHadith(
                       hadith: favoriteItems[index],
+                      hadithIndex: favoriteItems[index].reference,
                     );
                   },
                 )
-              : const Center(
+              : Center(
                   child: Text(
                     'لا يوجد أحاديث مفضلة',
-                    style: TextStyle(fontSize: 30),
+                    style: TextStyle(fontSize: 30.sp, color: Colors.white),
                   ),
                 ),
-          Align(
-            alignment: const Alignment(-0.9, -0.9),
+          Positioned(
+            top: 50,
+            left: 20,
             child: IconButton(
               onPressed: () {
                 // _showDrawer = true;
                 scaffoldKey.currentState!.openDrawer();
                 setState(() {});
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.menu,
-                size: 35,
+                size: 35.w,
               ),
             ),
           ),
-          Align(
-            alignment: const Alignment(0.9, 0.9),
+          Positioned(
+            bottom: 20,
+            right: 20,
             child: IconButton(
               onPressed: () {
-                print(
-                    'in the box favorites after toggle favorites--->>${Hive.box('favorites').values}');
+                _pageController.animateToPage(
+                  0,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.linearToEaseOut,
+                );
                 setState(() {});
               },
-              icon: const Icon(
-                Icons.show_chart,
-                size: 35,
+              icon: Icon(
+                Icons.keyboard_arrow_up_rounded,
+                size: 35.w,
               ),
             ),
           ),
         ],
       ),
+
       drawer: Drawer(
+
         backgroundColor: Colors.transparent,
         child: buildDrawer(favoriteItems),
       ),
@@ -122,11 +135,11 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: ListTile(
                   title: Text(
-                    '${favoriteItems[index].categories.first}',
+                    '${favoriteItems[index].categories.first} : ${favoriteItems[index].reference}',
                     textAlign: TextAlign.end,
                   ),
                   subtitle: Text(
-                    '${favoriteItems[index].hadeeth}',
+                    '${favoriteItems[index].title}',
                     textAlign: TextAlign.end,
                   ),
                   onTap: () {
@@ -148,12 +161,14 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
 }
 
 class FavoriteHadith extends StatelessWidget {
-  const FavoriteHadith({super.key, required this.hadith});
+  const FavoriteHadith({super.key, required this.hadith, required this.hadithIndex});
   final DetailedHadith hadith;
+  final String hadithIndex;
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: BlurryBackgroundWidget(hadith: hadith),
+      child: BlurryBackgroundWidget(hadith: hadith, hadithIndex: hadithIndex),
     );
   }
 }
+

@@ -68,8 +68,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         child: _buildBlocWidget(),
                     ),
                   ),
-                  if(!_isSearching)Align(
-                    alignment: Alignment(0.88.w, -0.88.h),
+                  if(!_isSearching)Positioned(
+                    top: 20,
+                    right: 20,
                     child: Text(
                       appName,
                       style: Theme.of(context).textTheme.titleLarge,

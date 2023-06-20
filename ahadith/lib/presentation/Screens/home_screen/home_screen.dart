@@ -60,7 +60,8 @@ class _MyHomePageState extends State<MyHomePage> {
               // color: Colors.black,
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
-              child: Image.asset('assets/images/watercolor.png',
+              child: Image.asset(
+                'assets/images/watercolor.png',
                 fit: BoxFit.cover,
               ),
             ),
@@ -69,11 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
             controller: _pageController,
             onPageChanged: _onPageChanged,
             children: [
-            BlocProvider(
-              create: (context) => CategoriesCubit(
-                  CategoriesRepository(CategoriesDataProvider())),
-              child: const CategoriesScreen(),
-            ),
               MultiProvider(
                 providers: [
                   ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
@@ -81,6 +77,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
                 child: const FavoritesScreen(),
+              ),
+              BlocProvider(
+                create: (context) => CategoriesCubit(
+                    CategoriesRepository(CategoriesDataProvider())),
+                child: const CategoriesScreen(),
               ),
             ],
           ),
@@ -95,12 +96,12 @@ class _MyHomePageState extends State<MyHomePage> {
         onTap: _onNavItemTapped,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'الصفحة الرئيسية',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
             label: 'المفضلة',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'الصفحة الرئيسية',
           ),
         ],
       ),

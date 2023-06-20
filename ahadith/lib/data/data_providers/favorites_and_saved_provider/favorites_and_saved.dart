@@ -1,3 +1,4 @@
+import 'package:ahadith/data/models/category.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -54,7 +55,7 @@ class FavoritesAndSavedProvider with ChangeNotifier {
     }
   }
 
-  void addFavorite(String id, DetailedHadith hadith) {
+  void addFavorite(String id, DetailedHadith hadith, String categoryTitle, int hadithIndex) {
     fitchFavorites();
 
     if(_favoriteIDs.contains(id)) return;
@@ -73,9 +74,9 @@ class FavoritesAndSavedProvider with ChangeNotifier {
         'attribution': hadith.attribution,
         'grade': hadith.grade,
         'explanation': hadith.explanation,
-        'categories': hadith.categories,
+        'categories': [categoryTitle,...hadith.categories!],
         'wordsMeanings': hadith.wordsMeanings!.isNotEmpty?hadith.wordsMeanings!.toList().toString():null,
-        'reference': hadith.reference,
+        'reference': hadithIndex.toString(),
       },
     );
 
@@ -101,11 +102,11 @@ class FavoritesAndSavedProvider with ChangeNotifier {
     }
   }
 
-  void toggleFavorite(String id, DetailedHadith hadith) {
+  void toggleFavorite(String id, DetailedHadith hadith, String categoryTitle, int hadithIndex) {
     if (_favoriteIDs.contains(id)) {
       removeFavorite(id, hadith);
     } else {
-      addFavorite(id, hadith);
+      addFavorite(id, hadith, categoryTitle, hadithIndex);
     }
     // notifyListeners();
   }
@@ -131,40 +132,105 @@ class FavoritesAndSavedProvider with ChangeNotifier {
 
   //-------------------- Saved --------------------
 
-  final List<String> _savedCategories = [];
+  final Box _savedBox = Hive.box('saved');
+
+  Map<String,List<DetailedHadith>> _savedCategories = {};
+  List _savedCategoriesIds = [];
+  Map<String,String> _savedCategoriesTitles = {};
+  List <String> _savedCategoriesTitlesList = [];
 
 
-  List get savedCategories {
-    return [..._savedCategories];
+  Map<String,List<DetailedHadith>> get savedCategories {
+    return {..._savedCategories};
   }
 
-  void addSaved(String id) {
-    if (_savedCategories.contains(id)) return;
-    _savedCategories.add(id);
+  Map<String,String> get savedCategoriesTitles {
+    return {..._savedCategoriesTitles};
+  }
+
+  List<String> get savedCategoriesTitlesList {
+    return [..._savedCategoriesTitlesList];
+  }
+
+  Set get savedCategoriesIds {
+    fitchSaved();
+    return {..._savedCategoriesIds};
+  }
+
+  void addSaved(List<DetailedHadith> ahadith, Category category) {
+    if(_savedBox.containsKey(category.id)) return;
+
+
+    List<Map<String, dynamic>> ahadithMap = turnAhadithToMaps(ahadith);
+
+    _savedBox.put(category.id, ahadithMap);
+    _savedBox.put('catName${category.id}', category.title);
+
+    fitchSaved();
+
     notifyListeners();
   }
 
-  void removeSaved(String id) {
-    _savedCategories.remove(id);
-    notifyListeners();
+  List<Map<String, dynamic>> turnAhadithToMaps(List<DetailedHadith> ahadith) {
+    List<Map<String, dynamic>> ahadithMap = ahadith
+        .map((hadith) => {
+              'id': hadith.id.toString(),
+              'title': hadith.title.toString(),
+              'hadeeth': hadith.hadeeth.toString(),
+              'attribution': hadith.attribution.toString(),
+              'grade': hadith.grade.toString(),
+              'explanation': hadith.explanation.toString(),
+              'categories': hadith.categories,
+              'wordsMeanings':hadith.wordsMeanings != null? hadith.wordsMeanings!.isNotEmpty?hadith.wordsMeanings!.toList().toString():[]: [],
+              'reference': hadith.reference.toString(),
+
+    }).toList();
+    return ahadithMap;
   }
 
-  void toggleSaved(String id) {
-    if (_savedCategories.contains(id)) {
-      _savedCategories.remove(id);
-    } else {
-      _savedCategories.add(id);
-    }
-    // notifyListeners();
+  List<DetailedHadith> turnMapsToAhadith(List<Map<String, dynamic>> ahadithMap) {
+    List<DetailedHadith> ahadith = ahadithMap
+        .map((hadith) => DetailedHadith(
+              id: hadith['id']!,
+              title: hadith['title']!,
+              hadeeth: hadith['hadeeth']!,
+              attribution: hadith['attribution']!,
+              grade: hadith['grade']!,
+              explanation: hadith['explanation']!,
+              categories: hadith['categories']!,
+              wordsMeanings: hadith['wordsMeanings'] != null
+                  ? [
+                      WordsMeanings(
+                          word:
+                              '${hadith['wordsMeanings'].toString().split(',')}',
+                          meaning: '')
+                    ]
+                  : [],
+              reference: hadith['reference']!,
+            ))
+        .toList();
+    return ahadith;
   }
 
-  void clearSaved() {
+  void fitchSaved() {
+    print('_savedCategoriesIds: ${_savedCategoriesIds}');
+    _savedCategoriesIds.clear();
+    _savedCategoriesIds = _savedBox.get(0,defaultValue: []) ?? [];
     _savedCategories.clear();
-    notifyListeners();
+
+    for(var id in _savedCategoriesIds){
+      _savedCategoriesTitles.putIfAbsent(id, () => _savedBox.get('catName$id'));
+      _savedCategoriesTitlesList.add(_savedBox.get('catName$id'));
+
+      List<Map<String, String?>> ahadithMap = _savedBox.get(id);
+      List<DetailedHadith> ahadith = turnMapsToAhadith(ahadithMap);
+      _savedCategories.putIfAbsent(id, () => ahadith);
+    }
+    print('inside fitchSaved------------------------$_savedCategoriesIds');
   }
 
   bool isSaved(String id) {
-    return _savedCategories.contains(id);
+    return _savedBox.containsKey(id);
   }
 
   int get savedCount {

@@ -10,4 +10,14 @@ class SingleHadithRepository {
     final h = await _singleHadithDataProvider.getHadith(hadithId: hadithId,);
     return DetailedHadith.fromJson(h);
   }
+
+  Future<List<DetailedHadith>> getHadiths({required List<String> hadithIds}) async{
+    List<DetailedHadith> hadiths = [];
+    hadithIds.forEach((hadithId) async {
+      final h = await _singleHadithDataProvider.getHadith(hadithId: hadithId,);
+      DetailedHadith hadith = DetailedHadith.fromJson(h);
+      hadiths.add(hadith);
+    });
+    return hadiths;
+  }
 }

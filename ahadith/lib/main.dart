@@ -14,17 +14,30 @@ import 'data/data_providers/favorites_and_saved_provider/favorites_and_saved.dar
 
 
 void main() async{
+
   //init hive
   await Hive.initFlutter();
 
-  //open box
+  //open box favorites
   await Hive.openBox('favorites');
   // await Hive.box('favorites').clear();
-  print('open box favorites--------------------------------------------------------');
-  print('in box favorites>>>>>>>>>>--------${Hive.box('favorites').values}----------------------------------------');
+  print('\n\nopen box favorites--------------------------------------------------------');
+  print('in box favorites>>>>>>>>>>--------${Hive.box('favorites').values}----------------------------------------\n\n');
+
+  //open box saved
+  await Hive.openBox('saved');
+  await Hive.box('saved').clear();
+  print('\n\nopen box saved--------------------------------------------------------');
+  print('in box saved>>>>>>>>>>--------${Hive.box('saved').values}----------------------------------------\n\n');
 
 
   runApp(const MyApp());
+
+  SystemChrome.setPreferredOrientations(
+    [
+      DeviceOrientation.portraitUp,
+    ],
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -97,7 +110,7 @@ class MyApp extends StatelessWidget {
                 brightness: Brightness.dark,
                 appBarTheme: AppBarTheme(
                   backgroundColor: Colors.black12,
-                  foregroundColor: Theme.of(context).primaryColor,
+                  foregroundColor: Colors.deepPurple.shade100,
                   titleTextStyle: GoogleFonts.gulzar(
                     color: Colors.white,
                     fontSize: 20.sp,

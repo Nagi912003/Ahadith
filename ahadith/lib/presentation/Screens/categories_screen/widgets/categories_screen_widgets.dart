@@ -17,18 +17,12 @@ Widget buildNoInternetWidget(context) {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(15),
-        boxShadow: const [
-          BoxShadow(
-            blurRadius: 8,
-            color: Colors.deepPurple,
-            offset: Offset(0, 2),
-          )
-        ],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset("assets/images/undraw_connected_world_wuay.png"),
+          MediaQuery.of(context).size.width>500? Image.asset("assets/images/undraw_connected_world_wuay.png",
+              width: 0.5.sw, height: 0.2.sh): Image.asset("assets/images/undraw_connected_world_wuay.png"),
           const Text(
             //"can't connect .. check the internet",
             "...حدث مشكلة في الاتصال",

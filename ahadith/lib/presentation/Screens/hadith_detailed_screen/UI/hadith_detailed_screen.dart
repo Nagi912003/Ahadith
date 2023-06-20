@@ -13,9 +13,11 @@ import '../../../../business_logic/single_hadith_cubit/single_hadith_cubit.dart'
 import 'package:ahadith/presentation/Screens/hadith_detailed_screen/Widgets/hadith_detailed_screen_widgets.dart';
 
 class HadithDetailedScreen extends StatefulWidget {
-  const HadithDetailedScreen({super.key, required this.hadith});
+  const HadithDetailedScreen({super.key, required this.hadith, required this.categoryTitle,required this.hadithIndex});
 
   final Hadith hadith;
+  final String categoryTitle;
+  final int hadithIndex;
 
   @override
   State<HadithDetailedScreen> createState() => _HadithDetailedScreenState();
@@ -41,7 +43,7 @@ class _HadithDetailedScreenState extends State<HadithDetailedScreen> {
         builder: (context, state) {
           if (state is SingleHadithLoaded) {
             bool isFavorite = fASProvider.isFavorite(state.hadith.id!);
-            bool isSaved = fASProvider.isSaved(state.hadith.id!);
+            // bool isSaved = fASProvider.isSaved(state.hadith.id!);
             return SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.all(12.0.w),
@@ -65,19 +67,11 @@ class _HadithDetailedScreenState extends State<HadithDetailedScreen> {
                       children: [
                         buildButton('', favoriteIcon(isFavorite, context), () async => {
                                   fASProvider
-                                      .toggleFavorite(state.hadith.id!,state.hadith),
-                          print('favorite IDs after toggle favorites--->>${fASProvider.favoriteIDs}'),
+                                      .toggleFavorite(state.hadith.id!,state.hadith,widget.categoryTitle,widget.hadithIndex),
                                   snakeBarFavoriteMessage(isFavorite,context),
                                   setState(() {
                                     isFavorite = !isFavorite;
                                   }),
-                                }, false, context),
-                        buildButton('', saveIcon(isSaved, context), () => {
-                                  setState(() {
-                                    isSaved = !isSaved;
-                                    fASProvider.toggleSaved(state.hadith.id!);
-                                  }),
-                                  snakeBarSavedMessage(isSaved,context),
                                 }, false, context),
                         buildButton('اظهار السند', const Icon(Icons.favorite),
                             showReference(state.hadith.reference!,context), true, context),

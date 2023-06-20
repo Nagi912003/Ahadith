@@ -9,6 +9,7 @@ class SingleHadithCubit extends Cubit<SingleHadithState> {
 
   final SingleHadithRepository singleHadithRepository;
   DetailedHadith hadith = DetailedHadith();
+  List<DetailedHadith> hadiths = [];
 
   SingleHadithCubit(this.singleHadithRepository) : super(SingleHadithInitial());
 
@@ -20,5 +21,17 @@ class SingleHadithCubit extends Cubit<SingleHadithState> {
       emit(SingleHadithError(e.toString()));
     });
     return hadith;
+  }
+
+  List<DetailedHadith> getHadiths({required List<String> hadithIds}) {
+    List<DetailedHadith> hadiths = [];
+    emit(SingleHadithsLoading());
+    singleHadithRepository.getHadiths(hadithIds: hadithIds).then((hadiths) => {
+      emit(SingleHadithsLoaded(hadiths)),
+      this.hadiths = hadiths
+    }, onError: (e) {
+      emit(SingleHadithsError(e.toString()));
+    });
+    return hadiths;
   }
 }
