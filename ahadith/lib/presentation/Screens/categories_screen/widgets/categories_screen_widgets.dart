@@ -44,7 +44,7 @@ Widget categoryItem(Category category, BuildContext context) {
   return Card(
     child: ListTile(
       title:
-          Text(category.title!, style: Theme.of(context).textTheme.bodySmall),
+          Text(category.title!, style: Theme.of(context).textTheme.bodySmall,textAlign: TextAlign.end,),
       onTap: () {
         Navigator.of(context).pushNamed(
           ahadithScreen,

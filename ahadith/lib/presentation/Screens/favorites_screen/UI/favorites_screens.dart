@@ -115,12 +115,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         const SizedBox(
           height: 50,
         ),
-        const SizedBox(
+         SizedBox(
           height: 50,
           child: Center(
             child: Text(
               'الأحاديث المفضلة',
-              style: TextStyle(fontSize: 30),
+              style: TextStyle(fontSize: 30.sp, color: Colors.white),
             ),
           ),
         ),
@@ -135,7 +135,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: ListTile(
                   title: Text(
-                    '${favoriteItems[index].categories.first} : ${favoriteItems[index].reference}',
+                    '${favoriteItems[index].categories.first} : ${int.parse(favoriteItems[index].reference) + 1}',
                     textAlign: TextAlign.end,
                   ),
                   subtitle: Text(

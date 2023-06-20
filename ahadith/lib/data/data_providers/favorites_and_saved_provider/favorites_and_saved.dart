@@ -160,6 +160,10 @@ class FavoritesAndSavedProvider with ChangeNotifier {
   void addSaved(List<DetailedHadith> ahadith, Category category) {
     if(_savedBox.containsKey(category.id)) return;
 
+    fitchSaved();
+
+    _savedCategoriesIds.add(category.id);
+    _savedBox.put(0, _savedCategoriesIds);
 
     List<Map<String, dynamic>> ahadithMap = turnAhadithToMaps(ahadith);
 
@@ -171,62 +175,30 @@ class FavoritesAndSavedProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  List<Map<String, dynamic>> turnAhadithToMaps(List<DetailedHadith> ahadith) {
-    List<Map<String, dynamic>> ahadithMap = ahadith
-        .map((hadith) => {
-              'id': hadith.id.toString(),
-              'title': hadith.title.toString(),
-              'hadeeth': hadith.hadeeth.toString(),
-              'attribution': hadith.attribution.toString(),
-              'grade': hadith.grade.toString(),
-              'explanation': hadith.explanation.toString(),
-              'categories': hadith.categories,
-              'wordsMeanings':hadith.wordsMeanings != null? hadith.wordsMeanings!.isNotEmpty?hadith.wordsMeanings!.toList().toString():[]: [],
-              'reference': hadith.reference.toString(),
-
-    }).toList();
-    return ahadithMap;
-  }
-
-  List<DetailedHadith> turnMapsToAhadith(List<Map<String, dynamic>> ahadithMap) {
-    List<DetailedHadith> ahadith = ahadithMap
-        .map((hadith) => DetailedHadith(
-              id: hadith['id']!,
-              title: hadith['title']!,
-              hadeeth: hadith['hadeeth']!,
-              attribution: hadith['attribution']!,
-              grade: hadith['grade']!,
-              explanation: hadith['explanation']!,
-              categories: hadith['categories']!,
-              wordsMeanings: hadith['wordsMeanings'] != null
-                  ? [
-                      WordsMeanings(
-                          word:
-                              '${hadith['wordsMeanings'].toString().split(',')}',
-                          meaning: '')
-                    ]
-                  : [],
-              reference: hadith['reference']!,
-            ))
-        .toList();
-    return ahadith;
-  }
 
   void fitchSaved() {
-    print('_savedCategoriesIds: ${_savedCategoriesIds}');
-    _savedCategoriesIds.clear();
-    _savedCategoriesIds = _savedBox.get(0,defaultValue: []) ?? [];
-    _savedCategories.clear();
+    // _savedCategoriesIds.clear();
+    _savedCategoriesIds = _savedBox.get(0,defaultValue: []);
+    // _savedCategories.clear();
+
+    _savedCategoriesTitlesList.clear();
 
     for(var id in _savedCategoriesIds){
       _savedCategoriesTitles.putIfAbsent(id, () => _savedBox.get('catName$id'));
       _savedCategoriesTitlesList.add(_savedBox.get('catName$id'));
 
-      List<Map<String, String?>> ahadithMap = _savedBox.get(id);
+      List<dynamic> ahadithMap = _savedBox.get(id);
       List<DetailedHadith> ahadith = turnMapsToAhadith(ahadithMap);
       _savedCategories.putIfAbsent(id, () => ahadith);
     }
-    print('inside fitchSaved------------------------$_savedCategoriesIds');
+    print('_savedCategoriesIds inside fitchSaved------------------------$_savedCategoriesIds');
+
+    print('_savedCategoriesTitles inside fitchSaved------------------------$_savedCategoriesTitles');
+
+    print('_savedCategoriesTitlesList inside fitchSaved------------------------$_savedCategoriesTitlesList');
+
+    print('_savedCategories inside fitchSaved------------------------$_savedCategories');
+
   }
 
   bool isSaved(String id) {
@@ -234,6 +206,49 @@ class FavoritesAndSavedProvider with ChangeNotifier {
   }
 
   int get savedCount {
-    return _savedCategories.length;
+    return _savedCategoriesIds.length;
   }
+
+
+  List<Map<String, dynamic>> turnAhadithToMaps(List<DetailedHadith> ahadith) {
+    List<Map<String, dynamic>> ahadithMap = ahadith
+        .map((hadith) => {
+      'id': hadith.id.toString(),
+      'title': hadith.title.toString(),
+      'hadeeth': hadith.hadeeth.toString(),
+      'attribution': hadith.attribution.toString(),
+      'grade': hadith.grade.toString(),
+      'explanation': hadith.explanation.toString(),
+      'categories': hadith.categories,
+      'wordsMeanings':hadith.wordsMeanings != null? hadith.wordsMeanings!.isNotEmpty?hadith.wordsMeanings!.toList().toString():[]: [],
+      'reference': hadith.reference.toString(),
+
+    }).toList();
+    return ahadithMap;
+  }
+
+  List<DetailedHadith> turnMapsToAhadith(List<dynamic> ahadithMap) {
+    List<DetailedHadith> ahadith = ahadithMap
+        .map((hadith) => DetailedHadith(
+      id: hadith['id']!,
+      title: hadith['title']!,
+      hadeeth: hadith['hadeeth']!,
+      attribution: hadith['attribution']!,
+      grade: hadith['grade']!,
+      explanation: hadith['explanation']??[],
+      categories: hadith['categories']??[],
+      wordsMeanings: hadith['wordsMeanings'] != null
+          ? [
+        WordsMeanings(
+            word:
+            '${hadith['wordsMeanings'].toString().split(',')}',
+            meaning: '')
+      ]
+          : [],
+      reference: hadith['reference']!,
+    ))
+        .toList();
+    return ahadith;
+  }
+
 }

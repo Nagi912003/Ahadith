@@ -26,13 +26,16 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            '${widget.hadith.categories!.first}: ${widget.hadithIndex}\n${widget.hadith.title!}',
-            style: TextStyle(
-              fontSize: 20.sp,
-              color: Colors.white,
+          Padding(
+            padding: const EdgeInsets.only(top: 50.0, left: 25.0, right: 25.0),
+            child: Text(
+              '${widget.hadith.categories!.first}: ${int.parse(widget.hadithIndex)+1}\n\n${widget.hadith.title!}',
+              style: TextStyle(
+                fontSize: 20.sp,
+                color: Colors.white,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           ),
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),

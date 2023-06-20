@@ -7,6 +7,7 @@ import 'package:ahadith/data/repositories/hadiths_repository.dart';
 import 'package:ahadith/data/repositories/single_hadith_repository.dart';
 import 'package:ahadith/presentation/Screens/hadith_detailed_screen/UI/hadith_detailed_screen.dart';
 import 'package:ahadith/presentation/Screens/home_screen/home_screen.dart';
+import 'package:ahadith/presentation/Screens/saved/saved_ahadith_screen/UI/saved_ahadith_screen.dart';
 import 'package:ahadith/presentation/Screens/saved/saved_categories_screen/UI/saved_categories_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -114,8 +115,16 @@ class AppRouter {
                     value: Provider.of<FavoritesAndSavedProvider>(context),
                   ),
                 ],
-                child: const SavedScreen(),
+                child: const SavedCategoriesScreen(),
               ),
+            );
+
+          case savedAhadithScreen:
+            final args = settings.arguments as Map<String,dynamic>;
+            final ahadith = args['ahadith'] as List<DetailedHadith>;
+            final categoryTitle = args['categoryTitle'] as String;
+            return MaterialPageRoute(
+              builder: (context) => SavedAhadithScreen(categoryTitle: categoryTitle, ahadith: ahadith,),
             );
 
       default:

@@ -1,3 +1,4 @@
+import 'package:ahadith/presentation/Screens/saved/saved_categories_screen/UI/saved_categories_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_offline/flutter_offline.dart';
@@ -21,6 +22,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   late List<Category> categories;
   late List<Category> searchResult;
   bool _isSearching = false;
+  bool _showingSaved = true;
+
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -65,7 +68,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       height: 0.9.sh,
                       width: 1.sw,
                       //color: Colors.deepPurple,
-                        child: _buildBlocWidget(),
+                        child: _showingSaved? const SavedCategoriesScreen():_buildBlocWidget(),
                     ),
                   ),
                   if(!_isSearching)Positioned(
@@ -74,6 +77,21 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     child: Text(
                       appName,
                       style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                  if(!_isSearching)Positioned(
+                    top: 30,
+                    left: 10,
+                    child: TextButton(
+                      child: Text(
+                        !_showingSaved?'المحفوظات':'الفئات',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _showingSaved = !_showingSaved;
+                        });
+                      },
                     ),
                   ),
                 ],

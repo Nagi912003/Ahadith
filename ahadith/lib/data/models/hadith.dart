@@ -47,9 +47,21 @@ class DetailedHadith {
     attribution = json['attribution'];
     grade = json['grade'];
     explanation = json['explanation'];
-    hints = json['hints'].cast<String>();
-    categories = json['categories'].cast<String>();
-    translations = json['translations'].cast<String>();
+    if (json['hints'] != null) {
+      hints = json['hints'].cast<String>()??[];
+    }else{
+      hints = null;
+    }
+    if (json['categories'] != null) {
+      categories = json['categories'].cast<String>()??[];
+    }else{
+      categories = null;
+    }
+    if (json['translations'] != null) {
+      translations = json['translations'].cast<String>()??[];
+    }else{
+      translations = null;
+    }
     if (json['words_meanings'] != null) {
       wordsMeanings = <WordsMeanings>[];
       json['words_meanings'].forEach((v) {
