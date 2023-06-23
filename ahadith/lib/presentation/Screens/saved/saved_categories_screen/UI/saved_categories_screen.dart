@@ -1,11 +1,12 @@
-import 'package:ahadith/constants/strings.dart';
-import 'package:ahadith/data/data_providers/favorites_and_saved_provider/favorites_and_saved.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../data/models/hadith.dart';
+import 'package:ahadith/constants/strings.dart';
+
+import 'package:ahadith/data/models/hadith.dart';
+import 'package:ahadith/data/data_providers/favorites_and_saved_provider/favorites_and_saved.dart';
+
 
 class SavedCategoriesScreen extends StatefulWidget {
   const SavedCategoriesScreen({super.key});
@@ -24,8 +25,8 @@ class _SavedCategoriesScreenState extends State<SavedCategoriesScreen> {
     final Map<String, List<DetailedHadith>> savedCategories =
         savedProvider.savedCategories;
 
-    final Map<String, String> savedCategoriesTitles =
-        savedProvider.savedCategoriesTitles;
+    // final Map<String, String> savedCategoriesTitles =
+    //     savedProvider.savedCategoriesTitles;
 
     final List<String> savedCategoriesTitlesList =
         savedProvider.savedCategoriesTitlesList;

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import '../../../data/data_providers/categories_data_provider.dart';
@@ -50,13 +52,17 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  int textLength = 160;
+
   @override
   Widget build(BuildContext context) {
+  String text = '{widget.hadith.hadeeth!}wwii,{widget.hadith.hadeeth!}wwii,,,{widget.hadith.hadeeth!}wwii,{widget.hadith.hadeeth!}wwii,,';
+    textLength = text.length;
     return Scaffold(
       body: Stack(
         children: [
           BlurredContainer(
-            child: Container(
+            child: SizedBox(
               // color: Colors.black,
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
@@ -66,7 +72,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
+
           PageView(
+            physics: const NeverScrollableScrollPhysics(),
             controller: _pageController,
             onPageChanged: _onPageChanged,
             children: [
@@ -107,4 +115,5 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+
 }

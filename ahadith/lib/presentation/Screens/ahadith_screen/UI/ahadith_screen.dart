@@ -22,12 +22,13 @@ class AhadithScreen extends StatefulWidget {
 class _AhadithScreenState extends State<AhadithScreen> {
   late List ahadith;
   int page = 1;
+  bool _downloading = false;
 
   @override
   void initState() {
     super.initState();
     BlocProvider.of<HadithsCubit>(context)
-        .getAllHadith(categoryId: widget.category.id!,perPage: '1550');
+        .getAllHadith(categoryId: widget.category.id!, perPage: '1550');
   }
 
   @override
@@ -49,26 +50,49 @@ class _AhadithScreenState extends State<AhadithScreen> {
               if (state is SingleHadithsLoaded) {
                 ahadith = state.hadiths;
                 return Provider.of<FavoritesAndSavedProvider>(context)
-                    .isSaved(widget.category.id!)
+                        .isSaved(widget.category.id!)
                     ? const Icon(Icons.download_done_outlined)
-                    : IconButton(icon:const Icon(Icons.downloading_outlined), onPressed: (){
-                  Provider.of<FavoritesAndSavedProvider>(context,
-                      listen: false)
-                      .addSaved(ahadith as List<DetailedHadith>, widget.category);
-                });
+                    : _downloading? const RefreshProgressIndicator():IconButton(
+                        icon: const Icon(Icons.downloading_outlined),
+                        onPressed: () async {
+                          setState(() {
+                            _downloading = true;
+                          });
+                          await Future.delayed(
+                                  const Duration(milliseconds: 2500))
+                              .then((_) => {
+                                    Provider.of<FavoritesAndSavedProvider>(
+                                            context,
+                                            listen: false)
+                                        .addSaved(
+                                            ahadith as List<DetailedHadith>,
+                                            widget.category),
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: const Text('تم تحميل الأحاديث',
+                                            textAlign: TextAlign.center),
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                    ),
+                                  });
+                          _downloading = false;
+                        });
               } else if (state is SingleHadithsLoading) {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: RefreshProgressIndicator(),
                 );
               } else if (state is SingleHadithsError) {
                 return const Icon(Icons.cancel_presentation_outlined);
               } else {
                 return const Center(
-                  child: Icon(Icons.file_download_off_outlined),
+                  child: RefreshProgressIndicator(),
                 );
               }
             },
           ),
+          const SizedBox(width: 10),
         ],
       ),
       body: BlocBuilder<HadithsCubit, HadithsState>(
@@ -77,14 +101,15 @@ class _AhadithScreenState extends State<AhadithScreen> {
             ahadith = state.hadiths;
 
             List<String> hadithIds = [];
-            ahadith.forEach((hadith) {
+            for (var hadith in ahadith) {
               hadithIds.add(hadith.id);
-            });
-            print('hadithIds: $hadithIds');
+              if (hadithIds.length >= 100) break;
+            }
 
-            BlocProvider.of<SingleHadithCubit>(context).getHadiths(hadithIds: hadithIds);
+            BlocProvider.of<SingleHadithCubit>(context)
+                .getHadiths(hadithIds: hadithIds);
 
-            return buildAhadithList(ahadith, widget.category.title!,context);
+            return buildAhadithList(ahadith, widget.category.title!, context);
           } else if (state is HadithsLoadedMore) {
             ahadith.addAll(state.hadiths);
             page++;

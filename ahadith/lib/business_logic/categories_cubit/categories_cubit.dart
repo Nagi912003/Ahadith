@@ -14,9 +14,12 @@ class CategoriesCubit extends Cubit<CategoriesState> {
   CategoriesCubit(this.categoriesRepository) : super(CategoriesInitial());
 
   List<Category>getAllCategories() {
+    emit(CategoriesLoading());
     categoriesRepository.getAllCategories().then((categories) => {
       emit(CategoriesLoaded(categories)),
       this.categories = categories
+    } , onError: (e) {
+      emit(CategoriesError(e.toString()));
     });
     return categories;
   }

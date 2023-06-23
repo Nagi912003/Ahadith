@@ -67,7 +67,7 @@ class _HadithDetailedScreenState extends State<HadithDetailedScreen> {
                       children: [
                         buildButton('', favoriteIcon(isFavorite, context), () async => {
                                   fASProvider
-                                      .toggleFavorite(state.hadith.id!,state.hadith,widget.categoryTitle,widget.hadithIndex),
+                                      .toggleFavorite(state.hadith.id!,state.hadith,widget.categoryTitle,widget.hadithIndex,false),
                                   snakeBarFavoriteMessage(isFavorite,context),
                                   setState(() {
                                     isFavorite = !isFavorite;

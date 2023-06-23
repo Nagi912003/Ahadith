@@ -28,6 +28,7 @@ class FavoritesAndSavedProvider with ChangeNotifier {
   }
 
   void fitchFavorites() {
+    _favoriteItems.clear();
     _favoriteIDs = _favoriteBox.get(0, defaultValue: []);
     for (var id in _favoriteIDs) {
       if(!_favoriteItems.any((element) => element.id == id)){
@@ -55,7 +56,7 @@ class FavoritesAndSavedProvider with ChangeNotifier {
     }
   }
 
-  void addFavorite(String id, DetailedHadith hadith, String categoryTitle, int hadithIndex) {
+  void addFavorite(String id, DetailedHadith hadith, String categoryTitle, int hadithIndex, bool fromSaved) {
     fitchFavorites();
 
     if(_favoriteIDs.contains(id)) return;
@@ -76,7 +77,7 @@ class FavoritesAndSavedProvider with ChangeNotifier {
         'explanation': hadith.explanation,
         'categories': [categoryTitle,...hadith.categories!],
         'wordsMeanings': hadith.wordsMeanings!.isNotEmpty?hadith.wordsMeanings!.toList().toString():null,
-        'reference': hadithIndex.toString(),
+        'reference': fromSaved? '${hadithIndex.toString()} من المحفوظات ' :(hadithIndex+1).toString(),
       },
     );
 
@@ -102,11 +103,11 @@ class FavoritesAndSavedProvider with ChangeNotifier {
     }
   }
 
-  void toggleFavorite(String id, DetailedHadith hadith, String categoryTitle, int hadithIndex) {
+  void toggleFavorite(String id, DetailedHadith hadith, String categoryTitle, int hadithIndex, bool formSaved) {
     if (_favoriteIDs.contains(id)) {
       removeFavorite(id, hadith);
     } else {
-      addFavorite(id, hadith, categoryTitle, hadithIndex);
+      addFavorite(id, hadith, categoryTitle, hadithIndex, formSaved);
     }
     // notifyListeners();
   }
@@ -152,9 +153,9 @@ class FavoritesAndSavedProvider with ChangeNotifier {
     return [..._savedCategoriesTitlesList];
   }
 
-  Set get savedCategoriesIds {
+  List get savedCategoriesIds {
     fitchSaved();
-    return {..._savedCategoriesIds};
+    return [..._savedCategoriesIds];
   }
 
   void addSaved(List<DetailedHadith> ahadith, Category category) {
@@ -220,7 +221,7 @@ class FavoritesAndSavedProvider with ChangeNotifier {
       'grade': hadith.grade.toString(),
       'explanation': hadith.explanation.toString(),
       'categories': hadith.categories,
-      'wordsMeanings':hadith.wordsMeanings != null? hadith.wordsMeanings!.isNotEmpty?hadith.wordsMeanings!.toList().toString():[]: [],
+      'wordsMeanings':hadith.wordsMeanings != null? hadith.wordsMeanings!.isNotEmpty?hadith.wordsMeanings!.toString():[]: [],
       'reference': hadith.reference.toString(),
 
     }).toList();

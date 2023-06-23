@@ -11,7 +11,7 @@ Widget buildAhadithList(ahadithList,String categoryTitle ,BuildContext context) 
         color: Theme.of(context).cardColor,
         child: ListTile(
           title: Text(
-            '$index',
+            '${index+1}',
             style: Theme.of(context).textTheme.bodySmall,
             textAlign: TextAlign.end,
           ),

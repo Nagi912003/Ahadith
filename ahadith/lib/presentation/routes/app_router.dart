@@ -124,7 +124,10 @@ class AppRouter {
             final ahadith = args['ahadith'] as List<DetailedHadith>;
             final categoryTitle = args['categoryTitle'] as String;
             return MaterialPageRoute(
-              builder: (context) => SavedAhadithScreen(categoryTitle: categoryTitle, ahadith: ahadith,),
+              builder: (context) =>
+              ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
+                  value: Provider.of<FavoritesAndSavedProvider>(context),
+                  child: SavedAhadithScreen(categoryTitle: categoryTitle, ahadith: ahadith,),),
             );
 
       default:
