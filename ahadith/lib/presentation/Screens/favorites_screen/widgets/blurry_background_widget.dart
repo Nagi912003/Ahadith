@@ -20,7 +20,7 @@ class BlurryBackgroundWidget extends StatefulWidget {
 }
 
 class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
-  bool _expanded = false;
+  // bool _expanded = false;
   int textLength = 100;
   @override
   Widget build(BuildContext context) {
@@ -53,10 +53,10 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             margin: EdgeInsets.only(
-              top: _expanded ? 30.h : 50.h,
-              left: _expanded ? 40.h : 50.w,
-              right: _expanded ? 40.h : 50.w,
-              bottom: _expanded ? 30.h : 100.h,
+              top: 50.h,
+              left: 50.w,
+              right: 50.w,
+              bottom: 100.h,
             ),
             height:
             textLength<120 ? 190.h : textLength<160 ? 220.h : textLength<190 ? 240.h : textLength<220 ? 260.h : textLength<250 ? 280.h : textLength<280 ? 300.h : textLength<310 ? 320.h : textLength<340 ? 340.h : textLength<370 ? 360.h : textLength<400 ? 380.h : textLength<430 ? 400.h : textLength<460 ? 420.h : textLength<490 ? 440.h : textLength<520 ? 460.h : textLength<550 ? 480.h : 500.h,
@@ -66,127 +66,113 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: _expanded
-                      ? Colors.white.withOpacity(0.1)
-                      : Colors.white.withOpacity(0.2),
+                  color: Colors.white.withOpacity(0.2),
                   blurRadius: 20,
-                  spreadRadius: _expanded ? 1 : 2,
+                  spreadRadius: 2,
                 ),
               ],
             ),
-            child: InkWell(
-              onTap: () {
-                setState(() {
-                  _expanded = !_expanded;
-                });
-              },
-              child: Container(
-                // color: Colors.deepPurple.withOpacity(0.2),
-                child: ListView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: EdgeInsets.only(
-                    top: 20.h,
-                    bottom: 20.h,
-                    left: 20.w,
-                    right: 20.w,
+            child: ListView(
+              physics: const BouncingScrollPhysics(),
+              padding: EdgeInsets.only(
+                top: 20.h,
+                bottom: 20.h,
+                left: 20.w,
+                right: 20.w,
+              ),
+              children: [
+                Text(
+                  widget.hadith.hadeeth!,
+                  style: GoogleFonts.lateef(
+                    // overflow: TextOverflow.fade,
+                    color: Colors.white,
+                    fontSize: 27.sp,
+                    fontWeight: FontWeight.bold,
+                    // fontFamily: Theme.of(context).textTheme.titleLarge?.fontFamily,
                   ),
-                  children: [
-                    Text(
-                      widget.hadith.hadeeth!,
-                      style: GoogleFonts.lateef(
-                        // overflow: TextOverflow.fade,
-                        color: Colors.white,
-                        fontSize: 27.sp,
-                        fontWeight: FontWeight.bold,
-                        // fontFamily: Theme.of(context).textTheme.titleLarge?.fontFamily,
-                      ),
-                      textAlign: TextAlign.end,
+                  textAlign: TextAlign.end,
+                ),
+                SizedBox(height: 30.h),
+                goToHadithButton('اذهب الى الحديث', widget.hadith),
+                SizedBox(height: 40.h),
+                MaterialButton(
+                    textColor: Colors.red[200],
+                    child: const Text(
+                      'ازالة الحديث من المفضلة',
                     ),
-                    _expanded
-                        ? SizedBox(height: 30.h)
-                        : SizedBox(height: 40.h),
-                    goToHadithButton('اذهب الى الحديث', widget.hadith),
-                    SizedBox(height: 40.h),
-                    MaterialButton(
-                        textColor: Colors.red[200],
-                        child: const Text(
-                          'ازالة الحديث من المفضلة',
-                        ),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              backgroundColor: MediaQuery.of(context)
-                                  .platformBrightness ==
-                                  Brightness.light
-                                  ? Colors.white
-                                  : Colors.black87,
-                              title: SizedBox(
-                                // height: 0.2.sh,
-                                // width: 0.8.sw,
-                                child: Column(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          backgroundColor: MediaQuery.of(context)
+                              .platformBrightness ==
+                              Brightness.light
+                              ? Colors.white
+                              : Colors.black87,
+                          title: SizedBox(
+                            // height: 0.2.sh,
+                            // width: 0.8.sw,
+                            child: Column(
+                              mainAxisAlignment:
+                              MainAxisAlignment.center,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  'هل انت متأكد من ازالة الحديث من المفضلة؟',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall,
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(height: 20.h),
+                                Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.center,
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
+                                  MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Text(
-                                      'هل انت متأكد من ازالة الحديث من المفضلة؟',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall,
-                                      textAlign: TextAlign.center,
+                                    TextButton(
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
+                                      child: Text(
+                                        'الرجوع',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
+                                      ),
                                     ),
-                                    SizedBox(height: 20.h),
-                                    Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.of(context).pop(),
-                                          child: Text(
-                                            'الرجوع',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall,
-                                          ),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                            favoritesProvider
-                                                .removeFavorite(
-                                              widget.hadith.id!,
-                                              widget.hadith,
-                                            );
-                                          },
-                                          child: Text(
-                                            'ازالة',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall!
-                                                .copyWith(
-                                                color:
-                                                Colors.red[200]),
-                                          ),
-                                        ),
-                                      ],
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        favoritesProvider
+                                            .removeFavorite(
+                                          widget.hadith.id!,
+                                          widget.hadith,
+                                        );
+                                      },
+                                      child: Text(
+                                        'ازالة',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(
+                                            color:
+                                            Colors.red[200]),
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
+                              ],
                             ),
-                          );
-                          // favoritesProvider.removeFavorite(
-                          //   widget.hadith.id!,
-                          //   widget.hadith,
-                          // );
-                        }),
-                  ],
-                ),
-              ),
+                          ),
+                        ),
+                      );
+                      // favoritesProvider.removeFavorite(
+                      //   widget.hadith.id!,
+                      //   widget.hadith,
+                      // );
+                    }),
+              ],
             ),
           ),
           const Text('HadeethEnc.com',
@@ -213,7 +199,7 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
               buildCard(
                   '', hadith.hadeeth! + hadith.attribution!, true, context),
               SizedBox(height: 20.h),
-              hadithGrade(hadith.grade!, context),
+              hadithGrade(hadith.grade!, context,fullScreen: false),
               SizedBox(height: 10.h),
               buildCard('التفسير : ', hadith.explanation!, false, context),
               if (hadith.wordsMeanings!.isNotEmpty) SizedBox(height: 10.h),

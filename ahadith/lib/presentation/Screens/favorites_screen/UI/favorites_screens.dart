@@ -11,12 +11,10 @@ import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 
 
-import 'package:ahadith/data/models/hadith.dart';
 import 'package:ahadith/data/data_providers/favorites_and_saved_provider/favorites_and_saved.dart';
 
-import 'package:ahadith/presentation/Screens/favorites_screen/widgets/blurry_background_widget.dart';
-
 import '../widgets/blurred_container.dart';
+import '../widgets/favorite_hadith.dart';
 
 class FavoritesScreen extends StatefulWidget {
   const FavoritesScreen({super.key});
@@ -26,11 +24,6 @@ class FavoritesScreen extends StatefulWidget {
 }
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
-  late Uint8List _imageFile;
-
-  //Create an instance of ScreenshotController
-  ScreenshotController screenshotController = ScreenshotController();
-
   @override
   void initState() {
     super.initState();
@@ -42,12 +35,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     super.didChangeDependencies();
   }
 
-  var scaffoldKey = GlobalKey<ScaffoldState>();
 
   PageController _pageController = PageController(
     initialPage: 0,
   );
+
   int pageIndex = 0;
+  //Create an instance of ScreenshotController
+  ScreenshotController screenshotController = ScreenshotController();
+  var scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -55,10 +51,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     final favoritesProvider = Provider.of<FavoritesAndSavedProvider>(context);
     final favoriteItems = favoritesProvider.favoriteItems;
     final favoritesCount = favoritesProvider.favoriteCount;
-    return Scaffold(
-      // drawerEnableOpenDragGesture: true,
-      // drawerEdgeDragWidth: 100.w,
 
+    return Scaffold(
       key: scaffoldKey,
       backgroundColor: Colors.transparent,
 
@@ -125,7 +119,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               icon: Icon(
                 Icons.share_outlined,
                 size: 35.w,
-                color: Theme.of(context).primaryColor,
+                color: MediaQuery.of(context).platformBrightness == Brightness.dark? Colors.deepPurple[100] : Colors.deepPurple,
               ),
             ):Icon(
               Icons.share_outlined,
@@ -143,19 +137,19 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     );
   }
 
-  Future<dynamic> ShowCapturedWidget(
-      BuildContext context, Uint8List capturedImage) {
-    return showDialog(
-      useSafeArea: false,
-      context: context,
-      builder: (context) => Scaffold(
-        appBar: AppBar(
-          title: const Text("Captured widget screenshot"),
-        ),
-        body: Center(child: Image.memory(capturedImage)),
-      ),
-    );
-  }
+  // Future<dynamic> ShowCapturedWidget(
+  //     BuildContext context, Uint8List capturedImage) {
+  //   return showDialog(
+  //     useSafeArea: false,
+  //     context: context,
+  //     builder: (context) => Scaffold(
+  //       appBar: AppBar(
+  //         title: const Text("Captured widget screenshot"),
+  //       ),
+  //       body: Center(child: Image.memory(capturedImage)),
+  //     ),
+  //   );
+  // }
 
   void _takeScreenshot(hadith, hadithIndex, pixelRatio) async {
     var takenWidget = Stack(
@@ -268,8 +262,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             margin: EdgeInsets.only(
               top: 50.h,
               left: 50.w,
-              right: 40.h,
-              bottom: 30.h,
+              right: 50.w,
+              bottom: 100.h,
             ),
             height:
             textLength<120 ? 190.h : textLength<160 ? 220.h : textLength<190 ? 240.h : textLength<220 ? 260.h : textLength<250 ? 280.h : textLength<280 ? 300.h : textLength<310 ? 320.h : textLength<340 ? 340.h : textLength<370 ? 360.h : textLength<400 ? 380.h : textLength<430 ? 400.h : textLength<460 ? 420.h : textLength<490 ? 440.h : textLength<520 ? 460.h : textLength<550 ? 480.h : 500.h,
@@ -315,15 +309,4 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   }
 }
 
-class FavoriteHadith extends StatelessWidget {
-  const FavoriteHadith({super.key, required this.hadith, required this.hadithIndex});
-  final DetailedHadith hadith;
-  final String hadithIndex;
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: BlurryBackgroundWidget(hadith: hadith, hadithIndex: hadithIndex),
-    );
-  }
-}
 

@@ -10,29 +10,40 @@ AppBar appbar(BuildContext context, String title) {
   );
 }
 
-Widget hadithGrade(String hadithGrade, BuildContext context) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.end,
-    children: [
-      Text(
-        hadithGrade,
-        style: TextStyle(
-          fontSize: 20.sp,
-          color: MediaQuery.of(context).platformBrightness == Brightness.light
-              ? Colors.deepPurple
-              : Colors.deepPurple.shade100,
-          overflow: TextOverflow.clip,
+Widget hadithGrade(String hadithGrade, BuildContext context,
+    {bool fullScreen = true}) {
+  return Container(
+    width: double.infinity,
+    padding: EdgeInsets.symmetric(horizontal: 10.w),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: fullScreen? 300.w: 200.w,
+          child: Text(
+            hadithGrade,
+            style: TextStyle(
+              fontSize: 20.sp,
+              color:
+                  MediaQuery.of(context).platformBrightness == Brightness.light
+                      ? Colors.deepPurple
+                      : Colors.deepPurple.shade100,
+              overflow: TextOverflow.clip,
+            ),
+            textAlign: TextAlign.end,
+          ),
         ),
-      ),
-      Text(
-        ' حديث',
-        style: TextStyle(
-          fontSize: 20.sp,
-          fontWeight: FontWeight.bold,
-          color: Theme.of(context).textTheme.bodyMedium?.color,
+        Text(
+          ' حديث',
+          style: TextStyle(
+            fontSize: 20.sp,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).textTheme.bodyMedium?.color,
+          ),
         ),
-      ),
-    ],
+      ],
+    ),
   );
 }
 
