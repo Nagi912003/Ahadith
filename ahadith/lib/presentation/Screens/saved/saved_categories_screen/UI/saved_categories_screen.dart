@@ -1,67 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 
 import 'package:ahadith/constants/strings.dart';
 
 import 'package:ahadith/data/models/hadith.dart';
-import 'package:ahadith/data/data_providers/favorites_and_saved_provider/favorites_and_saved.dart';
 
 
-class SavedCategoriesScreen extends StatefulWidget {
-  const SavedCategoriesScreen({super.key});
+class SavedCategoriesScreen extends StatelessWidget {
+  const SavedCategoriesScreen({super.key, required this.savedCategoriesIds, required this.savedCategories, required this.savedCategoriesTitlesList});
 
-  @override
-  State<SavedCategoriesScreen> createState() => _SavedCategoriesScreenState();
-}
+  final savedCategoriesIds;
 
-class _SavedCategoriesScreenState extends State<SavedCategoriesScreen> {
+  final Map<String, List<DetailedHadith>> savedCategories;
+
+  final List<String> savedCategoriesTitlesList;
+
+  final bool isSearching = false;
+
+
   @override
   Widget build(BuildContext context) {
-    final savedProvider = Provider.of<FavoritesAndSavedProvider>(context);
-
-    final savedCategoriesIds = savedProvider.savedCategoriesIds;
-
-    final Map<String, List<DetailedHadith>> savedCategories =
-        savedProvider.savedCategories;
-
-    // final Map<String, String> savedCategoriesTitles =
-    //     savedProvider.savedCategoriesTitles;
-
-    final List<String> savedCategoriesTitlesList =
-        savedProvider.savedCategoriesTitlesList;
-
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Center(
-        child: savedCategoriesTitlesList.isEmpty
-            ? Text('لا يوجد محفوظات بعد', style: TextStyle(fontSize: 30.sp, color: Colors.white),)
-            : ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: savedCategoriesTitlesList.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    color: Theme.of(context).cardColor,
-                    child: ListTile(
-                      title: Text(
-                        savedCategoriesTitlesList[index],
-                        style: Theme.of(context).textTheme.bodySmall,
-                        textAlign: TextAlign.end,
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pushNamed(
-                          savedAhadithScreen,
-                          arguments: {
-                            'ahadith': savedCategories[savedCategoriesIds.elementAt(index)],
-                            'categoryTitle': savedCategoriesTitlesList[index],
-                          },
-                        );
-                      },
-                    ),
-                  );
-                },
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Card(
+            color: Theme.of(context).cardColor,
+            child: ListTile(
+              title: Text(
+                'الاحاديث الاربعون النووية',
+                style: Theme.of(context).textTheme.bodySmall,
+                textAlign: TextAlign.end,
               ),
+              onTap: () {
+                Navigator.of(context).pushNamed(
+                  NawawiHadithScreen,
+                );
+              },
+            ),
+          ),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(),
+            padding: EdgeInsets.symmetric(
+              horizontal: 10.w,
+              vertical: 10.h,
+            ),
+            itemCount: savedCategoriesTitlesList.length,
+            itemBuilder: (context, index) {
+              return Card(
+                color: Theme.of(context).cardColor,
+                child: ListTile(
+                  title: Text(
+                    savedCategoriesTitlesList[index],
+                    style: Theme.of(context).textTheme.bodySmall,
+                    textAlign: TextAlign.end,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                      savedAhadithScreen,
+                      arguments: {
+                        'ahadith': savedCategories[
+                        savedCategoriesIds.elementAt(index)],
+                        'categoryTitle': savedCategoriesTitlesList[index],
+                      },
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
 }
+

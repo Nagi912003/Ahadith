@@ -1,4 +1,3 @@
-import 'package:ahadith/presentation/Screens/hadith_detailed_screen/Widgets/hadith_detailed_screen_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -7,9 +6,6 @@ import '../../../../data/models/category.dart';
 import '../../../../constants/strings.dart';
 
 Widget buildNoInternetWidget(context) {
-  void goToSaved() {
-    Navigator.of(context).pushNamed(savedScreen);
-  }
   return Center(
     child: Container(
       width: 0.9.sw,
@@ -33,7 +29,6 @@ Widget buildNoInternetWidget(context) {
             ),
           ),
           SizedBox(height: 20.h),
-          buildButton('المحفوظات', const Icon(Icons.save), goToSaved , true, context)
         ],
       ),
     ),
@@ -42,6 +37,7 @@ Widget buildNoInternetWidget(context) {
 
 Widget categoryItem(Category category, BuildContext context) {
   return Card(
+    color: Theme.of(context).cardColor,
     child: ListTile(
       title:
           Text(category.title!, style: Theme.of(context).textTheme.bodySmall,textAlign: TextAlign.end,),

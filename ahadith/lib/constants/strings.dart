@@ -9,3 +9,9 @@ const String hadithDetailedScreen = '/hadith_detailed_screen';
 const String favoritesScreen = '/favorites_screen';
 const String savedScreen = '/saved_screen';
 const String savedAhadithScreen = '/saved_ahadith_screen';
+const String NawawiHadithScreen = '/Nawawi_hadith';
+
+
+
+
+const String settingsScreen = '/settings_screen';

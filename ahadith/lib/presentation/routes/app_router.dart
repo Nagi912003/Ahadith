@@ -7,6 +7,7 @@ import 'package:ahadith/data/repositories/hadiths_repository.dart';
 import 'package:ahadith/data/repositories/single_hadith_repository.dart';
 import 'package:ahadith/presentation/Screens/hadith_detailed_screen/UI/hadith_detailed_screen.dart';
 import 'package:ahadith/presentation/Screens/home_screen/home_screen.dart';
+import 'package:ahadith/presentation/Screens/nawawis_ahadith_screen/nawawis_ahadith_screen.dart';
 import 'package:ahadith/presentation/Screens/saved/saved_ahadith_screen/UI/saved_ahadith_screen.dart';
 import 'package:ahadith/presentation/Screens/saved/saved_categories_screen/UI/saved_categories_screen.dart';
 import 'package:flutter/material.dart';
@@ -49,8 +50,15 @@ class AppRouter {
 
       case categoriesScreen:
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => categoriesCubit,
+          builder:(context) => MultiProvider(
+            providers: [
+              BlocProvider<SingleHadithCubit>.value(
+                value: SingleHadithCubit(SingleHadithRepository(SingleHadithDataProvider())),
+              ),
+              ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
+                value: Provider.of<FavoritesAndSavedProvider>(context),
+              ),
+            ],
             child: const CategoriesScreen(),
           ),
         );
@@ -107,17 +115,6 @@ class AppRouter {
               ),
             );
 
-          case savedScreen:
-            return MaterialPageRoute(
-              builder: (context) => MultiProvider(
-                providers: [
-                  ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
-                    value: Provider.of<FavoritesAndSavedProvider>(context),
-                  ),
-                ],
-                child: const SavedCategoriesScreen(),
-              ),
-            );
 
           case savedAhadithScreen:
             final args = settings.arguments as Map<String,dynamic>;
@@ -129,6 +126,13 @@ class AppRouter {
                   value: Provider.of<FavoritesAndSavedProvider>(context),
                   child: SavedAhadithScreen(categoryTitle: categoryTitle, ahadith: ahadith,),),
             );
+
+          case NawawiHadithScreen:
+            return MaterialPageRoute(
+              builder: (context) => NawawisAhadithScreen(),
+            );
+
+
 
       default:
         return MaterialPageRoute(builder: (_) => const PageNotFound());

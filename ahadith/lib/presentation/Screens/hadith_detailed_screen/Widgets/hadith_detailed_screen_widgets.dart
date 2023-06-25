@@ -25,6 +25,7 @@ Widget hadithGrade(String hadithGrade, BuildContext context,
             hadithGrade,
             style: TextStyle(
               fontSize: 20.sp,
+              fontFamily: Theme.of(context).textTheme.bodyLarge!.fontFamily,
               color:
                   MediaQuery.of(context).platformBrightness == Brightness.light
                       ? Colors.deepPurple
@@ -38,6 +39,7 @@ Widget hadithGrade(String hadithGrade, BuildContext context,
           ' حديث',
           style: TextStyle(
             fontSize: 20.sp,
+            fontFamily: Theme.of(context).textTheme.bodyLarge!.fontFamily,
             fontWeight: FontWeight.bold,
             color: Theme.of(context).textTheme.bodyMedium?.color,
           ),
@@ -58,7 +60,7 @@ Widget buildCard(
         text: TextSpan(
           text: title,
           style: TextStyle(
-            fontFamily: Theme.of(context).textTheme.bodyMedium?.fontFamily,
+            fontFamily: Theme.of(context).textTheme.bodyLarge?.fontFamily,
             fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
             fontWeight: FontWeight.bold,
             color: MediaQuery.of(context).platformBrightness == Brightness.light
@@ -69,7 +71,7 @@ Widget buildCard(
             TextSpan(
               text: content,
               style: TextStyle(
-                fontFamily: Theme.of(context).textTheme.bodySmall?.fontFamily,
+                fontFamily: isHadith? Theme.of(context).textTheme.bodyLarge?.fontFamily:Theme.of(context).textTheme.bodySmall?.fontFamily,
                 fontSize: isHadith ? 18.sp : 19.sp,
                 fontWeight: isHadith ? FontWeight.bold : FontWeight.normal,
                 color: isHadith

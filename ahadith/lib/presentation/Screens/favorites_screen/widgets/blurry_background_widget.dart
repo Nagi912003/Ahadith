@@ -42,7 +42,7 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
             padding:
             const EdgeInsets.only(top: 50.0, left: 25.0, right: 25.0),
             child: Text(
-              '${widget.hadith.categories!.first}: ${widget.hadithIndex}\n\n${widget.hadith.title!}',
+              '${widget.hadith.categories!.first}: ${widget.hadithIndex}\n\n${widget.hadith.attribution!}',
               style: TextStyle(
                 fontSize: 20.sp,
                 color: Colors.white,
@@ -93,7 +93,7 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
                   textAlign: TextAlign.end,
                 ),
                 SizedBox(height: 30.h),
-                goToHadithButton('اذهب الى الحديث', widget.hadith),
+                goToHadithButton('التفسير و معاني الكلمات', widget.hadith),
                 SizedBox(height: 40.h),
                 MaterialButton(
                     textColor: Colors.red[200],
@@ -167,10 +167,6 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
                           ),
                         ),
                       );
-                      // favoritesProvider.removeFavorite(
-                      //   widget.hadith.id!,
-                      //   widget.hadith,
-                      // );
                     }),
               ],
             ),

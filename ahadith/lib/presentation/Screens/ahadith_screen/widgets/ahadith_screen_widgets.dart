@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_translate/flutter_translate.dart';
 
 import '../../../../constants/strings.dart';
 
@@ -12,12 +13,12 @@ Widget buildAhadithList(ahadithList,String categoryTitle ,BuildContext context) 
         child: ListTile(
           title: Text(
             '${index+1}',
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.displaySmall,
             textAlign: TextAlign.end,
           ),
           subtitle: Text(
             '${ahadithList[index].title!}',
-            style: Theme.of(context).textTheme.bodySmall,
+            style: Theme.of(context).textTheme.displaySmall,
             textAlign: TextAlign.end,
           ),
           onTap: () {
