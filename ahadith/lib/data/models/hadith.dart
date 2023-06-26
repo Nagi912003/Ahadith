@@ -70,6 +70,11 @@ class DetailedHadith {
     }
     reference = json['reference'];
   }
+
+  @override
+  String toString() {
+    return '\n\nid:$id\ntitle:$title\nexplanation:$explanation\nhadeeth:$hadeeth\nattribution:$attribution\ngrade:$grade\nhints:$hints\ncategories:$categories\ntranslations:$translations\nwordsMeanings:$wordsMeanings\nreference:$reference\n\n';
+  }
 }
 
 class WordsMeanings {

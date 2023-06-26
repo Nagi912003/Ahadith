@@ -4,18 +4,22 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:provider/provider.dart';
 
+import '../../../constants/strings.dart';
 import '../../../data/data_providers/categories_data_provider.dart';
 import '../../../data/data_providers/favorites_and_saved_provider/favorites_and_saved.dart';
 import '../../../data/repositories/categories_repository.dart';
 
 import '../../../business_logic/categories_cubit/categories_cubit.dart';
 
+import '../../../theme/theme_manager.dart';
 import '../categories_screen/UI/categories_screen.dart';
 import '../favorites_screen/UI/favorites_screens.dart';
 import '../favorites_screen/widgets/blurred_container.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  const MyHomePage({super.key, required this.themeManager});
+
+  final ThemeManager themeManager;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -89,11 +93,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
                 child: const FavoritesScreen(),
               ),
-              _buildHomePageGrid(),
               BlocProvider(
                 create: (context) => CategoriesCubit(
                     CategoriesRepository(CategoriesDataProvider())),
-                child: const CategoriesScreen(),
+                child: CategoriesScreen(themeManager: widget.themeManager),
               ),
             ],
           ),
@@ -112,58 +115,17 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'المفضلة',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'الصفحة الرئيسية',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.list_alt),
             label: 'موسوعة الأحاديث',
           ),
         ],
       ),
-    );
-  }
 
-  Widget _buildHomePageGrid() {
-    return Stack(
-      children: [
-
-
-        // Positioned(
-        //   bottom: 0,
-        //   left: 10,
-        //   right: 10,
-        //   child: Container(
-        //     width: 1.sw,
-        //     height: 0.22.sh,
-        //     decoration: BoxDecoration(
-        //       color: Theme.of(context).cardColor,
-        //       borderRadius: const BorderRadius.only(
-        //         topLeft: Radius.circular(30),
-        //         topRight: Radius.circular(30),
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        // Align(
-        //   alignment: const Alignment(0.9, -0.9),
-        //   child: Text(
-        //     _today.toFormat("MMMM dd yyyy"),
-        //     style: TextStyle(
-        //       fontSize: 18.sp,
-        //       color: Theme.of(context).textTheme.bodySmall!.color,
-        //     ),
-        //   ),
-        // ),
-        Align(
-          alignment: const Alignment(0, -0.8),
-          child: Container(
-            width: 0.9.sw,
-            height: 0.2.sh,
-            padding: const EdgeInsets.all(25.0),
+      drawer: Drawer(
+        child: ListView(children: [
+          DrawerHeader(
             decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              borderRadius: BorderRadius.circular(20),
+              color: Theme.of(context).primaryColor,
             ),
             child: Center(
               child: Text(
@@ -175,15 +137,123 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-        ),
+          ListTile(
+            title: Text(
+              'اللغة',
+              style: TextStyle(
+                fontSize: 20.sp,
+                color: Theme.of(context).textTheme.bodySmall!.color,
+              ),
+            ),
+            // trailing: DropdownButton<String>(
+            //   value: widget.themeManager.currentLanguage,
+            //   icon: const Icon(Icons.arrow_downward),
+            //   iconSize: 24,
+            //   elevation: 16,
+            //   style: TextStyle(
+            //     fontSize: 20.sp,
+            //     color: Theme.of(context).textTheme.bodySmall!.color,
+            //   ),
+            //   underline: Container(
+            //     height: 2,
+            //     color: Theme.of(context).textTheme.bodySmall!.color,
+            //   ),
+            //   onChanged: (String? newValue) {
+            //     setState(() {
+            //       widget.themeManager.currentLanguage = newValue!;
+            //     });
+            //   },
+            //   items: <String>['العربية', 'English']
+            //       .map<DropdownMenuItem<String>>((String value) {
+            //     return DropdownMenuItem<String>(
+            //       value: value,
+            //       child: Text(
+            //         value == 'العربية' ? 'العربية' : 'English',
+            //         style: TextStyle(
+            //           fontSize: 20.sp,
+            //           color: Theme.of(context).textTheme.bodySmall!.color,
+            //         ),
+            //       ),
+            //     );
+            //   }).toList(),
+            // ),
+          ),
+          ListTile(
+            title: Text(
+              'المظهر',
+              style: TextStyle(
+                fontSize: 20.sp,
+                color: Theme.of(context).textTheme.bodySmall!.color,
+              ),
+            ),
+            trailing: DropdownButton<ThemeMode>(
+              items: [
+                DropdownMenuItem(
+                  child: Text(
+                    'الوضع الافتراضي',
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      color: Theme.of(context).textTheme.bodySmall!.color,
+                    ),
+                  ),
+                  value: ThemeMode.system,
+                ),
+                DropdownMenuItem(
+                  child: Text(
+                    'الوضع الفاتح',
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      color: Theme.of(context).textTheme.bodySmall!.color,
+                    ),
+                  ),
+                  value: ThemeMode.light,
+                ),
+                DropdownMenuItem(
+                  child: Text(
+                    'الوضع الداكن',
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      color: Theme.of(context).textTheme.bodySmall!.color,
+                    ),
+                  ),
+                  value: ThemeMode.dark,
+                ),
+              ],
+              value: widget.themeManager.themeMode,
+              icon: const Icon(Icons.arrow_downward),
+              iconSize: 24,
+              elevation: 16,
+              style: TextStyle(
+                fontSize: 20.sp,
+                color: Theme.of(context).textTheme.bodySmall!.color,
+              ),
+              underline: Container(
+                height: 2,
+                color: Theme.of(context).textTheme.bodySmall!.color,
+              ),
+              onChanged: (ThemeMode? newValue) {
+                setState(() {
+                  widget.themeManager.themeMode = newValue!;
+                });
+              },
+            ),
+          ),
+        ]),
+      ),
+    );
+  }
+
+  Widget _buildHomePageGrid() {
+    return Stack(
+      children: [
+
         Align(
-          alignment: const Alignment(0, -0.8),
+          alignment: const Alignment(0, 0),
           child: Container(
             width: 0.9.sw,
             height: 0.2.sh,
             padding: const EdgeInsets.all(25.0),
             decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Center(
@@ -193,74 +263,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   fontSize: 30.sp,
                   color: Theme.of(context).textTheme.bodySmall!.color,
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
           ),
         ),
-        // Align(
-        //   alignment: const Alignment(0, 0.85),
-        //   child: Padding(
-        //     padding: const EdgeInsets.all(18.0),
-        //     child: GridView(
-        //       shrinkWrap: true,
-        //       physics: const BouncingScrollPhysics(),
-        //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        //         crossAxisCount: 2,
-        //         childAspectRatio: 2,
-        //         crossAxisSpacing: 10,
-        //         mainAxisSpacing: 10,
-        //       ),
-        //       children: [
-        //         InkWell(
-        //           onTap: () {
-        //             setState(() {
-        //               _onNavItemTapped(0);
-        //               _currentIndex = 0;
-        //             });
-        //           },
-        //           child: Card(
-        //             child: Center(
-        //               child: Row(
-        //                 mainAxisSize: MainAxisSize.min,
-        //                 children: [
-        //                   Text('المفضلة', style: TextStyle(fontSize: 18.sp, color: Theme.of(context).textTheme.bodySmall!.color,)),
-        //                   const SizedBox(
-        //                     width: 10,
-        //                   ),
-        //                   Icon(Icons.favorite_rounded, color: Theme.of(context).textTheme.bodySmall!.color,),
-        //                 ],
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //         InkWell(
-        //           onTap: () {
-        //             setState(() {
-        //               _onNavItemTapped(2);
-        //               _currentIndex = 2;
-        //             });
-        //           },
-        //           child: Card(
-        //             child: Center(
-        //               child: Row(
-        //                 mainAxisSize: MainAxisSize.min,
-        //                 children: [
-        //                   Text('موسوعة الأحاديث', style: TextStyle(fontSize: 18.sp, color: Theme.of(context).textTheme.bodySmall!.color,)),
-        //                   const SizedBox(
-        //                     width: 10,
-        //                   ),
-        //                   Icon(Icons.list_alt, color: Theme.of(context).textTheme.bodySmall!.color,),
-        //                 ],
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // ),
-
-
       ],
     );
   }

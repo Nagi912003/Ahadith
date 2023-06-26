@@ -1,7 +1,9 @@
+import 'package:ahadith/presentation/Screens/categories_screen/widgets/random_hadith.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_offline/flutter_offline.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hijri/hijri_calendar.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../business_logic/categories_cubit/categories_cubit.dart';
@@ -14,10 +16,13 @@ import '../../../../data/models/hadith.dart';
 
 import 'package:ahadith/presentation/Screens/saved/saved_ahadith_screen/UI/saved_ahadith_screen.dart';
 import 'package:ahadith/presentation/Screens/saved/saved_categories_screen/UI/saved_categories_screen.dart';
+import '../../../../theme/theme_manager.dart';
 import '../widgets/categories_screen_widgets.dart';
 
 class CategoriesScreen extends StatefulWidget {
-  const CategoriesScreen({super.key});
+  const CategoriesScreen({super.key, required this.themeManager});
+
+  final ThemeManager themeManager;
 
   @override
   State<CategoriesScreen> createState() => _CategoriesScreenState();
@@ -69,6 +74,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         savedProvider.savedCategoriesTitlesList;
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: _isSearching
           ? AppBar(
               title: _isSearchingInAll
@@ -79,15 +85,17 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               backgroundColor: Colors.transparent,
               titleTextStyle: Theme.of(context).appBarTheme.titleTextStyle,
             )
-          : null,
+          : AppBar(
+              title: OurAppbar(),
+            ),
       body: Padding(
         padding: EdgeInsets.only(left: 8.0.w, right: 8.0.w),
         child: Stack(
           children: [
             Align(
-              alignment: Alignment(0, 1.h),
+              alignment: const Alignment(0, 1),
               child: SizedBox(
-                height: 0.9.sh,
+                height: 0.86.sh,
                 width: 1.sw,
                 //color: Colors.deepPurple,
                 child: SingleChildScrollView(
@@ -95,10 +103,21 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      // SizedBox(height: 0.68.sh),
-                      SizedBox(
-                        height: 20.h,
+                      SizedBox(height: 20.h),
+                      Text(
+                        'وما ينطق عن الهوى\nان هوا الا وحي يوحى',
+                        style: TextStyle(
+                          fontSize: 30.sp,
+                          color: Theme.of(context).textTheme.bodySmall!.color,
+                          fontFamily: Theme.of(context)
+                              .textTheme
+                              .titleLarge!
+                              .fontFamily,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
+
+                      SizedBox(height: 20.h),
                       Card(
                         color: Colors.transparent,
                         child: ExpansionTile(
@@ -192,28 +211,146 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           ],
                         ),
                       ),
+                      const RandomHadith(),
                     ],
                   ),
                 ),
               ),
             ),
-            if (!_isSearching)
-              Positioned(
-                top: 20,
-                right: 20,
-                child: Text(
-                  appName,
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: _buildAppBarActions(),
+      drawer: Drawer(
+        child: ListView(children: [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+            ),
+            child: Center(
+              child: Text(
+                'اللهم صل على محمد',
+                style: TextStyle(
+                  fontSize: 30.sp,
+                  color: Theme.of(context).textTheme.bodySmall!.color,
+                ),
+              ),
+            ),
+          ),
+          ListTile(
+            title: Text(
+              'الاحاديث اليومية',
+              style: TextStyle(
+                fontSize: 20.sp,
+                color: Theme.of(context).textTheme.bodySmall!.color,
+              ),
+            ),
+            onTap: (){
+              print(Provider.of<FavoritesAndSavedProvider>(context,listen: false).randomHadith.toString());
+            },
+          ),
+          ListTile(
+            title: Text(
+              'حجم الخط',
+              style: TextStyle(
+                fontSize: 20.sp,
+                color: Theme.of(context).textTheme.bodySmall!.color,
+              ),
+            ),
+            // trailing: DropdownButton<String>(
+            //   value: widget.themeManager.currentLanguage,
+            //   icon: const Icon(Icons.arrow_downward),
+            //   iconSize: 24,
+            //   elevation: 16,
+            //   style: TextStyle(
+            //     fontSize: 20.sp,
+            //     color: Theme.of(context).textTheme.bodySmall!.color,
+            //   ),
+            //   underline: Container(
+            //     height: 2,
+            //     color: Theme.of(context).textTheme.bodySmall!.color,
+            //   ),
+            //   onChanged: (String? newValue) {
+            //     setState(() {
+            //       widget.themeManager.currentLanguage = newValue!;
+            //     });
+            //   },
+            //   items: <String>['العربية', 'English']
+            //       .map<DropdownMenuItem<String>>((String value) {
+            //     return DropdownMenuItem<String>(
+            //       value: value,
+            //       child: Text(
+            //         value == 'العربية' ? 'العربية' : 'English',
+            //         style: TextStyle(
+            //           fontSize: 20.sp,
+            //           color: Theme.of(context).textTheme.bodySmall!.color,
+            //         ),
+            //       ),
+            //     );
+            //   }).toList(),
+            // ),
+          ),
+          ListTile(
+            title: Text(
+              'المظهر',
+              style: TextStyle(
+                fontSize: 20.sp,
+                color: Theme.of(context).textTheme.bodySmall!.color,
+              ),
+            ),
+            trailing: DropdownButton<ThemeMode>(
+              items: [
+                DropdownMenuItem(
+                  value: ThemeMode.system,
+                  child: Text(
+                    'الوضع الافتراضي',
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      color: Theme.of(context).textTheme.bodySmall!.color,
+                    ),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: ThemeMode.light,
+                  child: Text(
+                    'الوضع الفاتح',
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      color: Theme.of(context).textTheme.bodySmall!.color,
+                    ),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: ThemeMode.dark,
+                  child: Text(
+                    'الوضع الداكن',
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      color: Theme.of(context).textTheme.bodySmall!.color,
+                    ),
+                  ),
+                ),
+              ],
+              value: widget.themeManager.themeMode,
+              icon: const Icon(Icons.arrow_downward),
+              iconSize: 24,
+              elevation: 16,
+              style: TextStyle(
+                fontSize: 20.sp,
+                color: Theme.of(context).textTheme.bodySmall!.color,
+              ),
+              underline: Container(
+                height: 2,
+                color: Theme.of(context).textTheme.bodySmall!.color,
+              ),
+              onChanged: (ThemeMode? newValue) {
+                setState(() {
+                  widget.themeManager.themeMode = newValue!;
+                });
+              },
+            ),
+          ),
+        ]),
       ),
-      backgroundColor: Colors.transparent,
     );
   }
 
@@ -262,29 +399,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       ),
     );
   }
-
-  // Widget _buildSavedList() {
-  //   return SizedBox(
-  //     height: 0.8.sh,
-  //     child: ListView.builder(
-  //       padding: EdgeInsets.symmetric(
-  //         horizontal: 10.w,
-  //         vertical: 10.h,
-  //       ),
-  //       physics: const BouncingScrollPhysics(),
-  //       itemCount: _searchController.text.isEmpty
-  //           ? categories.length
-  //           : categoriesSearchResult.length,
-  //       itemBuilder: (context, index) {
-  //         return categoryItem(
-  //             _searchController.text.isEmpty
-  //                 ? categories[index]
-  //                 : categoriesSearchResult[index],
-  //             context);
-  //       },
-  //     ),
-  //   );
-  // }
 
   Widget _buildSearchField(int searchType) {
     return TextField(
@@ -344,7 +458,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         onPressed: () {
           showMenu(
               context: context,
-              position: RelativeRect.fromLTRB(280.w, 700.h, 50.w, 100.h),
+              position: RelativeRect.fromLTRB(300.w, 50.h, 30.w, 750.h),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.r),
               ),
@@ -367,6 +481,27 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         },
       );
     }
+  }
+
+  Widget OurAppbar() {
+    return Row(
+      children: [
+        Text(
+          HijriCalendar.now().toFormat("MMMM dd yyyy"),
+          style: TextStyle(
+            fontSize: 18.sp,
+            color: Theme.of(context).textTheme.bodySmall!.color,
+          ),
+        ),
+        const Spacer(),
+        Text(
+          appName,
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        const Spacer(),
+        _buildAppBarActions(),
+      ],
+    );
   }
 
   void _startSearch(int searchType) {

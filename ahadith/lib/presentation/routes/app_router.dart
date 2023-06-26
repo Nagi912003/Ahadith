@@ -10,6 +10,7 @@ import 'package:ahadith/presentation/Screens/home_screen/home_screen.dart';
 import 'package:ahadith/presentation/Screens/nawawis_ahadith_screen/nawawis_ahadith_screen.dart';
 import 'package:ahadith/presentation/Screens/saved/saved_ahadith_screen/UI/saved_ahadith_screen.dart';
 import 'package:ahadith/presentation/Screens/saved/saved_categories_screen/UI/saved_categories_screen.dart';
+import 'package:ahadith/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,95 +45,105 @@ class AppRouter {
   Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/':
+        final themeManager = settings.arguments as ThemeManager;
         return MaterialPageRoute(
-          builder: (_) => const MyHomePage(),
+          builder: (_) => MyHomePage(themeManager: themeManager),
         );
 
       case categoriesScreen:
+        final themeManager = settings.arguments as ThemeManager;
         return MaterialPageRoute(
-          builder:(context) => MultiProvider(
+          builder: (context) => MultiProvider(
             providers: [
               BlocProvider<SingleHadithCubit>.value(
-                value: SingleHadithCubit(SingleHadithRepository(SingleHadithDataProvider())),
+                value: SingleHadithCubit(
+                    SingleHadithRepository(SingleHadithDataProvider())),
               ),
               ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
                 value: Provider.of<FavoritesAndSavedProvider>(context),
               ),
             ],
-            child: const CategoriesScreen(),
+            child: CategoriesScreen(themeManager: themeManager),
           ),
         );
 
-        case ahadithScreen:
-          final category = settings.arguments as Category;
-          return MaterialPageRoute(
-            builder:(context) => MultiProvider(
-              providers: [
-                BlocProvider<SingleHadithCubit>.value(
-                  value: SingleHadithCubit(SingleHadithRepository(SingleHadithDataProvider())),
-                ),
-                ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
-                  value: Provider.of<FavoritesAndSavedProvider>(context),
-                ),
-                BlocProvider<HadithsCubit>.value(
-                  value: hadithsCubit,
-                ),
-              ],
-              child: AhadithScreen(
-                category: category,
+      case ahadithScreen:
+        final category = settings.arguments as Category;
+        return MaterialPageRoute(
+          builder: (context) => MultiProvider(
+            providers: [
+              BlocProvider<SingleHadithCubit>.value(
+                value: SingleHadithCubit(
+                    SingleHadithRepository(SingleHadithDataProvider())),
               ),
-            ),
-          );
-
-        case hadithDetailedScreen:
-          final args = settings.arguments as Map<String,dynamic>;
-          final hadith = args['hadith'] as Hadith;
-          final categoryTitle = args['categoryTitle'] as String;
-          final index = args['index'] as int;
-          return MaterialPageRoute(
-            builder:(context) => MultiProvider(
-              providers: [
-                BlocProvider<SingleHadithCubit>.value(
-                  value: SingleHadithCubit(SingleHadithRepository(SingleHadithDataProvider())),
-                ),
-                ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
-                  value: Provider.of<FavoritesAndSavedProvider>(context),
-                ),
-              ],
-              child: HadithDetailedScreen(hadith: hadith,categoryTitle: categoryTitle, hadithIndex: index,),
-            ),
-          );
-
-          case favoritesScreen:
-            return MaterialPageRoute(
-              builder: (context) => MultiProvider(
-                providers: [
-                  ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
-                    value: Provider.of<FavoritesAndSavedProvider>(context),
-                  ),
-                ],
-                child: const FavoritesScreen(),
-              ),
-            );
-
-
-          case savedAhadithScreen:
-            final args = settings.arguments as Map<String,dynamic>;
-            final ahadith = args['ahadith'] as List<DetailedHadith>;
-            final categoryTitle = args['categoryTitle'] as String;
-            return MaterialPageRoute(
-              builder: (context) =>
               ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
-                  value: Provider.of<FavoritesAndSavedProvider>(context),
-                  child: SavedAhadithScreen(categoryTitle: categoryTitle, ahadith: ahadith,),),
-            );
+                value: Provider.of<FavoritesAndSavedProvider>(context),
+              ),
+              BlocProvider<HadithsCubit>.value(
+                value: hadithsCubit,
+              ),
+            ],
+            child: AhadithScreen(
+              category: category,
+            ),
+          ),
+        );
 
-          case NawawiHadithScreen:
-            return MaterialPageRoute(
-              builder: (context) => NawawisAhadithScreen(),
-            );
+      case hadithDetailedScreen:
+        final args = settings.arguments as Map<String, dynamic>;
+        final hadith = args['hadith'] as Hadith;
+        final categoryTitle = args['categoryTitle'] as String;
+        final index = args['index'] as int;
+        return MaterialPageRoute(
+          builder: (context) => MultiProvider(
+            providers: [
+              BlocProvider<SingleHadithCubit>.value(
+                value: SingleHadithCubit(
+                    SingleHadithRepository(SingleHadithDataProvider())),
+              ),
+              ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
+                value: Provider.of<FavoritesAndSavedProvider>(context),
+              ),
+            ],
+            child: HadithDetailedScreen(
+              hadith: hadith,
+              categoryTitle: categoryTitle,
+              hadithIndex: index,
+            ),
+          ),
+        );
 
+      case favoritesScreen:
+        return MaterialPageRoute(
+          builder: (context) => MultiProvider(
+            providers: [
+              ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
+                value: Provider.of<FavoritesAndSavedProvider>(context),
+              ),
+            ],
+            child: const FavoritesScreen(),
+          ),
+        );
 
+      case savedAhadithScreen:
+        final args = settings.arguments as Map<String, dynamic>;
+        final ahadith = args['ahadith'] as List<DetailedHadith>;
+        final categoryTitle = args['categoryTitle'] as String;
+        return MaterialPageRoute(
+          builder: (context) =>
+              ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
+            value: Provider.of<FavoritesAndSavedProvider>(context),
+            child: SavedAhadithScreen(
+              categoryTitle: categoryTitle,
+              ahadith: ahadith,
+            ),
+          ),
+        );
+
+      case NawawiHadithScreen:
+        return MaterialPageRoute(
+          builder: (context) => NawawisAhadithScreen(),
+        );
 
       default:
         return MaterialPageRoute(builder: (_) => const PageNotFound());

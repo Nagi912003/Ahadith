@@ -8,10 +8,10 @@ import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:path_provider/path_provider.dart';
 
-
 import 'package:ahadith/data/data_providers/favorites_and_saved_provider/favorites_and_saved.dart';
 
 import '../widgets/blurred_container.dart';
+import '../widgets/captured_widget.dart';
 import '../widgets/favorite_hadith.dart';
 
 class FavoritesScreen extends StatefulWidget {
@@ -33,7 +33,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     super.didChangeDependencies();
   }
 
-
   PageController _pageController = PageController(
     initialPage: 0,
   );
@@ -53,7 +52,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Colors.transparent,
-
       body: Stack(
         children: [
           favoritesCount != 0
@@ -65,9 +63,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   itemBuilder: (context, index) {
                     pageIndex = index;
                     return FavoriteHadith(
-                        hadith: favoriteItems[index],
-                        hadithIndex: favoriteItems[index].reference,
-                      );
+                      hadith: favoriteItems[index],
+                      hadithIndex: favoriteItems[index].reference,
+                    );
                   },
                 )
               : Center(
@@ -112,22 +110,29 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           Positioned(
             bottom: 25,
             right: 70,
-            child:favoritesCount != 0? IconButton(
-              onPressed:(){_takeScreenshot(favoriteItems[pageIndex],favoriteItems[pageIndex].reference,pixelRatio);},
-              icon: Icon(
-                Icons.share_outlined,
-                size: 35.w,
-                color: MediaQuery.of(context).platformBrightness == Brightness.dark? Colors.deepPurple[100] : Colors.deepPurple,
-              ),
-            ):Icon(
-              Icons.share_outlined,
-              size: 35.w,
-              color: Colors.grey,
-            ),
+            child: favoritesCount != 0
+                ? IconButton(
+                    onPressed: () {
+                      _takeScreenshot(favoriteItems[pageIndex],
+                          favoriteItems[pageIndex].reference, pixelRatio);
+                    },
+                    icon: Icon(
+                      Icons.share_outlined,
+                      size: 35.w,
+                      color: MediaQuery.of(context).platformBrightness ==
+                              Brightness.dark
+                          ? Colors.deepPurple[100]
+                          : Colors.deepPurple,
+                    ),
+                  )
+                : Icon(
+                    Icons.share_outlined,
+                    size: 35.w,
+                    color: Colors.grey,
+                  ),
           ),
         ],
       ),
-
       drawer: Drawer(
         backgroundColor: Colors.transparent,
         child: buildDrawer(favoriteItems),
@@ -166,22 +171,22 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         CapturedWidget(
           hadith: hadith,
           hadithIndex: hadithIndex,
+          context: context,
         ),
       ],
     );
     await screenshotController
         .captureFromWidget(
-        // pixelRatio: pixelRatio,
-        InheritedTheme.captureAll(
-            context, Material(child: takenWidget)),
-        delay: const Duration(seconds: 1))
-         .then((image) async {
+            // pixelRatio: pixelRatio,
+            InheritedTheme.captureAll(context, Material(child: takenWidget)),
+            delay: const Duration(seconds: 1))
+        .then((image) async {
       final directory = await getApplicationDocumentsDirectory();
       final imagePath = await File('${directory.path}/image.png').create();
       await imagePath.writeAsBytes(image);
 
       /// Share Plugin
-      await Share.shareFiles([imagePath.path],text: '#Ahadith');
+      await Share.shareFiles([imagePath.path], text: '#Ahadith');
       // ShowCapturedWidget(context, image);
     });
   }
@@ -192,7 +197,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         const SizedBox(
           height: 50,
         ),
-         SizedBox(
+        SizedBox(
           height: 50,
           child: Center(
             child: Text(
@@ -235,76 +240,4 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       ],
     );
   }
-
-  Widget CapturedWidget({hadith, hadithIndex}) {
-    final textLength = hadith.hadeeth!.length;
-    return SizedBox(
-      height: 1000.h,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding:
-            const EdgeInsets.only(top: 50.0, left: 25.0, right: 25.0),
-            child: Text(
-              '${hadith.categories!.first}: $hadithIndex\n\n${hadith.title!}',
-              style: TextStyle(
-                fontSize: 20.sp,
-                color: Colors.white,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(
-              top: 50.h,
-              left: 50.w,
-              right: 50.w,
-              bottom: 100.h,
-            ),
-            height:
-            textLength<120 ? 190.h : textLength<160 ? 220.h : textLength<190 ? 240.h : textLength<220 ? 260.h : textLength<250 ? 280.h : textLength<280 ? 300.h : textLength<310 ? 320.h : textLength<340 ? 340.h : textLength<370 ? 360.h : textLength<400 ? 380.h : textLength<430 ? 400.h : textLength<460 ? 420.h : textLength<490 ? 440.h : textLength<520 ? 460.h : textLength<550 ? 480.h : 500.h,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.white.withOpacity(0.2),
-                  blurRadius: 20,
-                  spreadRadius: 2,
-                ),
-              ],
-            ),
-            child: ListView(
-              physics: const BouncingScrollPhysics(),
-              padding: EdgeInsets.only(
-                top: 20.h,
-                bottom: 20.h,
-                left: 20.w,
-                right: 20.w,
-              ),
-              children: [
-                Text(
-                  hadith.hadeeth!,
-                  style: GoogleFonts.lateef(
-                    // overflow: TextOverflow.fade,
-                    color: Colors.white,
-                    fontSize: 27.sp,
-                    fontWeight: FontWeight.bold,
-                    // fontFamily: Theme.of(context).textTheme.titleLarge?.fontFamily,
-                  ),
-                  textAlign: TextAlign.end,
-                ),
-              ],
-            ),
-          ),
-          const Text('HadeethEnc.com',
-              style: TextStyle(color: Colors.white54)),
-        ],
-      ),
-    );
-  }
 }
-
-

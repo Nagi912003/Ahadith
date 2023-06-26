@@ -11,9 +11,10 @@ class BlurryBackgroundWidget extends StatefulWidget {
   final DetailedHadith hadith;
   final String hadithIndex;
   final favoritesProvider;
+  final isRandom;
 
   const BlurryBackgroundWidget(
-      {super.key, required this.hadith, required this.hadithIndex, this.favoritesProvider});
+      {super.key, required this.hadith, required this.hadithIndex, this.favoritesProvider, this.isRandom = false});
 
   @override
   _BlurryBackgroundWidgetState createState() => _BlurryBackgroundWidgetState();
@@ -33,15 +34,23 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
     }
 
     return SizedBox(
-      height: 1000.h,
+      height: widget.isRandom? null : 1000.h,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const SizedBox(height: 20,),
           Padding(
             padding:
-            const EdgeInsets.only(top: 50.0, left: 25.0, right: 25.0),
-            child: Text(
+            widget.isRandom? const EdgeInsets.only( left: 25.0, right: 25.0) :const EdgeInsets.only(top: 50.0, left: 25.0, right: 25.0),
+            child:widget.isRandom? Text(
+              'حديـــــث اليوم',
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: Colors.white,
+                fontSize: 32.sp,
+              ),
+              textAlign: TextAlign.center,
+            ): Text(
               '${widget.hadith.categories!.first}: ${widget.hadithIndex}\n\n${widget.hadith.attribution!}',
               style: TextStyle(
                 fontSize: 20.sp,
@@ -56,7 +65,7 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
               top: 50.h,
               left: 50.w,
               right: 50.w,
-              bottom: 100.h,
+              bottom: widget.isRandom? 50.h :100.h,
             ),
             height:
             textLength<120 ? 190.h : textLength<160 ? 220.h : textLength<190 ? 240.h : textLength<220 ? 260.h : textLength<250 ? 280.h : textLength<280 ? 300.h : textLength<310 ? 320.h : textLength<340 ? 340.h : textLength<370 ? 360.h : textLength<400 ? 380.h : textLength<430 ? 400.h : textLength<460 ? 420.h : textLength<490 ? 440.h : textLength<520 ? 460.h : textLength<550 ? 480.h : 500.h,
@@ -95,7 +104,7 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
                 SizedBox(height: 30.h),
                 goToHadithButton('التفسير و معاني الكلمات', widget.hadith),
                 SizedBox(height: 40.h),
-                MaterialButton(
+                if(!widget.isRandom)MaterialButton(
                     textColor: Colors.red[200],
                     child: const Text(
                       'ازالة الحديث من المفضلة',
