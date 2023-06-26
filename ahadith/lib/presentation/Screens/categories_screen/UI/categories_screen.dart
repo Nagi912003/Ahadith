@@ -17,6 +17,8 @@ import '../../../../data/models/hadith.dart';
 import 'package:ahadith/presentation/Screens/saved/saved_ahadith_screen/UI/saved_ahadith_screen.dart';
 import 'package:ahadith/presentation/Screens/saved/saved_categories_screen/UI/saved_categories_screen.dart';
 import '../../../../theme/theme_manager.dart';
+import '../../hadith_detailed_screen/Widgets/hadith_detailed_screen_widgets.dart';
+import '../../saved/saved_detailed_hadith/UI/saved_detailed_hadith.dart';
 import '../widgets/categories_screen_widgets.dart';
 
 class CategoriesScreen extends StatefulWidget {
@@ -72,9 +74,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
     final List<String> savedCategoriesTitlesList =
         savedProvider.savedCategoriesTitlesList;
+    final randomAhadith = savedProvider.randomAhadith;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
+      drawerScrimColor: widget.themeManager.appPrimaryColor200.withOpacity(0.2),
       appBar: _isSearching
           ? AppBar(
               title: _isSearchingInAll
@@ -97,7 +101,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               child: SizedBox(
                 height: 0.86.sh,
                 width: 1.sw,
-                //color: Colors.deepPurple,
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -116,7 +119,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-
                       SizedBox(height: 20.h),
                       Card(
                         color: Colors.transparent,
@@ -125,6 +127,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           initiallyExpanded: _showingSaved,
                           collapsedBackgroundColor: Colors.transparent,
                           backgroundColor: Colors.transparent,
+                          iconColor: widget.themeManager.appPrimaryColor200,
+                          collapsedIconColor:
+                              widget.themeManager.appPrimaryColorInverse,
                           title: Text(
                             'المحفوظات',
                             style: Theme.of(context).textTheme.titleLarge,
@@ -135,12 +140,14 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                 ? buildAhadithList(
                                     savedCategoriesSearchResultOfAhadith,
                                     'نتيجة البحث',
-                                    context)
+                                    context,
+                                    widget.themeManager)
                                 : SavedCategoriesScreen(
                                     savedCategories: savedCategories,
                                     savedCategoriesTitlesList:
                                         savedCategoriesTitlesList,
                                     savedCategoriesIds: savedCategoriesIds,
+                                    themeManager: widget.themeManager,
                                   ),
                           ],
                         ),
@@ -152,6 +159,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           initiallyExpanded: _showingAll,
                           collapsedBackgroundColor: Colors.transparent,
                           backgroundColor: Colors.transparent,
+                          iconColor: widget.themeManager.appPrimaryColor200,
+                          collapsedIconColor:
+                              widget.themeManager.appPrimaryColor200,
                           title: Row(
                             children: [
                               Text(
@@ -185,7 +195,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                     );
                                   }
                                 },
-                                child: const RefreshProgressIndicator(),
+                                child: RefreshProgressIndicator(
+                                  color: widget.themeManager.appPrimaryColor,
+                                ),
                               ),
                             ],
                           ),
@@ -206,12 +218,14 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                   return buildNoInternetWidget(context);
                                 }
                               },
-                              child: const CircularProgressIndicator(),
+                              child: CircularProgressIndicator(
+                                color: widget.themeManager.appPrimaryColor,
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      const RandomHadith(),
+                      RandomHadith(themeManager: widget.themeManager),
                     ],
                   ),
                 ),
@@ -233,61 +247,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   fontSize: 30.sp,
                   color: Theme.of(context).textTheme.bodySmall!.color,
                 ),
+                textAlign: TextAlign.center,
               ),
             ),
-          ),
-          ListTile(
-            title: Text(
-              'الاحاديث اليومية',
-              style: TextStyle(
-                fontSize: 20.sp,
-                color: Theme.of(context).textTheme.bodySmall!.color,
-              ),
-            ),
-            onTap: (){
-              print(Provider.of<FavoritesAndSavedProvider>(context,listen: false).randomHadith.toString());
-            },
-          ),
-          ListTile(
-            title: Text(
-              'حجم الخط',
-              style: TextStyle(
-                fontSize: 20.sp,
-                color: Theme.of(context).textTheme.bodySmall!.color,
-              ),
-            ),
-            // trailing: DropdownButton<String>(
-            //   value: widget.themeManager.currentLanguage,
-            //   icon: const Icon(Icons.arrow_downward),
-            //   iconSize: 24,
-            //   elevation: 16,
-            //   style: TextStyle(
-            //     fontSize: 20.sp,
-            //     color: Theme.of(context).textTheme.bodySmall!.color,
-            //   ),
-            //   underline: Container(
-            //     height: 2,
-            //     color: Theme.of(context).textTheme.bodySmall!.color,
-            //   ),
-            //   onChanged: (String? newValue) {
-            //     setState(() {
-            //       widget.themeManager.currentLanguage = newValue!;
-            //     });
-            //   },
-            //   items: <String>['العربية', 'English']
-            //       .map<DropdownMenuItem<String>>((String value) {
-            //     return DropdownMenuItem<String>(
-            //       value: value,
-            //       child: Text(
-            //         value == 'العربية' ? 'العربية' : 'English',
-            //         style: TextStyle(
-            //           fontSize: 20.sp,
-            //           color: Theme.of(context).textTheme.bodySmall!.color,
-            //         ),
-            //       ),
-            //     );
-            //   }).toList(),
-            // ),
           ),
           ListTile(
             title: Text(
@@ -297,57 +259,111 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 color: Theme.of(context).textTheme.bodySmall!.color,
               ),
             ),
-            trailing: DropdownButton<ThemeMode>(
+            trailing: DropdownButton<int>(
+              iconDisabledColor: widget.themeManager.appPrimaryColor,
+              iconEnabledColor: widget.themeManager.appPrimaryColor,
               items: [
                 DropdownMenuItem(
-                  value: ThemeMode.system,
-                  child: Text(
-                    'الوضع الافتراضي',
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      color: Theme.of(context).textTheme.bodySmall!.color,
-                    ),
+                  value: 1,
+                  child: DropdownMenuItem(
+                    value: 1,
+                    child: Image.asset('assets/images/watercolor.png'),
                   ),
                 ),
                 DropdownMenuItem(
-                  value: ThemeMode.light,
-                  child: Text(
-                    'الوضع الفاتح',
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      color: Theme.of(context).textTheme.bodySmall!.color,
-                    ),
+                  value: 2,
+                  child: DropdownMenuItem(
+                    value: 2,
+                    child: Image.asset('assets/images/watercolor-p.png'),
                   ),
                 ),
                 DropdownMenuItem(
-                  value: ThemeMode.dark,
-                  child: Text(
-                    'الوضع الداكن',
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      color: Theme.of(context).textTheme.bodySmall!.color,
-                    ),
+                  value: 3,
+                  child: DropdownMenuItem(
+                    value: 3,
+                    child: Image.asset('assets/images/watercolor-off.png'),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: 4,
+                  child: DropdownMenuItem(
+                    value: 4,
+                    child: Image.asset('assets/images/watercolor-b.png'),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: 5,
+                  child: DropdownMenuItem(
+                    value: 5,
+                    child: Image.asset('assets/images/watercolor-g.png'),
                   ),
                 ),
               ],
-              value: widget.themeManager.themeMode,
-              icon: const Icon(Icons.arrow_downward),
+              value: widget.themeManager.mode,
+              icon: Icon(
+                Icons.keyboard_arrow_down_outlined,
+                color: widget.themeManager.appPrimaryColor200,
+              ),
               iconSize: 24,
               elevation: 16,
               style: TextStyle(
                 fontSize: 20.sp,
                 color: Theme.of(context).textTheme.bodySmall!.color,
               ),
-              underline: Container(
-                height: 2,
-                color: Theme.of(context).textTheme.bodySmall!.color,
-              ),
-              onChanged: (ThemeMode? newValue) {
+              underline: const SizedBox(height: 0),
+              onChanged: (int? newValue) {
                 setState(() {
-                  widget.themeManager.themeMode = newValue!;
+                  widget.themeManager.toggleBackGroundImage(newValue!);
                 });
               },
             ),
+          ),
+          ExpansionTile(
+            collapsedIconColor: widget.themeManager.appPrimaryColor,
+            iconColor: widget.themeManager.appPrimaryColor,
+            title: Text(
+              'الاحاديــث اليومية' + '  ${randomAhadith.length}',
+              style: TextStyle(
+                fontSize: 20.sp,
+                color: Theme.of(context).textTheme.bodySmall!.color,
+              ),
+            ),
+            children: randomAhadith
+                .map((e) => Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ListTile(
+                          title: Text(e.title!),
+                          onTap: () {
+                            final favoritesProvider =
+                                Provider.of<FavoritesAndSavedProvider>(context,
+                                    listen: false);
+                            final isFavorite =
+                                favoritesProvider.isFavorite(e.id!);
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => savedDetailedHadith(
+                                themeManager: widget.themeManager,
+                                isFavorite: isFavorite,
+                                hadith: e,
+                                onPressed: () {
+                                  favoritesProvider.addFavorite(
+                                      e.id!,
+                                      e,
+                                      'الاحاديــث اليومية',
+                                      randomAhadith.length,
+                                      true);
+                                  snakeBarFavoriteMessage(
+                                      false, context, widget.themeManager);
+                                },
+                                index: randomAhadith.indexOf(e),
+                              ),
+                            ));
+                          },
+                        ),
+                        const Divider(),
+                      ],
+                    ))
+                .toList(),
           ),
         ]),
       ),
@@ -358,8 +374,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     return BlocBuilder<CategoriesCubit, CategoriesState>(
       builder: (context, state) {
         if (state is CategoriesLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Center(
+            child: CircularProgressIndicator(
+              color: widget.themeManager.appPrimaryColor,
+            ),
           );
         } else if (state is CategoriesLoaded) {
           categories = state.categories;
@@ -369,8 +387,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
             child: Text(state.message),
           );
         } else {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Center(
+            child: CircularProgressIndicator(
+              color: widget.themeManager.appPrimaryColor,
+            ),
           );
         }
       },
@@ -394,7 +414,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               _searchController.text.isEmpty && !_isSearchingInAll
                   ? categories[index]
                   : categoriesSearchResult[index],
-              context);
+              context,
+              widget.themeManager);
         },
       ),
     );
@@ -402,6 +423,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
   Widget _buildSearchField(int searchType) {
     return TextField(
+      textAlign: TextAlign.end,
       controller: _searchController,
       autofocus: true,
       decoration: InputDecoration(
@@ -412,8 +434,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         hintStyle: const TextStyle(color: Colors.white30),
       ),
       style: TextStyle(
-          fontSize: 25.0,
-          fontFamily: Theme.of(context).textTheme.displaySmall!.fontFamily),
+        fontSize: 25.0,
+        fontFamily: Theme.of(context).textTheme.displaySmall!.fontFamily,
+      ),
+      autocorrect: true,
       onChanged: (query) {
         searchType == 1
             ? searchByCategoriesTitle(query)
@@ -446,7 +470,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   Widget _buildAppBarActions() {
     if (_isSearching) {
       return IconButton(
-        icon: const Icon(Icons.clear),
+        icon: Icon(
+          Icons.clear,
+          color: widget.themeManager.appPrimaryColor200,
+        ),
         onPressed: () {
           _clearSearchQuery();
           Navigator.pop(context);
@@ -454,7 +481,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       );
     } else {
       return IconButton(
-        icon: const Icon(Icons.search),
+        icon: Icon(
+          Icons.search,
+          color: widget.themeManager.appPrimaryColor,
+        ),
         onPressed: () {
           showMenu(
               context: context,

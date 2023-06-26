@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:ahadith/data/data_providers/favorites_and_saved_provider/favorites_and_saved.dart';
 import 'package:ahadith/presentation/Screens/favorites_screen/widgets/favorite_hadith.dart';
+import 'package:ahadith/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path_provider/path_provider.dart';
@@ -13,8 +14,8 @@ import '../../favorites_screen/widgets/blurred_container.dart';
 import '../../favorites_screen/widgets/captured_widget.dart';
 
 class RandomHadith extends StatelessWidget {
-  const RandomHadith({super.key});
-
+  const RandomHadith({super.key, required this.themeManager});
+  final ThemeManager themeManager;
   @override
   Widget build(BuildContext context) {
   ScreenshotController screenshotController = ScreenshotController();
@@ -27,7 +28,7 @@ class RandomHadith extends StatelessWidget {
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: Image.asset(
-                'assets/images/watercolor.png',
+                themeManager.bgImage,
                 fit: BoxFit.cover,
               ),
             ),
@@ -61,7 +62,7 @@ class RandomHadith extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        FavoriteHadith(hadith: hadith, hadithIndex: 'حديث اليوم',isRandom: true,),
+        FavoriteHadith(hadith: hadith, hadithIndex: 'حديث اليوم',isRandom: true,themeManager: themeManager),
         Align(
           alignment: Alignment.bottomRight,
           child: IconButton(
@@ -72,10 +73,7 @@ class RandomHadith extends StatelessWidget {
             icon: Icon(
               Icons.share_outlined,
               size: 35.w,
-              color: MediaQuery.of(context).platformBrightness ==
-                  Brightness.dark
-                  ? Colors.deepPurple[100]
-                  : Colors.deepPurple,
+              color: themeManager.appPrimaryColor200,
             ),
           ),
         )

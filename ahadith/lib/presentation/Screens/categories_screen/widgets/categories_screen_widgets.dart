@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../data/models/category.dart';
 
 import '../../../../constants/strings.dart';
+import '../../../../theme/theme_manager.dart';
 
 Widget buildNoInternetWidget(context) {
   return Center(
@@ -17,8 +18,8 @@ Widget buildNoInternetWidget(context) {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          MediaQuery.of(context).size.width>500? Image.asset("assets/images/undraw_connected_world_wuay.png",
-              width: 0.5.sw, height: 0.2.sh): Image.asset("assets/images/undraw_connected_world_wuay.png"),
+          MediaQuery.of(context).size.width>500? Image.asset("assets/images/undraw_connected_world_wuay-removebg-preview.png",
+              width: 0.5.sw, height: 0.2.sh): Image.asset("assets/images/undraw_connected_world_wuay-removebg-preview.png"),
           const Text(
             //"can't connect .. check the internet",
             "...حدث مشكلة في الاتصال",
@@ -35,7 +36,7 @@ Widget buildNoInternetWidget(context) {
   );
 }
 
-Widget categoryItem(Category category, BuildContext context) {
+Widget categoryItem(Category category, BuildContext context, ThemeManager themeManager) {
   return Card(
     color: Theme.of(context).cardColor,
     child: ListTile(
@@ -44,7 +45,7 @@ Widget categoryItem(Category category, BuildContext context) {
       onTap: () {
         Navigator.of(context).pushNamed(
           ahadithScreen,
-          arguments: category,
+          arguments: {'category':category, 'themeManager':themeManager},
         );
       },
     ),

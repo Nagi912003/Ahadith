@@ -1,16 +1,15 @@
+import 'package:ahadith/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'hadith_detailed_screen_widgets.dart';
-import'../../../../data/models/hadith.dart';
+import '../../../../data/models/hadith.dart';
 
-Widget buildDetailedHadith(DetailedHadith hadith, bool isFavorite,BuildContext context, onPressed, int index){
+Widget buildDetailedHadith(DetailedHadith hadith, bool isFavorite,
+    BuildContext context, onPressed, int index, ThemeManager themeManager) {
   return Scaffold(
     appBar: AppBar(
-      foregroundColor:
-      MediaQuery.of(context).platformBrightness == Brightness.light
-          ? Colors.deepPurple
-          : Colors.deepPurple.shade100,
+      foregroundColor: Colors.deepPurple.shade100,
       title: Text(hadith.title!),
       centerTitle: true,
       titleTextStyle: Theme.of(context).textTheme.titleLarge,
@@ -22,27 +21,42 @@ Widget buildDetailedHadith(DetailedHadith hadith, bool isFavorite,BuildContext c
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            buildCard('', hadith.hadeeth! + hadith.attribution!, true,context),
+            buildCard('', hadith.hadeeth! + hadith.attribution!, true, context,
+                themeManager),
             SizedBox(height: 20.h),
-            hadithGrade(hadith.grade!, context),
+            hadithGrade(hadith.grade!, context,themeManager),
             SizedBox(height: 10.h),
-            buildCard('التفسير : ', hadith.explanation!, false,context),
-            if (hadith.wordsMeanings!.isNotEmpty)
+            buildCard('التفسير : ', hadith.explanation!, false, context,themeManager),
+            if (hadith.wordsMeanings!.isNotEmpty) SizedBox(height: 10.h),
+            if (hadith.wordsMeanings!.isNotEmpty &&
+                hadith.wordsMeanings.toString().length > 10)
+              buildCard(
+                  ': معانى الكلمات\n ',
+                  hadith.wordsMeanings!.first.toString(),
+                  false,
+                  context,
+                  themeManager),
+            if (hadith.hints != null && hadith.hints != [])
               SizedBox(height: 10.h),
-            if (hadith.wordsMeanings!.isNotEmpty && hadith.wordsMeanings.toString().length>10)
-              buildCard(': معانى الكلمات\n ', hadith.wordsMeanings!.first.toString(), false,context),
-            if (hadith.hints != null && hadith.hints != [])SizedBox(height: 10.h),
-            if (hadith.hints != null && hadith.hints != [])buildCard(': الدروس المستفادة\n ', hadith.hints.toString(), false,context),
+            if (hadith.hints != null && hadith.hints != [])
+              buildCard(': الدروس المستفادة\n ', hadith.hints.toString(), false,
+                  context, themeManager),
             SizedBox(height: 10.h),
-            isFavorite? buildButton('', favoriteIcon(isFavorite, context), (){} , false, context):buildButton('اضف للمفضله', favoriteIcon(isFavorite, context), onPressed, true, context),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //   children: [
-            //     buildButton('', favoriteIcon(isFavorite, context), onPressed, false, context),
-            //     buildButton('اظهار السند', const Icon(Icons.favorite),
-            //         showReference(hadith.reference!,context), true, context),
-            //   ],
-            // ),
+            isFavorite
+                ? buildButton(
+                    '',
+                    favoriteIcon(isFavorite, context, themeManager),
+                    () {},
+                    false,
+                    context,
+                    themeManager)
+                : buildButton(
+                    'اضف للمفضله',
+                    favoriteIcon(isFavorite, context, themeManager),
+                    onPressed,
+                    true,
+                    context,
+                    themeManager),
             SizedBox(height: 50.h),
           ],
         ),

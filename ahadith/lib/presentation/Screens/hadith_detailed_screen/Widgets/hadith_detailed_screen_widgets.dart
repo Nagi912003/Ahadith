@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../theme/theme_manager.dart';
+
 AppBar appbar(BuildContext context, String title) {
   return AppBar(
     title: Text(title, style: Theme.of(context).textTheme.titleLarge),
@@ -10,7 +12,7 @@ AppBar appbar(BuildContext context, String title) {
   );
 }
 
-Widget hadithGrade(String hadithGrade, BuildContext context,
+Widget hadithGrade(String hadithGrade, BuildContext context, ThemeManager themeManager,
     {bool fullScreen = true}) {
   return Container(
     width: double.infinity,
@@ -26,10 +28,7 @@ Widget hadithGrade(String hadithGrade, BuildContext context,
             style: TextStyle(
               fontSize: 20.sp,
               fontFamily: Theme.of(context).textTheme.bodyLarge!.fontFamily,
-              color:
-                  MediaQuery.of(context).platformBrightness == Brightness.light
-                      ? Colors.deepPurple
-                      : Colors.deepPurple.shade100,
+              color: themeManager.appPrimaryColor200,
               overflow: TextOverflow.clip,
             ),
             textAlign: TextAlign.end,
@@ -50,9 +49,9 @@ Widget hadithGrade(String hadithGrade, BuildContext context,
 }
 
 Widget buildCard(
-    String title, String content, bool isHadith, BuildContext context) {
+    String title, String content, bool isHadith, BuildContext context, ThemeManager themeManager) {
   return Card(
-    color: isHadith ? Colors.deepPurple.shade100 : Theme.of(context).cardColor,
+    color: isHadith ? themeManager.appPrimaryColor200 : Theme.of(context).cardColor,
     child: Padding(
       padding: const EdgeInsets.all(12.0),
       child: RichText(
@@ -63,9 +62,7 @@ Widget buildCard(
             fontFamily: Theme.of(context).textTheme.bodyLarge?.fontFamily,
             fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
             fontWeight: FontWeight.bold,
-            color: MediaQuery.of(context).platformBrightness == Brightness.light
-                ? Colors.deepPurple
-                : Colors.deepPurple.shade100,
+            color: themeManager.appPrimaryColor200,
           ),
           children: [
             TextSpan(
@@ -90,7 +87,7 @@ Widget buildCard(
 }
 
 Widget buildButton(
-    String title, Icon icon, onPressed, bool hasText, BuildContext context) {
+    String title, Icon icon, onPressed, bool hasText, BuildContext context,  ThemeManager themeManager) {
   return MaterialButton(
     padding: EdgeInsets.zero,
     onPressed: onPressed,
@@ -102,9 +99,7 @@ Widget buildButton(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: MediaQuery.of(context).platformBrightness == Brightness.light
-              ? Colors.deepPurple
-              : Colors.deepPurple.shade100,
+          color: themeManager.appPrimaryColor200,
           width: 1,
         ),
       ),
@@ -115,10 +110,7 @@ Widget buildButton(
               style: TextStyle(
                 fontSize: 22,
                 fontFamily: Theme.of(context).textTheme.titleLarge?.fontFamily,
-                color: MediaQuery.of(context).platformBrightness ==
-                        Brightness.light
-                    ? Colors.deepPurple
-                    : Colors.deepPurple.shade100,
+                color: themeManager.appPrimaryColor200,
               ),
             )
           : icon,
@@ -126,7 +118,7 @@ Widget buildButton(
   );
 }
 
-Function showReference(String reference, BuildContext context) {
+Function showReference(String reference, BuildContext context, ThemeManager themeManager) {
   return () {
     showDialog(
       context: context,
@@ -135,7 +127,7 @@ Function showReference(String reference, BuildContext context) {
           'السند',
           textAlign: TextAlign.center,
           style: TextStyle(
-            color: Colors.deepPurple,
+            color: themeManager.appPrimaryColor,
             fontSize: 25.sp,
             fontWeight: FontWeight.bold,
           ),
@@ -157,7 +149,7 @@ Function showReference(String reference, BuildContext context) {
               style: TextStyle(
                 fontSize: 20.sp,
                 fontWeight: FontWeight.bold,
-                color: Colors.deepPurple,
+                color: themeManager.appPrimaryColor,
               ),
             ),
           ),
@@ -167,7 +159,7 @@ Function showReference(String reference, BuildContext context) {
   };
 }
 
-Widget _showSnakeBar(String message, BuildContext context) {
+Widget _showSnakeBar(String message, BuildContext context, ThemeManager themeManager) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       shape: RoundedRectangleBorder(
@@ -181,54 +173,47 @@ Widget _showSnakeBar(String message, BuildContext context) {
           fontWeight: FontWeight.bold,
         ),
       ),
-      backgroundColor:
-          MediaQuery.of(context).platformBrightness == Brightness.light
-              ? Colors.deepPurple.withOpacity(0.6)
-              : Colors.deepPurple.shade100.withOpacity(0.6),
+      backgroundColor: themeManager.appPrimaryColor200.withOpacity(0.6),
       duration: const Duration(seconds: 2),
     ),
   );
   return Container();
 }
 
-Widget snakeBarFavoriteMessage(bool isFavorite, BuildContext context) {
+Widget snakeBarFavoriteMessage(bool isFavorite, BuildContext context, ThemeManager themeManager) {
   try {
     return !isFavorite
-        ? _showSnakeBar('تمت اضافة الحديث الى المفضلة', context)
-        : _showSnakeBar('تمت ازالة الحديث من المفضلة', context);
+        ? _showSnakeBar('تمت اضافة الحديث الى المفضلة', context, themeManager)
+        : _showSnakeBar('تمت ازالة الحديث من المفضلة', context, themeManager);
   } catch (e) {
     print('Error showing Snackbar: $e');
     return Container();
   }
 }
 
-Widget snakeBarSavedMessage(bool isSaved, BuildContext context) {
+Widget snakeBarSavedMessage(bool isSaved, BuildContext context, ThemeManager themeManager) {
   try {
     return isSaved
-        ? _showSnakeBar('تمت اضافة الحديث الى المحفوظات', context)
-        : _showSnakeBar('تمت ازالة الحديث من المحفوظات', context);
+        ? _showSnakeBar('تمت اضافة الحديث الى المحفوظات', context, themeManager)
+        : _showSnakeBar('تمت ازالة الحديث من المحفوظات', context, themeManager);
   } catch (e) {
     print('Error showing Snackbar: $e');
     return Container();
   }
 }
 
-Icon favoriteIcon(bool isFavorite, BuildContext context) {
+Icon favoriteIcon(bool isFavorite, BuildContext context,  ThemeManager themeManager) {
   return Icon(
     isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-    color: MediaQuery.of(context).platformBrightness == Brightness.light
-        ? Colors.deepPurple
-        : Colors.deepPurple.shade100,
+    color: themeManager.appPrimaryColor200,
     size: 30.sp,
   );
 }
 
-Icon saveIcon(bool isSaved, BuildContext context) {
+Icon saveIcon(bool isSaved, BuildContext context, ThemeManager themeManager) {
   return Icon(
     isSaved ? Icons.save : Icons.save_alt_outlined,
-    color: MediaQuery.of(context).platformBrightness == Brightness.light
-        ? Colors.deepPurple
-        : Colors.deepPurple.shade100,
+    color: themeManager.appPrimaryColor200,
     size: 30.sp,
   );
 }

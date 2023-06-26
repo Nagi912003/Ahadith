@@ -34,6 +34,7 @@ void main() async{
   //open box saved
   await Hive.openBox('saved');
   // await Hive.box('saved').clear();
+  Box saved = Hive.box('saved');
   // print('\n\nopen box saved--------------------------------------------------------');
   // print('in box saved>>>>>>>>>>--------${Hive.box('saved').values}----------------------------------------\n\n');
 
@@ -94,28 +95,11 @@ class _MyAppState extends State<MyApp> {
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
 
-              // localizationsDelegates: [
-              //   GlobalMaterialLocalizations.delegate,
-              //   GlobalWidgetsLocalizations.delegate,
-              //   localizationDelegate
-              // ],
-              // supportedLocales: localizationDelegate.supportedLocales,
-              // locale: localizationDelegate.currentLocale,
-
-              theme: lightTheme,
-
               darkTheme: darkTheme,
 
-              themeMode: _themeManager.themeMode,
+              themeMode: ThemeMode.dark,
 
               home: MyHomePage(themeManager: _themeManager),
-
-
-              /*BlocProvider(
-                create: (context) => CategoriesCubit(
-                    CategoriesRepository(CategoriesDataProvider())),
-                child: const CategoriesScreen(),
-              ),*/
               onGenerateRoute: AppRouter().generateRoute,
             ),
           );

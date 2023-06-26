@@ -1,9 +1,10 @@
+import 'package:ahadith/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 
 import '../../../../constants/strings.dart';
 
-Widget buildAhadithList(ahadithList,String categoryTitle ,BuildContext context) {
+Widget buildAhadithList(ahadithList,String categoryTitle ,BuildContext context, ThemeManager themeManager) {
   return ListView.builder(
     physics: const BouncingScrollPhysics(),
     itemCount: ahadithList.length,
@@ -27,6 +28,7 @@ Widget buildAhadithList(ahadithList,String categoryTitle ,BuildContext context) 
               'hadith': ahadithList[index]!,
               'categoryTitle': categoryTitle,
               'index': index,
+              'themeManager': themeManager,
             },);
           },
         ),

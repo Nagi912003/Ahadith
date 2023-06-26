@@ -1,5 +1,6 @@
 import 'package:ahadith/data/data_providers/favorites_and_saved_provider/favorites_and_saved.dart';
 import 'package:ahadith/presentation/Screens/hadith_detailed_screen/Widgets/hadith_detailed_screen_widgets.dart';
+import 'package:ahadith/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -12,9 +13,10 @@ class BlurryBackgroundWidget extends StatefulWidget {
   final String hadithIndex;
   final favoritesProvider;
   final isRandom;
+  final ThemeManager themeManager;
 
   const BlurryBackgroundWidget(
-      {super.key, required this.hadith, required this.hadithIndex, this.favoritesProvider, this.isRandom = false});
+      {super.key, required this.hadith, required this.hadithIndex, this.favoritesProvider, this.isRandom = false, required this.themeManager});
 
   @override
   _BlurryBackgroundWidgetState createState() => _BlurryBackgroundWidgetState();
@@ -202,15 +204,15 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
             physics: const BouncingScrollPhysics(),
             children: [
               buildCard(
-                  '', hadith.hadeeth! + hadith.attribution!, true, context),
+                  '', hadith.hadeeth! + hadith.attribution!, true, context,widget.themeManager),
               SizedBox(height: 20.h),
-              hadithGrade(hadith.grade!, context,fullScreen: false),
+              hadithGrade(hadith.grade!, context,widget.themeManager,fullScreen: false),
               SizedBox(height: 10.h),
-              buildCard('التفسير : ', hadith.explanation!, false, context),
+              buildCard('التفسير : ', hadith.explanation!, false, context,widget.themeManager),
               if (hadith.wordsMeanings!.isNotEmpty) SizedBox(height: 10.h),
               if (hadith.wordsMeanings!.isNotEmpty)
                 buildCard(': معانى الكلمات\n ',
-                    hadith.wordsMeanings!.toList().toString(), false, context),
+                    hadith.wordsMeanings!.toList().toString(), false, context,widget.themeManager),
               SizedBox(height: 22.h),
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
@@ -242,10 +244,7 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
           child: Text(
             title,
             style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: MediaQuery.of(context).platformBrightness ==
-                          Brightness.light
-                      ? Colors.white
-                      : Colors.deepPurple.shade100,
+                  color: widget.themeManager.appPrimaryColor,
                 ),
           ),
         ),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:ahadith/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,8 +16,9 @@ import '../widgets/captured_widget.dart';
 import '../widgets/favorite_hadith.dart';
 
 class FavoritesScreen extends StatefulWidget {
-  const FavoritesScreen({super.key});
+  const FavoritesScreen({super.key, required this.themeManager});
 
+  final ThemeManager themeManager;
   @override
   State<FavoritesScreen> createState() => _FavoritesScreenState();
 }
@@ -65,6 +67,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     return FavoriteHadith(
                       hadith: favoriteItems[index],
                       hadithIndex: favoriteItems[index].reference,
+                      themeManager: widget.themeManager,
                     );
                   },
                 )
@@ -104,6 +107,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               icon: Icon(
                 Icons.keyboard_arrow_up_rounded,
                 size: 35.w,
+                color: widget.themeManager.appPrimaryColor200,
               ),
             ),
           ),
@@ -119,10 +123,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     icon: Icon(
                       Icons.share_outlined,
                       size: 35.w,
-                      color: MediaQuery.of(context).platformBrightness ==
-                              Brightness.dark
-                          ? Colors.deepPurple[100]
-                          : Colors.deepPurple,
+                      color: widget.themeManager.appPrimaryColor200,
                     ),
                   )
                 : Icon(
@@ -163,7 +164,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Image.asset(
-              'assets/images/watercolor.png',
+              widget.themeManager.bgImage,
               fit: BoxFit.cover,
             ),
           ),

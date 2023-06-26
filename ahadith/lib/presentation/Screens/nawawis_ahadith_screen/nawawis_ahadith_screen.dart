@@ -1,11 +1,13 @@
 import 'package:ahadith/data/models/hadith.dart';
+import 'package:ahadith/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ahadith/presentation/Screens/saved/saved_ahadith_screen/UI/saved_ahadith_screen.dart';
 
 class NawawisAhadithScreen extends StatelessWidget {
-  NawawisAhadithScreen({super.key});
+  NawawisAhadithScreen({super.key, required this.themeManager});
 
+  final ThemeManager themeManager;
   final nawawisAhadith = [
     DetailedHadith(
       title: 'الاعمال بالنيات',
@@ -532,7 +534,7 @@ class NawawisAhadithScreen extends StatelessWidget {
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
       ),
       body: buildAhadithList(
-          nawawisAhadith, 'الاحاديث الاربعون النووية', context),
+          nawawisAhadith, 'الاحاديث الاربعون النووية', context, themeManager),
     );
   }
 }

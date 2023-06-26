@@ -1,3 +1,4 @@
+import 'package:ahadith/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -7,7 +8,7 @@ import 'package:ahadith/data/models/hadith.dart';
 
 
 class SavedCategoriesScreen extends StatelessWidget {
-  const SavedCategoriesScreen({super.key, required this.savedCategoriesIds, required this.savedCategories, required this.savedCategoriesTitlesList});
+  const SavedCategoriesScreen({super.key, required this.savedCategoriesIds, required this.savedCategories, required this.savedCategoriesTitlesList, required this.themeManager});
 
   final savedCategoriesIds;
 
@@ -16,6 +17,7 @@ class SavedCategoriesScreen extends StatelessWidget {
   final List<String> savedCategoriesTitlesList;
 
   final bool isSearching = false;
+  final ThemeManager themeManager;
 
 
   @override
@@ -35,7 +37,7 @@ class SavedCategoriesScreen extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.of(context).pushNamed(
-                  NawawiHadithScreen,
+                  NawawiHadithScreen,arguments: themeManager
                 );
               },
             ),
@@ -64,6 +66,7 @@ class SavedCategoriesScreen extends StatelessWidget {
                         'ahadith': savedCategories[
                         savedCategoriesIds.elementAt(index)],
                         'categoryTitle': savedCategoriesTitlesList[index],
+                        'themeManager': themeManager,
                       },
                     );
                   },

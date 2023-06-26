@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:provider/provider.dart';
 
-import '../../../constants/strings.dart';
 import '../../../data/data_providers/categories_data_provider.dart';
 import '../../../data/data_providers/favorites_and_saved_provider/favorites_and_saved.dart';
 import '../../../data/repositories/categories_repository.dart';
@@ -28,8 +27,6 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 1;
   final PageController _pageController = PageController(initialPage: 1);
-
-  final _today = HijriCalendar.now();
 
   @override
   void didChangeDependencies() {
@@ -74,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: Image.asset(
-                'assets/images/watercolor.png',
+                widget.themeManager.bgImage,
                 fit: BoxFit.cover,
               ),
             ),
@@ -91,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     value: Provider.of<FavoritesAndSavedProvider>(context),
                   ),
                 ],
-                child: const FavoritesScreen(),
+                child: FavoritesScreen(themeManager: widget.themeManager),
               ),
               BlocProvider(
                 create: (context) => CategoriesCubit(
@@ -106,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
         elevation: 0.0,
         //backgroundColor: Colors.black,
         currentIndex: _currentIndex,
-        selectedItemColor: Colors.deepPurple,
+        selectedItemColor: widget.themeManager.appPrimaryColor,
         unselectedItemColor: Colors.grey,
         onTap: _onNavItemTapped,
         items: const [
@@ -120,155 +117,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-
-      drawer: Drawer(
-        child: ListView(children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
-            child: Center(
-              child: Text(
-                'اللهم صل على محمد',
-                style: TextStyle(
-                  fontSize: 30.sp,
-                  color: Theme.of(context).textTheme.bodySmall!.color,
-                ),
-              ),
-            ),
-          ),
-          ListTile(
-            title: Text(
-              'اللغة',
-              style: TextStyle(
-                fontSize: 20.sp,
-                color: Theme.of(context).textTheme.bodySmall!.color,
-              ),
-            ),
-            // trailing: DropdownButton<String>(
-            //   value: widget.themeManager.currentLanguage,
-            //   icon: const Icon(Icons.arrow_downward),
-            //   iconSize: 24,
-            //   elevation: 16,
-            //   style: TextStyle(
-            //     fontSize: 20.sp,
-            //     color: Theme.of(context).textTheme.bodySmall!.color,
-            //   ),
-            //   underline: Container(
-            //     height: 2,
-            //     color: Theme.of(context).textTheme.bodySmall!.color,
-            //   ),
-            //   onChanged: (String? newValue) {
-            //     setState(() {
-            //       widget.themeManager.currentLanguage = newValue!;
-            //     });
-            //   },
-            //   items: <String>['العربية', 'English']
-            //       .map<DropdownMenuItem<String>>((String value) {
-            //     return DropdownMenuItem<String>(
-            //       value: value,
-            //       child: Text(
-            //         value == 'العربية' ? 'العربية' : 'English',
-            //         style: TextStyle(
-            //           fontSize: 20.sp,
-            //           color: Theme.of(context).textTheme.bodySmall!.color,
-            //         ),
-            //       ),
-            //     );
-            //   }).toList(),
-            // ),
-          ),
-          ListTile(
-            title: Text(
-              'المظهر',
-              style: TextStyle(
-                fontSize: 20.sp,
-                color: Theme.of(context).textTheme.bodySmall!.color,
-              ),
-            ),
-            trailing: DropdownButton<ThemeMode>(
-              items: [
-                DropdownMenuItem(
-                  child: Text(
-                    'الوضع الافتراضي',
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      color: Theme.of(context).textTheme.bodySmall!.color,
-                    ),
-                  ),
-                  value: ThemeMode.system,
-                ),
-                DropdownMenuItem(
-                  child: Text(
-                    'الوضع الفاتح',
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      color: Theme.of(context).textTheme.bodySmall!.color,
-                    ),
-                  ),
-                  value: ThemeMode.light,
-                ),
-                DropdownMenuItem(
-                  child: Text(
-                    'الوضع الداكن',
-                    style: TextStyle(
-                      fontSize: 20.sp,
-                      color: Theme.of(context).textTheme.bodySmall!.color,
-                    ),
-                  ),
-                  value: ThemeMode.dark,
-                ),
-              ],
-              value: widget.themeManager.themeMode,
-              icon: const Icon(Icons.arrow_downward),
-              iconSize: 24,
-              elevation: 16,
-              style: TextStyle(
-                fontSize: 20.sp,
-                color: Theme.of(context).textTheme.bodySmall!.color,
-              ),
-              underline: Container(
-                height: 2,
-                color: Theme.of(context).textTheme.bodySmall!.color,
-              ),
-              onChanged: (ThemeMode? newValue) {
-                setState(() {
-                  widget.themeManager.themeMode = newValue!;
-                });
-              },
-            ),
-          ),
-        ]),
-      ),
-    );
-  }
-
-  Widget _buildHomePageGrid() {
-    return Stack(
-      children: [
-
-        Align(
-          alignment: const Alignment(0, 0),
-          child: Container(
-            width: 0.9.sw,
-            height: 0.2.sh,
-            padding: const EdgeInsets.all(25.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Center(
-              child: Text(
-                'وما ينطق عن الهوى ان هوا الا وحي يوحى',
-                style: TextStyle(
-                  fontSize: 30.sp,
-                  color: Theme.of(context).textTheme.bodySmall!.color,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

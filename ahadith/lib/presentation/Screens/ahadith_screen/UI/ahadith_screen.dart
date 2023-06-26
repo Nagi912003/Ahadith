@@ -1,6 +1,7 @@
 import 'package:ahadith/business_logic/single_hadith_cubit/single_hadith_cubit.dart';
 import 'package:ahadith/data/data_providers/favorites_and_saved_provider/favorites_and_saved.dart';
 import 'package:ahadith/data/models/hadith.dart';
+import 'package:ahadith/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -12,8 +13,10 @@ import '../../../../data/models/category.dart';
 import '../widgets/ahadith_screen_widgets.dart';
 
 class AhadithScreen extends StatefulWidget {
-  const AhadithScreen({super.key, required this.category});
+  const AhadithScreen(
+      {super.key, required this.category, required this.themeManager});
   final Category category;
+  final ThemeManager themeManager;
 
   @override
   State<AhadithScreen> createState() => _AhadithScreenState();
@@ -66,7 +69,9 @@ class _AhadithScreenState extends State<AhadithScreen> {
                         .isSaved(widget.category.id!)
                     ? const Icon(Icons.download_done_outlined)
                     : _downloading
-                        ? const RefreshProgressIndicator()
+                        ? RefreshProgressIndicator(
+                            color: widget.themeManager.appPrimaryColor,
+                          )
                         : IconButton(
                             icon: const Icon(Icons.downloading_outlined),
                             onPressed: () async {
@@ -97,14 +102,18 @@ class _AhadithScreenState extends State<AhadithScreen> {
                               _downloading = false;
                             });
               } else if (state is SingleHadithsLoading) {
-                return const Center(
-                  child: RefreshProgressIndicator(),
+                return Center(
+                  child: RefreshProgressIndicator(
+                    color: widget.themeManager.appPrimaryColor,
+                  ),
                 );
               } else if (state is SingleHadithsError) {
                 return const Icon(Icons.cancel_presentation_outlined);
               } else {
-                return const Center(
-                  child: RefreshProgressIndicator(),
+                return Center(
+                  child: RefreshProgressIndicator(
+                    color: widget.themeManager.appPrimaryColor,
+                  ),
                 );
               }
             },
@@ -126,22 +135,26 @@ class _AhadithScreenState extends State<AhadithScreen> {
             BlocProvider.of<SingleHadithCubit>(context)
                 .getHadiths(hadithIds: hadithIds);
 
-            return buildAhadithList(ahadith, widget.category.title!, context);
+            return buildAhadithList(
+                ahadith, widget.category.title!, context, widget.themeManager);
           } else if (state is HadithsLoadedMore) {
             ahadith.addAll(state.hadiths);
             page++;
-            return buildAhadithList(ahadith, widget.category.title!, context);
+            return buildAhadithList(
+                ahadith, widget.category.title!, context, widget.themeManager);
           } else if (state is HadithsLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Center(
+              child: CircularProgressIndicator(
+                  color: widget.themeManager.appPrimaryColor),
             );
           } else if (state is HadithsError) {
             return Center(
               child: Text(state.message),
             );
           } else {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Center(
+              child: CircularProgressIndicator(
+                  color: widget.themeManager.appPrimaryColor),
             );
           }
         },

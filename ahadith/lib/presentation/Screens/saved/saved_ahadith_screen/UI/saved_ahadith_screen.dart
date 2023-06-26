@@ -1,4 +1,5 @@
 import 'package:ahadith/data/data_providers/favorites_and_saved_provider/favorites_and_saved.dart';
+import 'package:ahadith/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,10 +11,14 @@ import '../../../hadith_detailed_screen/Widgets/hadith_detailed_screen_widgets.d
 
 class SavedAhadithScreen extends StatelessWidget {
   const SavedAhadithScreen(
-      {super.key, required this.categoryTitle, required this.ahadith});
+      {super.key,
+      required this.categoryTitle,
+      required this.ahadith,
+      required this.themeManager});
 
   final String categoryTitle;
   final List<DetailedHadith> ahadith;
+  final ThemeManager themeManager;
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +34,13 @@ class SavedAhadithScreen extends StatelessWidget {
         centerTitle: true,
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
       ),
-      body: buildAhadithList(ahadith, categoryTitle, context),
+      body: buildAhadithList(ahadith, categoryTitle, context, themeManager),
     );
   }
-
-
 }
 
-Widget buildAhadithList(
-    ahadithList, String categoryTitle, BuildContext context) {
+Widget buildAhadithList(ahadithList, String categoryTitle, BuildContext context,
+    ThemeManager themeManager) {
   return ListView.builder(
     shrinkWrap: true,
     physics: const BouncingScrollPhysics(),
@@ -58,9 +61,9 @@ Widget buildAhadithList(
           ),
           onTap: () {
             final favoritesProvider =
-            Provider.of<FavoritesAndSavedProvider>(context, listen: false);
+                Provider.of<FavoritesAndSavedProvider>(context, listen: false);
             final isFavorite =
-            favoritesProvider.isFavorite(ahadithList[index].id!);
+                favoritesProvider.isFavorite(ahadithList[index].id!);
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -68,10 +71,12 @@ Widget buildAhadithList(
                   hadith: ahadithList[index],
                   isFavorite: isFavorite,
                   onPressed: () {
-                    favoritesProvider.addFavorite(ahadithList[index].id!,ahadithList[index], categoryTitle, index+1, true);
-                    snakeBarFavoriteMessage(false,context);
+                    favoritesProvider.addFavorite(ahadithList[index].id!,
+                        ahadithList[index], categoryTitle, index + 1, true);
+                    snakeBarFavoriteMessage(false, context, themeManager);
                   },
                   index: index,
+                  themeManager: themeManager,
                 ),
               ),
             );

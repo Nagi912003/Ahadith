@@ -9,7 +9,6 @@ import 'package:ahadith/presentation/Screens/hadith_detailed_screen/UI/hadith_de
 import 'package:ahadith/presentation/Screens/home_screen/home_screen.dart';
 import 'package:ahadith/presentation/Screens/nawawis_ahadith_screen/nawawis_ahadith_screen.dart';
 import 'package:ahadith/presentation/Screens/saved/saved_ahadith_screen/UI/saved_ahadith_screen.dart';
-import 'package:ahadith/presentation/Screens/saved/saved_categories_screen/UI/saved_categories_screen.dart';
 import 'package:ahadith/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 
@@ -68,7 +67,9 @@ class AppRouter {
         );
 
       case ahadithScreen:
-        final category = settings.arguments as Category;
+        final args = settings.arguments as Map<String, dynamic>;
+        final category = args['category'] as Category;
+        final themeManager = args['themeManager'] as ThemeManager;
         return MaterialPageRoute(
           builder: (context) => MultiProvider(
             providers: [
@@ -85,6 +86,7 @@ class AppRouter {
             ],
             child: AhadithScreen(
               category: category,
+              themeManager: themeManager,
             ),
           ),
         );
@@ -94,6 +96,7 @@ class AppRouter {
         final hadith = args['hadith'] as Hadith;
         final categoryTitle = args['categoryTitle'] as String;
         final index = args['index'] as int;
+        final themeManager = args['themeManager'] as ThemeManager;
         return MaterialPageRoute(
           builder: (context) => MultiProvider(
             providers: [
@@ -109,11 +112,13 @@ class AppRouter {
               hadith: hadith,
               categoryTitle: categoryTitle,
               hadithIndex: index,
+              themeManager: themeManager,
             ),
           ),
         );
 
       case favoritesScreen:
+        final themeManager = settings.arguments as ThemeManager;
         return MaterialPageRoute(
           builder: (context) => MultiProvider(
             providers: [
@@ -121,7 +126,7 @@ class AppRouter {
                 value: Provider.of<FavoritesAndSavedProvider>(context),
               ),
             ],
-            child: const FavoritesScreen(),
+            child: FavoritesScreen(themeManager: themeManager),
           ),
         );
 
@@ -129,20 +134,24 @@ class AppRouter {
         final args = settings.arguments as Map<String, dynamic>;
         final ahadith = args['ahadith'] as List<DetailedHadith>;
         final categoryTitle = args['categoryTitle'] as String;
+        final themeManager = args['themeManager'] as ThemeManager;
         return MaterialPageRoute(
           builder: (context) =>
               ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
-            value: Provider.of<FavoritesAndSavedProvider>(context),
-            child: SavedAhadithScreen(
+               value: Provider.of<FavoritesAndSavedProvider>(context),
+               child: SavedAhadithScreen(
               categoryTitle: categoryTitle,
               ahadith: ahadith,
+              themeManager: themeManager,
             ),
           ),
         );
 
       case NawawiHadithScreen:
+        final themeManager = settings.arguments as ThemeManager;
         return MaterialPageRoute(
-          builder: (context) => NawawisAhadithScreen(),
+          builder: (context) =>
+              NawawisAhadithScreen(themeManager: themeManager),
         );
 
       default:
