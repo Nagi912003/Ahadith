@@ -14,12 +14,12 @@ Widget buildAhadithList(ahadithList,String categoryTitle ,BuildContext context, 
         child: ListTile(
           title: Text(
             '${index+1}',
-            style: Theme.of(context).textTheme.displaySmall,
+            style: Theme.of(context).textTheme.bodySmall,
             textAlign: TextAlign.end,
           ),
           subtitle: Text(
             '${ahadithList[index].title!}',
-            style: Theme.of(context).textTheme.displaySmall,
+            style: Theme.of(context).textTheme.bodySmall,
             textAlign: TextAlign.end,
           ),
           onTap: () {

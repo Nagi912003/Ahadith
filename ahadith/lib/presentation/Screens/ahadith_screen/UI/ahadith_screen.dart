@@ -37,7 +37,7 @@ class _AhadithScreenState extends State<AhadithScreen> {
   void downloadHadiths() async {
     _downloading = true;
 
-    await Future.delayed(const Duration(milliseconds: 3500)).then((_) => {
+    await Future.delayed(const Duration(milliseconds: 3000)).then((_) => {
           Provider.of<FavoritesAndSavedProvider>(context, listen: false)
               .addSaved(ahadith as List<DetailedHadith>, widget.category),
           _downloading = false,
