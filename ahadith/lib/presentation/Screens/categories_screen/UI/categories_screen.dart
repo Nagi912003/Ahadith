@@ -108,7 +108,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     children: [
                       SizedBox(height: 20.h),
                       Text(
-                        'وما ينطق عن الهوى\nان هوا الا وحي يوحى',
+                        'َمَا يَنطِقُ عَنِ الْهَوَىٰ\nإِنْ هُوَ إِلَّا وَحْيٌ يُوحَىٰ',
+                        // 'وما ينطق عن الهوى\nان هوا الا وحي يوحى',
                         style: TextStyle(
                           fontSize: 30.sp,
                           color: Theme.of(context).textTheme.bodySmall!.color,
@@ -131,9 +132,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           collapsedIconColor:
                               widget.themeManager.appPrimaryColorInverse,
                           title: Text(
-                            'المحفوظات',
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
+                              'المحفوظات',
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
                           children: [
                             _searchController.text.isNotEmpty &&
                                     _isSearchingInSaved
@@ -242,7 +243,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
             ),
             child: Center(
               child: Text(
-                'اللهم صل على محمد',
+                'اللَهُمَّ صّلِ وسَلّمْ عَلى نَبِيْنَا مُحَمد ﷺ',
                 style: TextStyle(
                   fontSize: 30.sp,
                   color: widget.themeManager.appPrimaryColor200,

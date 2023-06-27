@@ -30,11 +30,23 @@ class SavedCategoriesScreen extends StatelessWidget {
           Card(
             color: Theme.of(context).cardColor,
             child: ListTile(
-              title: Text(
-                'الاحاديث الاربعون النووية',
-                style: Theme.of(context).textTheme.bodySmall,
-                textAlign: TextAlign.end,
-              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  'alnawawiforty.com   ',
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 12.sp,
+                  ),
+                ),
+                Text(
+                  'الاحاديث الاربعون النووية',
+                  style: Theme.of(context).textTheme.bodySmall,
+                  textAlign: TextAlign.end,
+                ),
+              ],
+            ),
               onTap: () {
                 Navigator.of(context).pushNamed(
                   NawawiHadithScreen,arguments: themeManager
