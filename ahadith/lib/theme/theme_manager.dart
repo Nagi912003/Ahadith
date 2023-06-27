@@ -15,7 +15,7 @@ class ThemeManager with ChangeNotifier {
     int mode = 1;
     Color appPrimaryColor = Colors.deepPurple;
     Color appPrimaryColor200 = Colors.deepPurple[200]!;
-    Color appPrimaryColorInverse = Colors.deepPurple[200]!;
+    Color appPrimaryColorInverse = Colors.red;
 
     void setBackGroundImage(String imagePath) {
       bgImage = imagePath;
@@ -52,7 +52,6 @@ class ThemeManager with ChangeNotifier {
           _savedBox.put('themeMode', 5);
           appPrimaryColor = Colors.green[200]!;
           appPrimaryColor200 = Colors.green[100]!;
-          appPrimaryColorInverse = Colors.red;
           bgImage = 'assets/images/watercolor-g.png';
           break;
         default:

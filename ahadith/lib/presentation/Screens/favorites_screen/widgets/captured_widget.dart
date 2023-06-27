@@ -1,7 +1,7 @@
 import 'package:ahadith/data/models/hadith.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 
 Widget CapturedWidget({required DetailedHadith hadith, hadithIndex,bool isRandom = false, required BuildContext context}) {
   String hadeeth = hadith.hadeeth!;

@@ -1,10 +1,9 @@
 import 'package:ahadith/presentation/Screens/home_screen/home_screen.dart';
+import 'package:ahadith/presentation/Screens/splash_screen/splash_screen.dart';
 import 'package:ahadith/theme/theme_constants.dart';
 import 'package:ahadith/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:flutter_translate/flutter_translate.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -17,10 +16,6 @@ import 'data/data_providers/favorites_and_saved_provider/favorites_and_saved.dar
 
 
 void main() async{
-
-  // var delegate = await LocalizationDelegate.create(
-  //     fallbackLocale: 'en_US',
-  //     supportedLocales: ['en_US', 'ar']);
 
   //init hive
   await Hive.initFlutter();
@@ -99,7 +94,7 @@ class _MyAppState extends State<MyApp> {
 
               themeMode: ThemeMode.dark,
 
-              home: MyHomePage(themeManager: _themeManager),
+              home: SplashScreen(child: MyHomePage(themeManager: _themeManager), themeManager: _themeManager),
               onGenerateRoute: AppRouter().generateRoute,
             ),
           );
