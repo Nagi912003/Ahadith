@@ -456,14 +456,17 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   }
 
   void searchByHadithInSaved(String hadeethTitle) {
-    List<DetailedHadith> savedCategoriesSearchResultOfAhadithTemp = [];
-    savedCategories.values.toList().forEach((detailedHadithList) {
-      savedCategoriesSearchResultOfAhadithTemp += detailedHadithList;
-    });
-    savedCategoriesSearchResultOfAhadith =
-        savedCategoriesSearchResultOfAhadithTemp
-            .where((hadith) => hadith.title!.contains(hadeethTitle))
-            .toList();
+    // List<DetailedHadith> savedCategoriesSearchResultOfAhadithTemp = [];
+    // savedCategories.values.toList().forEach((detailedHadithList) {
+    //   savedCategoriesSearchResultOfAhadithTemp += detailedHadithList;
+    // });
+    // savedCategoriesSearchResultOfAhadith =
+    //     savedCategoriesSearchResultOfAhadithTemp
+    //         .where((hadith) => hadith.title!.contains(hadeethTitle))
+    //         .toList();
+    //
+    savedCategoriesSearchResultOfAhadith = [];
+    savedCategoriesSearchResultOfAhadith = Provider.of<FavoritesAndSavedProvider>(context, listen: false).searchByHadeethInSaved(hadeethTitle);
 
     setState(() {});
   }

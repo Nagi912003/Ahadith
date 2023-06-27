@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'search_algorithm.dart';
 
 import 'package:ahadith/data/models/category.dart';
 import 'package:flutter/material.dart';
@@ -142,6 +143,8 @@ class FavoritesAndSavedProvider with ChangeNotifier {
   Map<String, String> _savedCategoriesTitles = {};
   List<String> _savedCategoriesTitlesList = [];
 
+  InvertedIndex index = InvertedIndex();
+
   Map<String, List<DetailedHadith>> get savedCategories {
     return {..._savedCategories};
   }
@@ -174,6 +177,10 @@ class FavoritesAndSavedProvider with ChangeNotifier {
 
     fitchSaved();
 
+    List<String> savedAhadithTitlesList = savedAhadith.map((e) => e.title!).toList();
+    index = InvertedIndex();
+    index.buildIndex(savedAhadithTitlesList);
+
     notifyListeners();
   }
 
@@ -183,7 +190,7 @@ class FavoritesAndSavedProvider with ChangeNotifier {
     // _savedCategories.clear();
 
     _savedCategoriesTitlesList.clear();
-
+    savedAhadith.clear();
     for (var id in _savedCategoriesIds) {
       _savedCategoriesTitles.putIfAbsent(id, () => _savedBox.get('catName$id'));
       _savedCategoriesTitlesList.add(_savedBox.get('catName$id'));
@@ -193,6 +200,20 @@ class FavoritesAndSavedProvider with ChangeNotifier {
       _savedCategories.putIfAbsent(id, () => ahadith);
       savedAhadith += ahadith;
     }
+  }
+
+
+  List<DetailedHadith> searchByHadeethInSaved(String query){
+    print(query);
+    print(index.index.length);
+    List<Ranking> rankings = index.rank(query, 10);
+    List<DetailedHadith> searchResult = [];
+
+    for (Ranking ranking in rankings) {
+      searchResult.add(savedAhadith[ranking.docId]);
+    }
+
+    return searchResult;
   }
 
   bool isSaved(String id) {
