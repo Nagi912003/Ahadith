@@ -1,6 +1,6 @@
 String baseUrl = 'https://hadeethenc.com/api/v1';
 String lang = 'ar';
-String appName = 'أحاديـــث';
+String appName = 'أَحَادِيـــثٌ';
 
 //screen
 const String categoriesScreen = '/categories_screen';

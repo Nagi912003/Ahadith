@@ -207,9 +207,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             ),
           ),
         ),
-        // const SizedBox(
-        //   height: 50,
-        // ),
         Expanded(
           child: ListView.builder(
             itemCount: favoriteItems.length,
@@ -221,9 +218,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     '${favoriteItems[index].categories.first} : ${favoriteItems[index].reference}',
                     textAlign: TextAlign.end,
                   ),
-                  subtitle: Text(
-                    '${favoriteItems[index].title}',
-                    textAlign: TextAlign.end,
+                  subtitle: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      '${favoriteItems[index].title}',
+                      textAlign: TextAlign.end,
+                      style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                        fontSize: 18.5.sp,
+                      ),
+                    ),
                   ),
                   onTap: () {
                     Navigator.of(context).pop();

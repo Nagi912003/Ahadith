@@ -94,14 +94,14 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
               children: [
                 Text(
                   widget.hadith.hadeeth!,
-                  style: GoogleFonts.lateef(
+                  style: Theme.of(context).textTheme.displaySmall!.copyWith(
                     // overflow: TextOverflow.fade,
                     color: Colors.white,
-                    fontSize: 27.sp,
+                    fontSize: 25.sp,
                     fontWeight: FontWeight.bold,
                     // fontFamily: Theme.of(context).textTheme.titleLarge?.fontFamily,
                   ),
-                  textAlign: TextAlign.end,
+                  textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 30.h),
                 goToHadithButton('التفسير و معاني الكلمات', widget.hadith),

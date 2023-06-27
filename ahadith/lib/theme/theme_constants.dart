@@ -25,7 +25,7 @@ ThemeData darkTheme = ThemeData(
   ),
 
   textTheme: TextTheme(
-    bodyLarge: GoogleFonts.kufam(
+    bodyLarge: GoogleFonts.ibmPlexSansArabic(
       color: Colors.white,
       fontSize: 18.sp,
       fontWeight: FontWeight.bold,
@@ -35,7 +35,7 @@ ThemeData darkTheme = ThemeData(
       fontSize: 16.sp,
       fontWeight: FontWeight.bold,
     ),
-    bodySmall: GoogleFonts.amiri(
+    bodySmall: GoogleFonts.tajawal(
       color: Colors.white,
       fontSize: 20.sp,
       fontWeight: FontWeight.bold,
@@ -45,7 +45,7 @@ ThemeData darkTheme = ThemeData(
       fontSize: 25.sp,
       fontWeight: FontWeight.bold,
     ),
-    displaySmall: GoogleFonts.lateef(
+    displaySmall: GoogleFonts.notoNaskhArabic(
       color: Colors.white,
       fontSize: 26.sp,
       fontWeight: FontWeight.bold,

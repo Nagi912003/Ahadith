@@ -93,14 +93,14 @@ Widget CapturedWidget({required DetailedHadith hadith, hadithIndex,bool isRandom
             children: [
               Text(
                 hadeeth,
-                style: GoogleFonts.lateef(
+                style: Theme.of(context).textTheme.displaySmall!.copyWith(
                   // overflow: TextOverflow.fade,
                   color: Colors.white,
-                  fontSize: 27.sp,
+                  fontSize: 26.sp,
                   fontWeight: FontWeight.bold,
                   // fontFamily: Theme.of(context).textTheme.titleLarge?.fontFamily,
                 ),
-                textAlign: TextAlign.end,
+                textAlign: TextAlign.center,
               ),
             ],
           ),

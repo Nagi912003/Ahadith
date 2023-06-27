@@ -245,7 +245,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 'اللهم صل على محمد',
                 style: TextStyle(
                   fontSize: 30.sp,
-                  color: Theme.of(context).textTheme.bodySmall!.color,
+                  color: widget.themeManager.appPrimaryColor200,
                 ),
                 textAlign: TextAlign.center,
               ),
