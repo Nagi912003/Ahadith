@@ -115,11 +115,7 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          backgroundColor: MediaQuery.of(context)
-                              .platformBrightness ==
-                              Brightness.light
-                              ? Colors.white
-                              : Colors.black87,
+                          backgroundColor: Colors.black87,
                           title: SizedBox(
                             // height: 0.2.sh,
                             // width: 0.8.sw,
@@ -193,10 +189,7 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor:
-            MediaQuery.of(context).platformBrightness == Brightness.light
-                ? Colors.white
-                : Colors.grey.shade800,
+        backgroundColor: Colors.grey.shade800,
         title: SizedBox(
           height: 0.8.sh,
           width: 0.8.sw,

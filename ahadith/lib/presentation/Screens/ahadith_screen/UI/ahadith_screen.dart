@@ -4,6 +4,7 @@ import 'package:ahadith/data/models/hadith.dart';
 import 'package:ahadith/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../business_logic/hadiths_cubit/hadiths_cubit.dart';
@@ -25,7 +26,7 @@ class AhadithScreen extends StatefulWidget {
 class _AhadithScreenState extends State<AhadithScreen> {
   late List ahadith;
   int page = 1;
-  bool _downloading = false;
+  bool _downloading = true;
 
   @override
   void initState() {
@@ -46,13 +47,13 @@ class _AhadithScreenState extends State<AhadithScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if(Provider.of<FavoritesAndSavedProvider>(context,listen: false)
+        .isSaved(widget.category.id!)){
+      _downloading = false;
+    }
     return Scaffold(
       appBar: AppBar(
-        foregroundColor:
-            MediaQuery.of(context).platformBrightness == Brightness.light
-                ? Colors.deepPurple
-                : Colors.deepPurple.shade100,
-
+        foregroundColor: widget.themeManager.appPrimaryColor,
         title: Text(widget.category.title!),
         // titleSpacing: 20,
         centerTitle: true,
@@ -135,8 +136,39 @@ class _AhadithScreenState extends State<AhadithScreen> {
             BlocProvider.of<SingleHadithCubit>(context)
                 .getHadiths(hadithIds: hadithIds);
 
-            return buildAhadithList(
-                ahadith, widget.category.title!, context, widget.themeManager);
+            return _downloading
+                ? Stack(
+                    children: [
+                      buildAhadithList(ahadith, widget.category.title!, context,
+                          widget.themeManager),
+                      Container(
+                        width: double.infinity,
+                        height: 1.sh,
+                        color: Colors.grey.shade800.withOpacity(0.4),
+                        child: Center(
+                          child: Card(
+                            color: Colors.grey.shade900,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  CircularProgressIndicator(color: widget.themeManager.appPrimaryColor,),
+                                  SizedBox(height: 20.h,),
+                                  Text(
+                                    'المرة الأولى لفتح هذه الفئة \n انتظر لحين حفظ الاحاديث',
+                                    style: Theme.of(context).textTheme.bodySmall,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : buildAhadithList(ahadith, widget.category.title!, context,
+                    widget.themeManager);
           } else if (state is HadithsLoadedMore) {
             ahadith.addAll(state.hadiths);
             page++;

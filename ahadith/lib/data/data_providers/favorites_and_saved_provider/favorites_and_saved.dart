@@ -202,10 +202,16 @@ class FavoritesAndSavedProvider with ChangeNotifier {
     }
   }
 
+  void buildInvertedIndex(){
+    fitchSaved();
+    print('\n\nbuildInvertedIndex triggered\n\n');
+    List<String> savedAhadithTitlesList = savedAhadith.map((e) => e.title!).toList();
+    index = InvertedIndex();
+    index.buildIndex(savedAhadithTitlesList);
+  }
+
 
   List<DetailedHadith> searchByHadeethInSaved(String query){
-    print(query);
-    print(index.index.length);
     List<Ranking> rankings = index.rank(query, 10);
     List<DetailedHadith> searchResult = [];
 

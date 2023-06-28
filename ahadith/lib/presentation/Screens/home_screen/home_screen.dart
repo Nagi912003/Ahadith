@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 
 import '../../../data/data_providers/categories_data_provider.dart';
@@ -25,6 +26,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 1;
   final PageController _pageController = PageController(initialPage: 1);
+
+  @override
+  void initState() {
+    Provider.of<FavoritesAndSavedProvider>(context, listen: false)
+        .buildInvertedIndex();
+    super.initState();
+  }
 
   @override
   void didChangeDependencies() {

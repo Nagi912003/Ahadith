@@ -47,6 +47,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<CategoriesCubit>(context).getAllCategories();
+    // Provider.of<FavoritesAndSavedProvider>(context, listen: false)
+    //     .buildInvertedIndex();
   }
 
   @override
@@ -108,7 +110,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     children: [
                       SizedBox(height: 20.h),
                       Text(
-                        'َمَا يَنطِقُ عَنِ الْهَوَىٰ\nإِنْ هُوَ إِلَّا وَحْيٌ يُوحَىٰ',
+                        'َوَمَا يَنطِقُ عَنِ الْهَوَىٰ\nإِنْ هُوَ إِلَّا وَحْيٌ يُوحَىٰ',
                         // 'وما ينطق عن الهوى\nان هوا الا وحي يوحى',
                         style: TextStyle(
                           fontSize: 30.sp,
@@ -299,6 +301,20 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     child: Image.asset('assets/images/watercolor-g.png'),
                   ),
                 ),
+                DropdownMenuItem(
+                  value: 7,
+                  child: DropdownMenuItem(
+                    value: 7,
+                    child: Image.asset('assets/images/watercolor-bw.png'),
+                  ),
+                ),
+                DropdownMenuItem(
+                  value: 8,
+                  child: DropdownMenuItem(
+                    value: 8,
+                    child: Image.asset('assets/images/watercolor-grey.png'),
+                  ),
+                ),
               ],
               value: widget.themeManager.mode,
               icon: Icon(
@@ -456,6 +472,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   }
 
   void searchByHadithInSaved(String hadeethTitle) {
+    // if(firstSearch) {
+    //   Provider.of<FavoritesAndSavedProvider>(context, listen: false)
+    //       .buildInvertedIndex();
+    //   firstSearch = false;
+    // }
     // List<DetailedHadith> savedCategoriesSearchResultOfAhadithTemp = [];
     // savedCategories.values.toList().forEach((detailedHadithList) {
     //   savedCategoriesSearchResultOfAhadithTemp += detailedHadithList;

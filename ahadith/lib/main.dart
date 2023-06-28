@@ -1,9 +1,9 @@
 import 'package:ahadith/presentation/Screens/home_screen/home_screen.dart';
-import 'package:ahadith/presentation/Screens/splash_screen/splash_screen.dart';
 import 'package:ahadith/theme/theme_constants.dart';
 import 'package:ahadith/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -17,6 +17,9 @@ import 'data/data_providers/favorites_and_saved_provider/favorites_and_saved.dar
 
 void main() async{
 
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   //init hive
   await Hive.initFlutter();
 
@@ -29,7 +32,7 @@ void main() async{
   //open box saved
   await Hive.openBox('saved');
   // await Hive.box('saved').clear();
-  Box saved = Hive.box('saved');
+  // Box saved = Hive.box('saved');
   // print('\n\nopen box saved--------------------------------------------------------');
   // print('in box saved>>>>>>>>>>--------${Hive.box('saved').values}----------------------------------------\n\n');
 
@@ -41,6 +44,8 @@ void main() async{
       DeviceOrientation.portraitUp,
     ],
   );
+
+  FlutterNativeSplash.remove();
 }
 
 ThemeManager _themeManager = ThemeManager();
@@ -94,7 +99,7 @@ class _MyAppState extends State<MyApp> {
 
               themeMode: ThemeMode.dark,
 
-              home: SplashScreen(child: MyHomePage(themeManager: _themeManager), themeManager: _themeManager),
+              home: MyHomePage(themeManager: _themeManager),
               onGenerateRoute: AppRouter().generateRoute,
             ),
           );
