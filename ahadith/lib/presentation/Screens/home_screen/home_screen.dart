@@ -67,64 +67,60 @@ class _MyHomePageState extends State<MyHomePage> {
     String text =
         'اللهم صل على محمد وعلى آل محمد كما صليت على إبراهيم وعلى آل إبراهيم إنك حميد مجيد اللهم بارك على محمد وعلى آل محمد كما باركت على إبراهيم وعلى آل إبراهيم إنك حميد مجيد';
     textLength = text.length;
-    return Container(
-      width: double.infinity,
-      height: MediaQuery.of(context).size.height,
-      child: Scaffold(
-        body: Stack(
-          children: [
-            BlurredContainer(
-              child: SizedBox(
-                // color: Colors.black,
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                child: Image.asset(
-                  widget.themeManager.bgImage,
-                  fit: BoxFit.cover,
-                ),
+    return Scaffold(
+      body: Stack(
+        children: [
+          BlurredContainer(
+            child: SizedBox(
+              // color: Colors.black,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: Image.asset(
+                widget.themeManager.bgImage,
+                fit: BoxFit.cover,
               ),
             ),
-            PageView(
-              // physics: const NeverScrollableScrollPhysics(),
+          ),
+          PageView(
+            // physics: const NeverScrollableScrollPhysics(),
 
-              controller: _pageController,
-              onPageChanged: _onPageChanged,
-              children: [
-                MultiProvider(
-                  providers: [
-                    ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
-                      value: Provider.of<FavoritesAndSavedProvider>(context),
-                    ),
-                  ],
-                  child: FavoritesScreen(themeManager: widget.themeManager),
-                ),
-                BlocProvider(
-                  create: (context) => CategoriesCubit(
-                      CategoriesRepository(CategoriesDataProvider())),
-                  child: CategoriesScreen(themeManager: widget.themeManager),
-                ),
-              ],
-            ),
-          ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          elevation: 0.0,
-          //backgroundColor: Colors.black,
-          currentIndex: _currentIndex,
-          selectedItemColor: widget.themeManager.appPrimaryColor,
-          unselectedItemColor: Colors.grey,
-          onTap: _onNavItemTapped,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
-              label: 'المفضلة',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list_alt),
-              label: 'موسوعة الأحاديث',
-            ),
-          ],
-        ),
+            controller: _pageController,
+            onPageChanged: _onPageChanged,
+            children: [
+              MultiProvider(
+                providers: [
+                  ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
+                    value: Provider.of<FavoritesAndSavedProvider>(context),
+                  ),
+                ],
+                child: FavoritesScreen(themeManager: widget.themeManager),
+              ),
+              BlocProvider(
+                create: (context) => CategoriesCubit(
+                    CategoriesRepository(CategoriesDataProvider())),
+                child: CategoriesScreen(themeManager: widget.themeManager),
+              ),
+            ],
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        currentIndex: _currentIndex,
+        selectedItemColor: widget.themeManager.appPrimaryColor,
+        unselectedItemColor: Colors.grey,
+        onTap: _onNavItemTapped,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite),
+            label: 'المفضلة',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list_alt),
+            label: 'موسوعة الأحاديث',
+          ),
+        ],
       ),
     );
   }

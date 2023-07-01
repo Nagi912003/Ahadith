@@ -93,6 +93,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
             )
           : AppBar(
               title: OurAppbar(),
+        backgroundColor: Colors.transparent,
             ),
       body: Padding(
         padding: EdgeInsets.only(left: 8.0.w, right: 8.0.w),
@@ -104,6 +105,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 height: 0.86.sh,
                 width: 1.sw,
                 child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -111,7 +113,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                       SizedBox(height: 20.h),
                       Text(
                         'َوَمَا يَنطِقُ عَنِ الْهَوَىٰ\nإِنْ هُوَ إِلَّا وَحْيٌ يُوحَىٰ',
-                        // 'وما ينطق عن الهوى\nان هوا الا وحي يوحى',
                         style: TextStyle(
                           fontSize: 30.sp,
                           color: Theme.of(context).textTheme.bodySmall!.color,
@@ -218,7 +219,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                       .getAllCategories();
                                   return _buildBlocWidget();
                                 } else {
-                                  return buildNoInternetWidget(context);
+                                  return buildNoInternetWidget(context,widget.themeManager);
                                 }
                               },
                               child: CircularProgressIndicator(
@@ -238,150 +239,161 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         ),
       ),
       drawer: Drawer(
+        backgroundColor: Colors.black54,
         child: ListView(children: [
           DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
+            child: SizedBox(
+              height: 200,
+              child: Card(
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      'اللَهُمَّ صّلِ وسَلّمْ عَلى نَبِيْنَا مُحَمد ﷺ',
+                      style: TextStyle(
+                        fontSize: 30.sp,
+                        color: widget.themeManager.appPrimaryColor200,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
             ),
-            child: Center(
-              child: Text(
-                'اللَهُمَّ صّلِ وسَلّمْ عَلى نَبِيْنَا مُحَمد ﷺ',
+          ),
+          Card(
+            child: ListTile(
+              title: Text(
+                'المظهر',
                 style: TextStyle(
-                  fontSize: 30.sp,
+                  fontSize: 20.sp,
+                  color: Theme.of(context).textTheme.bodySmall!.color,
+                ),
+              ),
+              trailing: DropdownButton<int>(
+                iconDisabledColor: widget.themeManager.appPrimaryColor,
+                iconEnabledColor: widget.themeManager.appPrimaryColor,
+                items: [
+                  DropdownMenuItem(
+                    value: 1,
+                    child: DropdownMenuItem(
+                      value: 1,
+                      child: Image.asset('assets/images/watercolor.png'),
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: 2,
+                    child: DropdownMenuItem(
+                      value: 2,
+                      child: Image.asset('assets/images/watercolor-p.png'),
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: 3,
+                    child: DropdownMenuItem(
+                      value: 3,
+                      child: Image.asset('assets/images/watercolor-off.png'),
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: 4,
+                    child: DropdownMenuItem(
+                      value: 4,
+                      child: Image.asset('assets/images/watercolor-b.png'),
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: 5,
+                    child: DropdownMenuItem(
+                      value: 5,
+                      child: Image.asset('assets/images/watercolor-g.png'),
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: 7,
+                    child: DropdownMenuItem(
+                      value: 7,
+                      child: Image.asset('assets/images/watercolor-bw.png'),
+                    ),
+                  ),
+                  DropdownMenuItem(
+                    value: 8,
+                    child: DropdownMenuItem(
+                      value: 8,
+                      child: Image.asset('assets/images/watercolor-grey.png'),
+                    ),
+                  ),
+                ],
+                value: widget.themeManager.mode,
+                icon: Icon(
+                  Icons.keyboard_arrow_down_outlined,
                   color: widget.themeManager.appPrimaryColor200,
                 ),
-                textAlign: TextAlign.center,
+                iconSize: 24,
+                elevation: 16,
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  color: Theme.of(context).textTheme.bodySmall!.color,
+                ),
+                underline: const SizedBox(height: 0),
+                onChanged: (int? newValue) {
+                  setState(() {
+                    widget.themeManager.toggleBackGroundImage(newValue!);
+                  });
+                },
               ),
             ),
           ),
-          ListTile(
-            title: Text(
-              'المظهر',
-              style: TextStyle(
-                fontSize: 20.sp,
-                color: Theme.of(context).textTheme.bodySmall!.color,
+          Card(
+            child: ExpansionTile(
+              collapsedIconColor: widget.themeManager.appPrimaryColor,
+              iconColor: widget.themeManager.appPrimaryColor,
+              title: Text(
+                'الاحاديــث اليومية' + '  ${randomAhadith.length}',
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  color: Theme.of(context).textTheme.bodySmall!.color,
+                ),
               ),
-            ),
-            trailing: DropdownButton<int>(
-              iconDisabledColor: widget.themeManager.appPrimaryColor,
-              iconEnabledColor: widget.themeManager.appPrimaryColor,
-              items: [
-                DropdownMenuItem(
-                  value: 1,
-                  child: DropdownMenuItem(
-                    value: 1,
-                    child: Image.asset('assets/images/watercolor.png'),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: 2,
-                  child: DropdownMenuItem(
-                    value: 2,
-                    child: Image.asset('assets/images/watercolor-p.png'),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: 3,
-                  child: DropdownMenuItem(
-                    value: 3,
-                    child: Image.asset('assets/images/watercolor-off.png'),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: 4,
-                  child: DropdownMenuItem(
-                    value: 4,
-                    child: Image.asset('assets/images/watercolor-b.png'),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: 5,
-                  child: DropdownMenuItem(
-                    value: 5,
-                    child: Image.asset('assets/images/watercolor-g.png'),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: 7,
-                  child: DropdownMenuItem(
-                    value: 7,
-                    child: Image.asset('assets/images/watercolor-bw.png'),
-                  ),
-                ),
-                DropdownMenuItem(
-                  value: 8,
-                  child: DropdownMenuItem(
-                    value: 8,
-                    child: Image.asset('assets/images/watercolor-grey.png'),
-                  ),
-                ),
-              ],
-              value: widget.themeManager.mode,
-              icon: Icon(
-                Icons.keyboard_arrow_down_outlined,
-                color: widget.themeManager.appPrimaryColor200,
-              ),
-              iconSize: 24,
-              elevation: 16,
-              style: TextStyle(
-                fontSize: 20.sp,
-                color: Theme.of(context).textTheme.bodySmall!.color,
-              ),
-              underline: const SizedBox(height: 0),
-              onChanged: (int? newValue) {
-                setState(() {
-                  widget.themeManager.toggleBackGroundImage(newValue!);
-                });
-              },
+              children: randomAhadith
+                  .map((e) => Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            title: Text(e.title!),
+                            onTap: () {
+                              final favoritesProvider =
+                                  Provider.of<FavoritesAndSavedProvider>(context,
+                                      listen: false);
+                              final isFavorite =
+                                  favoritesProvider.isFavorite(e.id!);
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => savedDetailedHadith(
+                                  themeManager: widget.themeManager,
+                                  isFavorite: isFavorite,
+                                  hadith: e,
+                                  onPressed: () {
+                                    favoritesProvider.addFavorite(
+                                        e.id!,
+                                        e,
+                                        'الاحاديــث اليومية',
+                                        randomAhadith.length,
+                                        true);
+                                    snakeBarFavoriteMessage(
+                                        false, context, widget.themeManager);
+                                  },
+                                  index: randomAhadith.indexOf(e),
+                                ),
+                              ));
+                            },
+                          ),
+                          const Divider(),
+                        ],
+                      ))
+                  .toList(),
             ),
           ),
-          ExpansionTile(
-            collapsedIconColor: widget.themeManager.appPrimaryColor,
-            iconColor: widget.themeManager.appPrimaryColor,
-            title: Text(
-              'الاحاديــث اليومية' + '  ${randomAhadith.length}',
-              style: TextStyle(
-                fontSize: 20.sp,
-                color: Theme.of(context).textTheme.bodySmall!.color,
-              ),
-            ),
-            children: randomAhadith
-                .map((e) => Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          title: Text(e.title!),
-                          onTap: () {
-                            final favoritesProvider =
-                                Provider.of<FavoritesAndSavedProvider>(context,
-                                    listen: false);
-                            final isFavorite =
-                                favoritesProvider.isFavorite(e.id!);
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => savedDetailedHadith(
-                                themeManager: widget.themeManager,
-                                isFavorite: isFavorite,
-                                hadith: e,
-                                onPressed: () {
-                                  favoritesProvider.addFavorite(
-                                      e.id!,
-                                      e,
-                                      'الاحاديــث اليومية',
-                                      randomAhadith.length,
-                                      true);
-                                  snakeBarFavoriteMessage(
-                                      false, context, widget.themeManager);
-                                },
-                                index: randomAhadith.indexOf(e),
-                              ),
-                            ));
-                          },
-                        ),
-                        const Divider(),
-                      ],
-                    ))
-                .toList(),
-          ),
+
         ]),
       ),
     );
@@ -416,7 +428,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
   Widget _buildCategoriesList() {
     return SizedBox(
-      height: 0.8.sh,
+      height: 400.h,
       child: ListView.builder(
         padding: EdgeInsets.symmetric(
           horizontal: 10.w,

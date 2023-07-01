@@ -1,6 +1,7 @@
 import 'package:ahadith/data/data_providers/favorites_and_saved_provider/favorites_and_saved.dart';
 import 'package:ahadith/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../data/models/hadith.dart';

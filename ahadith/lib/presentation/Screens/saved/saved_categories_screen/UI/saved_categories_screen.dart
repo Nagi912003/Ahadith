@@ -22,10 +22,11 @@ class SavedCategoriesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
+    return SizedBox(
+      height: 400.h,
+      child: ListView(
+        physics: const BouncingScrollPhysics(),
+        shrinkWrap: true,
         children: [
           Card(
             color: Theme.of(context).cardColor,

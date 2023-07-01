@@ -177,7 +177,7 @@ class FavoritesAndSavedProvider with ChangeNotifier {
 
     fitchSaved();
 
-    List<String> savedAhadithTitlesList = savedAhadith.map((e) => e.title!).toList();
+    List<String> savedAhadithTitlesList = savedAhadith.map((e) => e.hadeeth!).toList();
     index = InvertedIndex();
     index.buildIndex(savedAhadithTitlesList);
 
@@ -249,6 +249,23 @@ class FavoritesAndSavedProvider with ChangeNotifier {
             })
         .toList();
     return ahadithMap;
+  }
+  Map<String, dynamic> turnHadithToMap(DetailedHadith hadith){
+    return {
+      'id': hadith.id.toString(),
+      'title': hadith.title.toString(),
+      'hadeeth': hadith.hadeeth.toString(),
+      'attribution': hadith.attribution.toString(),
+      'grade': hadith.grade.toString(),
+      'explanation': hadith.explanation.toString(),
+      'categories': hadith.categories,
+      'wordsMeanings': hadith.wordsMeanings != null
+          ? hadith.wordsMeanings!.isNotEmpty
+          ? hadith.wordsMeanings!.toString()
+          : []
+          : [],
+      'reference': hadith.reference.toString(),
+    };
   }
 
   List<DetailedHadith> turnMapsToAhadith(List<dynamic> ahadithMap) {

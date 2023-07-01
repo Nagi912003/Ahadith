@@ -6,26 +6,23 @@ import '../../../../data/models/category.dart';
 import '../../../../constants/strings.dart';
 import '../../../../theme/theme_manager.dart';
 
-Widget buildNoInternetWidget(context) {
+Widget buildNoInternetWidget(context, ThemeManager themeManager) {
   return Center(
     child: Container(
       width: 0.9.sw,
-      height: 0.5.sh,
+      height: 200.h,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.black45,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          MediaQuery.of(context).size.width>500? Image.asset("assets/images/undraw_connected_world_wuay-removebg-preview.png",
-              width: 0.5.sw, height: 0.2.sh): Image.asset("assets/images/undraw_connected_world_wuay-removebg-preview.png"),
-          const Text(
-            //"can't connect .. check the internet",
+          Text(
             "...حدث مشكلة في الاتصال",
             style: TextStyle(
               fontSize: 22,
-              color: Colors.deepPurple,
+              color: themeManager.appPrimaryColor,
               //color: MyColors.mySecondary,
             ),
           ),
