@@ -31,7 +31,7 @@ void main() async{
 
   //open box saved
   await Hive.openBox('saved');
-  // await Hive.box('saved').clear();
+  await Hive.box('saved').clear();
   // Box saved = Hive.box('saved');
   // print('\n\nopen box saved--------------------------------------------------------');
   // print('in box saved>>>>>>>>>>--------${Hive.box('saved').values}----------------------------------------\n\n');

@@ -204,7 +204,6 @@ class FavoritesAndSavedProvider with ChangeNotifier {
 
   void buildInvertedIndex(){
     fitchSaved();
-    print('\n\nbuildInvertedIndex triggered\n\n');
     List<String> savedAhadithTitlesList = savedAhadith.map((e) => e.title!).toList();
     index = InvertedIndex();
     index.buildIndex(savedAhadithTitlesList);

@@ -32,7 +32,7 @@ class _AhadithScreenState extends State<AhadithScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<HadithsCubit>(context)
-        .getAllHadith(categoryId: widget.category.id!, perPage: '1550');
+        .getAllHadith(categoryId: widget.category.id!, perPage: '1000');
   }
 
   void downloadHadiths() async {
@@ -130,7 +130,7 @@ class _AhadithScreenState extends State<AhadithScreen> {
             List<String> hadithIds = [];
             for (var hadith in ahadith) {
               hadithIds.add(hadith.id);
-              if (hadithIds.length >= 200) break;
+              if (hadithIds.length >= 100) break;
             }
 
             BlocProvider.of<SingleHadithCubit>(context)

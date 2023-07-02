@@ -152,6 +152,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                         savedCategoriesTitlesList,
                                     savedCategoriesIds: savedCategoriesIds,
                                     themeManager: widget.themeManager,
+                              listLength: savedCategories.length,
                                   ),
                           ],
                         ),
