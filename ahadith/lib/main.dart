@@ -26,16 +26,9 @@ void main() async{
   //open box favorites
   await Hive.openBox('favorites');
   // await Hive.box('favorites').clear(); // remember random short ahadith
-  // print('\n\nopen box favorites--------------------------------------------------------');
-  // print('in box favorites>>>>>>>>>>--------${Hive.box('favorites').values}----------------------------------------\n\n');
 
-  //open box saved
   await Hive.openBox('saved');
-  await Hive.box('saved').clear();
-  // Box saved = Hive.box('saved');
-  // print('\n\nopen box saved--------------------------------------------------------');
-  // print('in box saved>>>>>>>>>>--------${Hive.box('saved').values}----------------------------------------\n\n');
-
+  // await Hive.box('saved').clear();
 
   runApp(const MyApp());
 
