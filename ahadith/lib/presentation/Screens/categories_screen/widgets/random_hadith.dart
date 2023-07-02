@@ -52,7 +52,7 @@ class RandomHadith extends StatelessWidget {
         await imagePath.writeAsBytes(image);
 
         /// Share Plugin
-        await Share.shareFiles([imagePath.path], text: '#Ahadith');
+        await Share.shareFiles([imagePath.path], text: '#حديـث اليوم \n #صل_على_محمد');
         // ShowCapturedWidget(context, image);
       });
     }

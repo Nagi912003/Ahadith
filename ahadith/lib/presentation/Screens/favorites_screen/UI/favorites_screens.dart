@@ -186,7 +186,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       await imagePath.writeAsBytes(image);
 
       /// Share Plugin
-      await Share.shareFiles([imagePath.path], text: '#Ahadith');
+      await Share.shareFiles([imagePath.path], text: '#أحاديـث \n #صل_على_محمد');
       // ShowCapturedWidget(context, image);
     });
   }
