@@ -30,7 +30,7 @@ class SavedCategoriesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     print(listLength);
     return SizedBox(
-      height: listLength <= 2 ? listLength <= 1 ?100.h: 200.h : listLength == 3 ? 300.h : 400.h ,
+      height: listLength <= 1 ? null : listLength <= 2 ? 200.h : listLength == 3 ? 300.h : 400.h ,
       child: ListView(
         physics: const BouncingScrollPhysics(),
         shrinkWrap: true,
@@ -86,6 +86,7 @@ class SavedCategoriesScreen extends StatelessWidget {
                             savedCategoriesIds.elementAt(index)],
                         'categoryTitle': savedCategoriesTitlesList[index],
                         'themeManager': themeManager,
+                        'categoryId': savedCategoriesIds.elementAt(index),
                       },
                     );
                   },

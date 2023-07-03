@@ -27,8 +27,12 @@ class SingleHadithCubit extends Cubit<SingleHadithState> {
     List<DetailedHadith> hadiths = [];
     emit(SingleHadithsLoading());
     singleHadithRepository.getHadiths(hadithIds: hadithIds).then((hadiths) => {
+      if(hadiths.isEmpty){
+        emit(SingleHadithsError('Ahadeeth list came empty')),
+      }else{
       emit(SingleHadithsLoaded(hadiths)),
       this.hadiths = hadiths
+      },
     }, onError: (e) {
       emit(SingleHadithsError(e.toString()));
     });

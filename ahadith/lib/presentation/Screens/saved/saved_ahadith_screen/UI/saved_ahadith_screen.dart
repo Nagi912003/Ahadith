@@ -15,11 +15,13 @@ class SavedAhadithScreen extends StatelessWidget {
       {super.key,
       required this.categoryTitle,
       required this.ahadith,
-      required this.themeManager});
+      required this.themeManager,
+      required this.categoryId});
 
   final String categoryTitle;
   final List<DetailedHadith> ahadith;
   final ThemeManager themeManager;
+  final String categoryId;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,73 @@ class SavedAhadithScreen extends StatelessWidget {
         // titleSpacing: 20,
         centerTitle: true,
         titleTextStyle: Theme.of(context).textTheme.titleLarge,
+        actions: [
+          MaterialButton(
+              // textColor: Colors.red[200],
+              child: Icon(Icons.delete_outline, color: Colors.red[200],),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    backgroundColor: Colors.black87,
+                    title: SizedBox(
+                      // height: 0.2.sh,
+                      // width: 0.8.sw,
+                      child: Column(
+                        mainAxisAlignment:
+                        MainAxisAlignment.center,
+                        crossAxisAlignment:
+                        CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'هل انت متأكد من ازالة الفئة من المحفوظات ؟',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall,
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 20.h),
+                          Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceEvenly,
+                            children: [
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.of(context).pop(),
+                                child: Text(
+                                  'الرجوع',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall,
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  Provider.of<FavoritesAndSavedProvider>(context, listen: false)
+                                      .deleteFromSaved(categoryId);
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  'ازالة',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(
+                                      color:
+                                      Colors.red[200]),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }),
+        ],
       ),
       body: buildAhadithList(ahadith, categoryTitle, context, themeManager),
     );

@@ -8,6 +8,9 @@ class SingleHadithRepository {
 
   Future<DetailedHadith> getHadith({required String hadithId}) async{
     final h = await _singleHadithDataProvider.getHadith(hadithId: hadithId,);
+    if(h== {}){
+      return DetailedHadith(title: null);
+    }
     return DetailedHadith.fromJson(h);
   }
 

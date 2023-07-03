@@ -184,6 +184,26 @@ class FavoritesAndSavedProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteFromSaved(String categoryId) {
+    if (!_savedBox.containsKey(categoryId)) return;
+
+    fitchSaved();
+
+    _savedCategoriesIds.remove(categoryId);
+    _savedBox.put(0, _savedCategoriesIds);
+
+    _savedBox.delete(categoryId);
+    _savedBox.delete('catName$categoryId');
+
+    fitchSaved();
+
+    List<String> savedAhadithTitlesList = savedAhadith.map((e) => e.hadeeth!).toList();
+    index = InvertedIndex();
+    index.buildIndex(savedAhadithTitlesList);
+
+    notifyListeners();
+  }
+
   void fitchSaved() {
     // _savedCategoriesIds.clear();
     _savedCategoriesIds = _savedBox.get(0, defaultValue: []);

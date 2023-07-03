@@ -135,6 +135,7 @@ class AppRouter {
         final ahadith = args['ahadith'] as List<DetailedHadith>;
         final categoryTitle = args['categoryTitle'] as String;
         final themeManager = args['themeManager'] as ThemeManager;
+        final categoryId = args['categoryId'] as String;
         return MaterialPageRoute(
           builder: (context) =>
               ChangeNotifierProvider<FavoritesAndSavedProvider>.value(
@@ -143,6 +144,7 @@ class AppRouter {
               categoryTitle: categoryTitle,
               ahadith: ahadith,
               themeManager: themeManager,
+                 categoryId: categoryId,
             ),
           ),
         );
