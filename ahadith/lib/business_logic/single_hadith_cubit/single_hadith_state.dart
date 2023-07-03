@@ -29,6 +29,10 @@ class SingleHadithsLoaded extends SingleHadithState {
 
 class SingleHadithsLoading extends SingleHadithState {}
 
+class SingleHadithsExists extends SingleHadithState {}
+
+class SingleHadithsStop extends SingleHadithState {}
+
 class SingleHadithsError extends SingleHadithState {
   final String message;
 

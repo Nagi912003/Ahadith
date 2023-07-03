@@ -24,10 +24,18 @@ class SingleHadithDataProvider {
       return {};
     }
   }
-  // void close() {
-  //   dio.close;
-  // }
-  // dispose() {
-  //   dio.close;
-  // }
+
+  Future<List> getAHadith({required List<String> ahadithIds}) async {
+    List ahadith = [];
+    ahadith = await ahadithIds.map((hadithId) async {
+      try {
+        Response response = await dio.get('/hadeeths/one/?language=$lang&id=$hadithId');
+        return response.data ;
+      } catch (e) {
+        print('------------------------error in SHSProvider------------------------: $e');
+      }
+    }).toList();
+    // print('ahadith---------from SHSProvider---------:$ahadith');
+    return ahadith;
+  }
 }

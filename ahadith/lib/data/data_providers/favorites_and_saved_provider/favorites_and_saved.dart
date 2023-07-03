@@ -181,7 +181,9 @@ class FavoritesAndSavedProvider with ChangeNotifier {
     index = InvertedIndex();
     index.buildIndex(savedAhadithTitlesList);
 
-    notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
   }
 
   void deleteFromSaved(String categoryId) {

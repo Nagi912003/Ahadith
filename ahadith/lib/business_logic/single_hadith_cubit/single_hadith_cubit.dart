@@ -38,4 +38,11 @@ class SingleHadithCubit extends Cubit<SingleHadithState> {
     });
     return hadiths;
   }
+
+  void sayExist(){
+    emit(SingleHadithsExists());
+  }
+  void sayStop(){
+    emit(SingleHadithsStop());
+  }
 }

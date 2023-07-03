@@ -32,23 +32,27 @@ class _AhadithScreenState extends State<AhadithScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<HadithsCubit>(context)
-        .getAllHadith(categoryId: widget.category.id!, perPage: '1000');
+        .getAllHadith(categoryId: widget.category.id!, perPage: '1550');
   }
 
   void downloadHadiths() async {
     _downloading = true;
 
-    await Future.delayed(const Duration(milliseconds: 3000)).then((_) => {
-          Provider.of<FavoritesAndSavedProvider>(context, listen: false)
-              .addSaved(ahadith as List<DetailedHadith>, widget.category),
-          _downloading = false,
-        });
+    Provider.of<FavoritesAndSavedProvider>(context, listen: false)
+        .addSaved(ahadith as List<DetailedHadith>, widget.category);
+    _downloading = false;
+
+    // await Future.delayed(const Duration(milliseconds: 3000)).then((_) => {
+    //   Provider.of<FavoritesAndSavedProvider>(context, listen: false)
+    //           .addSaved(ahadith as List<DetailedHadith>, widget.category),
+    //       _downloading = false,
+    //     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if(Provider.of<FavoritesAndSavedProvider>(context,listen: false)
-        .isSaved(widget.category.id!)){
+    if (Provider.of<FavoritesAndSavedProvider>(context, listen: false)
+        .isSaved(widget.category.id!)) {
       _downloading = false;
     }
     return Scaffold(
@@ -61,7 +65,15 @@ class _AhadithScreenState extends State<AhadithScreen> {
         actions: [
           BlocBuilder<SingleHadithCubit, SingleHadithState>(
             builder: (context, state) {
-              if (state is SingleHadithsLoaded) {
+              if(state is SingleHadithsExists){
+                return Icon(Icons.download_done_outlined, color: widget.themeManager.appPrimaryColor,);
+              }else if(state is SingleHadithsStop){
+                return Icon(
+                  Icons.cancel_presentation_outlined,
+                  color: Colors.red[200],
+                );
+              }
+              else if (state is SingleHadithsLoaded) {
                 ahadith = state.hadiths;
 
                 downloadHadiths();
@@ -80,23 +92,26 @@ class _AhadithScreenState extends State<AhadithScreen> {
                                 _downloading = true;
                               });
                               await Future.delayed(
-                                      const Duration(milliseconds: 2500))
+                                      const Duration(milliseconds: 0))
                                   .then((_) => {
                                         Provider.of<FavoritesAndSavedProvider>(
                                                 context,
                                                 listen: false)
                                             .addSaved(
-                                                ahadith as List<DetailedHadith>,
+                                                ahadith
+                                                    as List<DetailedHadith>,
                                                 widget.category),
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
                                             content: const Text(
                                                 'تم تحميل الأحاديث',
-                                                textAlign: TextAlign.center),
-                                            backgroundColor: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
+                                                textAlign:
+                                                    TextAlign.center),
+                                            backgroundColor:
+                                                Theme.of(context)
+                                                    .colorScheme
+                                                    .primary,
                                           ),
                                         ),
                                       });
@@ -109,10 +124,20 @@ class _AhadithScreenState extends State<AhadithScreen> {
                   ),
                 );
               } else if (state is SingleHadithsError) {
-                return const Icon(Icons.cancel_presentation_outlined);
+                print(state.message);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  setState(() {
+                    _downloading = false;
+                  });
+                    BlocProvider.of<SingleHadithCubit>(context).sayStop();
+                });
+                return Icon(
+                  Icons.cancel_presentation_outlined,
+                  color: Colors.red[200],
+                );
               } else {
                 return Center(
-                  child: RefreshProgressIndicator(
+                  child: CircularProgressIndicator(
                     color: widget.themeManager.appPrimaryColor,
                   ),
                 );
@@ -127,14 +152,20 @@ class _AhadithScreenState extends State<AhadithScreen> {
           if (state is HadithsLoaded) {
             ahadith = state.hadiths;
 
-            List<String> hadithIds = [];
-            for (var hadith in ahadith) {
-              hadithIds.add(hadith.id);
-              if (hadithIds.length >= 100) break;
+            if(!Provider.of<FavoritesAndSavedProvider>(context)
+                .isSaved(widget.category.id!)){
+              List<String> hadithIds = [];
+              for (var hadith in ahadith) {
+                hadithIds.add(hadith.id);
+                if (hadithIds.length >= 100) break;
+              }
+
+              BlocProvider.of<SingleHadithCubit>(context)
+                  .getHadiths(hadithIds: hadithIds);
+            }else{
+              BlocProvider.of<SingleHadithCubit>(context).sayExist();
             }
 
-            BlocProvider.of<SingleHadithCubit>(context)
-                .getHadiths(hadithIds: hadithIds);
 
             return _downloading
                 ? Stack(
@@ -153,11 +184,16 @@ class _AhadithScreenState extends State<AhadithScreen> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  CircularProgressIndicator(color: widget.themeManager.appPrimaryColor,),
-                                  SizedBox(height: 20.h,),
+                                  CircularProgressIndicator(
+                                    color: widget.themeManager.appPrimaryColor,
+                                  ),
+                                  SizedBox(
+                                    height: 20.h,
+                                  ),
                                   Text(
                                     'المرة الأولى لفتح هذه الفئة \n انتظر لحين حفظ الاحاديث',
-                                    style: Theme.of(context).textTheme.bodySmall,
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
                                   ),
                                 ],
                               ),
