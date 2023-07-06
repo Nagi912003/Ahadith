@@ -274,6 +274,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               trailing: DropdownButton<int>(
                 iconDisabledColor: widget.themeManager.appPrimaryColor,
                 iconEnabledColor: widget.themeManager.appPrimaryColor,
+                borderRadius: BorderRadius.circular(10),
+                isDense: true,
                 items: [
                   DropdownMenuItem(
                     value: 1,
@@ -339,7 +341,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 underline: const SizedBox(height: 0),
                 onChanged: (int? newValue) {
                   setState(() {
-                    widget.themeManager.toggleBackGroundImage(newValue!);
+                    widget.themeManager.mode = newValue!;
+                    widget.themeManager.toggleBackGroundImage(newValue);
                   });
                 },
               ),

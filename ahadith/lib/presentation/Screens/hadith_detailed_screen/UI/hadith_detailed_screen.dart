@@ -75,7 +75,7 @@ class _HadithDetailedScreenState extends State<HadithDetailedScreen> {
                                     isFavorite = !isFavorite;
                                   }),
                                 }, false, context,widget.themeManager),
-                        buildButton('اظهار السند', const Icon(Icons.favorite),
+                        buildButton('اظهار المراجع', const Icon(Icons.favorite),
                             showReference(state.hadith.reference!,context,widget.themeManager), true, context,widget.themeManager),
                       ],
                     ),

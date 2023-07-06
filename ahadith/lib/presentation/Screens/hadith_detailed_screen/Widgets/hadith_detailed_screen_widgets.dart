@@ -124,7 +124,7 @@ Function showReference(String reference, BuildContext context, ThemeManager them
       context: context,
       builder: (context) => AlertDialog(
         title: Text(
-          'السند',
+          'المراجع',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: themeManager.appPrimaryColor,

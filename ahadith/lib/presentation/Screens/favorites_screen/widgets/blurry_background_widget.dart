@@ -67,7 +67,7 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
               top: 50.h,
               left: 50.w,
               right: 50.w,
-              bottom: widget.isRandom? 50.h :100.h,
+              bottom: widget.isRandom? 50.h : textLength < 440 ?100.h : 50.h,
             ),
             height:
             textLength<120 ? 190.h : textLength<160 ? 220.h : textLength<190 ? 240.h : textLength<220 ? 260.h : textLength<250 ? 280.h : textLength<280 ? 300.h : textLength<310 ? 320.h : textLength<340 ? 340.h : textLength<370 ? 360.h : textLength<400 ? 380.h : textLength<430 ? 400.h : textLength<460 ? 420.h : textLength<490 ? 440.h : textLength<520 ? 460.h : textLength<550 ? 480.h : 500.h,
@@ -86,7 +86,7 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
             child: ListView(
               physics: const BouncingScrollPhysics(),
               padding: EdgeInsets.only(
-                top: 20.h,
+                top:  widget.isRandom? 40.h : 30.h,
                 bottom: 20.h,
                 left: 20.w,
                 right: 20.w,

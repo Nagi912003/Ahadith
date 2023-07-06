@@ -177,16 +177,18 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     );
     await screenshotController
         .captureFromWidget(
-            // pixelRatio: pixelRatio,
-            InheritedTheme.captureAll(context, Material(child: takenWidget)),
-            delay: const Duration(seconds: 1))
+      // pixelRatio: pixelRatio,
+      InheritedTheme.captureAll(context, Material(child: takenWidget)),
+      // delay: const Duration(seconds: 1),
+    )
         .then((image) async {
       final directory = await getApplicationDocumentsDirectory();
       final imagePath = await File('${directory.path}/image.png').create();
       await imagePath.writeAsBytes(image);
 
       /// Share Plugin
-      await Share.shareFiles([imagePath.path], text: '#أحاديـث \n #صل_على_محمد');
+      await Share.shareFiles([imagePath.path],
+          text: '#أحاديـث \n #صل_على_محمد');
       // ShowCapturedWidget(context, image);
     });
   }
@@ -223,8 +225,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       '${favoriteItems[index].title}',
                       textAlign: TextAlign.end,
                       style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                        fontSize: 18.5.sp,
-                      ),
+                            fontSize: 18.5.sp,
+                          ),
                     ),
                   ),
                   onTap: () {
