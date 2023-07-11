@@ -15,10 +15,10 @@ A comprehensive Android app that brings the treasure of Prophetic traditions (Ah
 - Easy sharing of Hadiths with others
 
 ## Screenshots
-![Screenshot 1]([screenshots/screenshot1.png](https://play-lh.googleusercontent.com/uDgWVNrPAe1tDtlVkSrrLFgvCWLaWKoo7DwKSa1NPyyvyb667CTEHVnbRty1Q15Reure=w526-h296-rw))
-![Screenshot 2]([screenshots/screenshot2.png](https://play-lh.googleusercontent.com/1-euiBtQl8rTUlpfuL3KAKOGpX80rSjUBGLsI152rMcsmoeOqYebcXtQyzDUE-WVtUkS=w526-h296-rw))
-![Screenshot 2]([screenshots/screenshot2.png](https://play-lh.googleusercontent.com/PPi97gOwZluTmN7hoP5bKPMzk-uaTgdWzdvIiG9FYvUMyCQnE2jC6OMMNBtZjgl4Rw=w526-h296-rw))
-![Screenshot 2]([screenshots/screenshot2.png](https://play-lh.googleusercontent.com/mBRKfL5hFuBV_z3ps9-laqDnCpVvwwBjjrXql8CXaQEXUSDq1pMwRFg_SwL4h3mK0EM=w526-h296-rw))
+![Screenshot 1]((https://play-lh.googleusercontent.com/uDgWVNrPAe1tDtlVkSrrLFgvCWLaWKoo7DwKSa1NPyyvyb667CTEHVnbRty1Q15Reure=w2560-h1440-rw))
+![Screenshot 2]((https://play-lh.googleusercontent.com/1-euiBtQl8rTUlpfuL3KAKOGpX80rSjUBGLsI152rMcsmoeOqYebcXtQyzDUE-WVtUkS=w526-h296-rw))
+![Screenshot 2](https://play-lh.googleusercontent.com/PPi97gOwZluTmN7hoP5bKPMzk-uaTgdWzdvIiG9FYvUMyCQnE2jC6OMMNBtZjgl4Rw=w526-h296-rw)
+![Screenshot 2](https://play-lh.googleusercontent.com/mBRKfL5hFuBV_z3ps9-laqDnCpVvwwBjjrXql8CXaQEXUSDq1pMwRFg_SwL4h3mK0EM=w526-h296-rw)
 
 ## Technologies Used
 - Flutter
