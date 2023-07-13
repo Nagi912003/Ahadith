@@ -92,8 +92,17 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               titleTextStyle: Theme.of(context).appBarTheme.titleTextStyle,
             )
           : AppBar(
+              leading: Builder(
+                builder: (context) => IconButton(
+                  icon: Icon(
+                    Icons.menu,
+                    color: widget.themeManager.appPrimaryColor200,
+                  ),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
+              ),
               title: OurAppbar(),
-        backgroundColor: Colors.transparent,
+              backgroundColor: Colors.transparent,
             ),
       body: Padding(
         padding: EdgeInsets.only(left: 8.0.w, right: 8.0.w),
@@ -135,9 +144,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           collapsedIconColor:
                               widget.themeManager.appPrimaryColorInverse,
                           title: Text(
-                              'المحفوظات',
-                              style: Theme.of(context).textTheme.titleLarge,
-                            ),
+                            'المحفوظات',
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
                           children: [
                             _searchController.text.isNotEmpty &&
                                     _isSearchingInSaved
@@ -152,7 +161,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                         savedCategoriesTitlesList,
                                     savedCategoriesIds: savedCategoriesIds,
                                     themeManager: widget.themeManager,
-                              listLength: savedCategories.length,
+                                    listLength: savedCategories.length,
                                   ),
                           ],
                         ),
@@ -220,7 +229,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                       .getAllCategories();
                                   return _buildBlocWidget();
                                 } else {
-                                  return buildNoInternetWidget(context,widget.themeManager);
+                                  return buildNoInternetWidget(
+                                      context, widget.themeManager);
                                 }
                               },
                               child: CircularProgressIndicator(
@@ -349,6 +359,34 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
             ),
           ),
           Card(
+            child: ListTile(
+              title: Text(
+                'حجم الخط',
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  color: Theme.of(context).textTheme.bodySmall!.color,
+                ),
+              ),
+              trailing: SizedBox(
+                width: 150,
+                child: Slider(
+                  activeColor: widget.themeManager.appPrimaryColor200,
+                  value: widget.themeManager.fontSize,
+                  min: -2,
+                  max: 2,
+                  divisions: 4,
+                  label: '${widget.themeManager.fontSize}',
+                  onChanged: (double value) {
+                    setState(() {
+                      widget.themeManager.fontSize = value;
+                      widget.themeManager.toggleFontSize(value);
+                    });
+                  },
+                ),
+              ),
+            ),
+          ),
+          Card(
             child: ExpansionTile(
               collapsedIconColor: widget.themeManager.appPrimaryColor,
               iconColor: widget.themeManager.appPrimaryColor,
@@ -367,7 +405,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                             title: Text(e.title!),
                             onTap: () {
                               final favoritesProvider =
-                                  Provider.of<FavoritesAndSavedProvider>(context,
+                                  Provider.of<FavoritesAndSavedProvider>(
+                                      context,
                                       listen: false);
                               final isFavorite =
                                   favoritesProvider.isFavorite(e.id!);
@@ -397,7 +436,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   .toList(),
             ),
           ),
-
         ]),
       ),
     );
@@ -503,7 +541,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     //         .toList();
     //
     savedCategoriesSearchResultOfAhadith = [];
-    savedCategoriesSearchResultOfAhadith = Provider.of<FavoritesAndSavedProvider>(context, listen: false).searchByHadeethInSaved(hadeethTitle);
+    savedCategoriesSearchResultOfAhadith =
+        Provider.of<FavoritesAndSavedProvider>(context, listen: false)
+            .searchByHadeethInSaved(hadeethTitle);
 
     setState(() {});
   }

@@ -21,6 +21,8 @@ class ThemeManager with ChangeNotifier {
 
   String bgImage = 'assets/images/watercolor.png';
   int mode = 1;
+  double fontSize = 0;
+  double addedFontSize = 0;
   Color appPrimaryColor = Colors.deepPurple;
   Color appPrimaryColor200 = Colors.deepPurple[200]!;
   Color appPrimaryColorInverse = Colors.deepPurple[200]!;
@@ -86,6 +88,30 @@ class ThemeManager with ChangeNotifier {
         appPrimaryColor200 = Colors.deepPurple[100]!;
         appPrimaryColorInverse = Colors.deepPurple[200]!;
         bgImage = 'assets/images/watercolor.png';
+    }
+    notifyListeners();
+  }
+
+  void toggleFontSize(double fontSize) {
+    switch (fontSize) {
+      case -2:
+        addedFontSize = -5;
+        break;
+      case -1:
+        addedFontSize = -2.5;
+        break;
+      case 0:
+        addedFontSize = 0;
+        break;
+      case 1:
+        addedFontSize = 2.5;
+        break;
+      case 2:
+        addedFontSize = 5;
+        break;
+      default:
+        this.fontSize = 0;
+        addedFontSize = 0;
     }
     notifyListeners();
   }
