@@ -28,7 +28,7 @@ class NotificationsServices {
       importance: Importance.max,
       priority: Priority.high,
       playSound: true,
-      sound: RawResourceAndroidNotificationSound('birds_notification'),
+      // sound: RawResourceAndroidNotificationSound('birds_notification'),
       icon: 'logo',
     );
 
