@@ -14,7 +14,12 @@ import '../../../../business_logic/single_hadith_cubit/single_hadith_cubit.dart'
 import 'package:ahadith/presentation/Screens/hadith_detailed_screen/Widgets/hadith_detailed_screen_widgets.dart';
 
 class HadithDetailedScreen extends StatefulWidget {
-  const HadithDetailedScreen({super.key, required this.hadith, required this.categoryTitle,required this.hadithIndex, required this.themeManager});
+  const HadithDetailedScreen(
+      {super.key,
+      required this.hadith,
+      required this.categoryTitle,
+      required this.hadithIndex,
+      required this.themeManager});
 
   final Hadith hadith;
   final String categoryTitle;
@@ -36,11 +41,12 @@ class _HadithDetailedScreenState extends State<HadithDetailedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final fASProvider = Provider.of<FavoritesAndSavedProvider>(context,listen: false);
+    final fASProvider =
+        Provider.of<FavoritesAndSavedProvider>(context, listen: false);
     BlocProvider.of<SingleHadithCubit>(context)
         .getHadith(hadithId: widget.hadith.id!);
     return Scaffold(
-      appBar: appbar(context,widget.hadith.title!),
+      appBar: appbar(context, widget.hadith.title!, widget.themeManager),
       body: BlocBuilder<SingleHadithCubit, SingleHadithState>(
         builder: (context, state) {
           if (state is SingleHadithLoaded) {
@@ -52,31 +58,66 @@ class _HadithDetailedScreenState extends State<HadithDetailedScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    buildCard('', state.hadith.hadeeth! + state.hadith.attribution!, true,context,widget.themeManager),
+                    buildCard(
+                        '',
+                        state.hadith.hadeeth! + state.hadith.attribution!,
+                        true,
+                        context,
+                        widget.themeManager),
                     SizedBox(height: 20.h),
-                    hadithGrade(state.hadith.grade!, context,widget.themeManager),
+                    hadithGrade(
+                        state.hadith.grade!, context, widget.themeManager),
                     SizedBox(height: 10.h),
-                    buildCard('التفسير : ', state.hadith.explanation!, false,context,widget.themeManager),
+                    buildCard('التفسير : ', state.hadith.explanation!, false,
+                        context, widget.themeManager),
                     if (state.hadith.wordsMeanings!.isNotEmpty)
                       SizedBox(height: 10.h),
                     if (state.hadith.wordsMeanings!.isNotEmpty)
-                      buildCard(': معانى الكلمات\n ', state.hadith.wordsMeanings!.toList().toString(), false,context,widget.themeManager),
+                      buildCard(
+                          ': معانى الكلمات\n ',
+                          state.hadith.wordsMeanings!.toList().toString(),
+                          false,
+                          context,
+                          widget.themeManager),
                     SizedBox(height: 10.h),
-                    buildCard(': الدروس المستفادة\n ', state.hadith.hints.toString(), false,context,widget.themeManager),
+                    buildCard(
+                        ': الدروس المستفادة\n ',
+                        state.hadith.hints.toString(),
+                        false,
+                        context,
+                        widget.themeManager),
                     SizedBox(height: 10.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        buildButton('', favoriteIcon(isFavorite, context,widget.themeManager), () async => {
-                                  fASProvider
-                                      .toggleFavorite(state.hadith.id!,state.hadith,widget.categoryTitle,widget.hadithIndex,false),
-                                  snakeBarFavoriteMessage(isFavorite,context,widget.themeManager),
+                        buildButton(
+                            '',
+                            favoriteIcon(
+                                isFavorite, context, widget.themeManager),
+                            () async => {
+                                  fASProvider.toggleFavorite(
+                                      state.hadith.id!,
+                                      state.hadith,
+                                      widget.categoryTitle,
+                                      widget.hadithIndex,
+                                      false),
+                                  snakeBarFavoriteMessage(
+                                      isFavorite, context, widget.themeManager),
                                   setState(() {
                                     isFavorite = !isFavorite;
                                   }),
-                                }, false, context,widget.themeManager),
-                        buildButton('اظهار المراجع', const Icon(Icons.favorite),
-                            showReference(state.hadith.reference!,context,widget.themeManager), true, context,widget.themeManager),
+                                },
+                            false,
+                            context,
+                            widget.themeManager),
+                        buildButton(
+                            'اظهار المراجع',
+                            const Icon(Icons.favorite),
+                            showReference(state.hadith.reference!, context,
+                                widget.themeManager),
+                            true,
+                            context,
+                            widget.themeManager),
                       ],
                     ),
                     SizedBox(height: 50.h),
@@ -90,7 +131,9 @@ class _HadithDetailedScreenState extends State<HadithDetailedScreen> {
             );
           } else {
             return Center(
-              child: CircularProgressIndicator(color: widget.themeManager.appPrimaryColor,),
+              child: CircularProgressIndicator(
+                color: widget.themeManager.appPrimaryColor,
+              ),
             );
           }
         },

@@ -1,13 +1,14 @@
 import 'package:ahadith/data/models/hadith.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:google_fonts/google_fonts.dart';
+
+import '../../../../theme/theme_manager.dart';
 
 Widget CapturedWidget(
     {required DetailedHadith hadith,
     hadithIndex,
     bool isRandom = false,
-    required BuildContext context}) {
+    required BuildContext context, required ThemeManager themeManager}) {
   String hadeeth = hadith.hadeeth!;
   if (isRandom) {
     hadeeth = '${hadith.hadeeth} ${hadith.attribution}';
@@ -66,7 +67,7 @@ Widget CapturedWidget(
                 style: Theme.of(context).textTheme.displaySmall!.copyWith(
                       // overflow: TextOverflow.fade,
                       color: Colors.white,
-                      fontSize: 26.sp,
+                      fontSize: 26.sp  + themeManager.fontSize,
                       fontWeight: FontWeight.bold,
                       // fontFamily: Theme.of(context).textTheme.titleLarge?.fontFamily,
                     ),

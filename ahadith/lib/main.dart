@@ -88,7 +88,7 @@ class _MyAppState extends State<MyApp> {
             child: MaterialApp(
               debugShowCheckedModeBanner: false,
 
-              darkTheme: darkTheme,
+              darkTheme: darkTheme(_themeManager),
 
               themeMode: ThemeMode.dark,
 

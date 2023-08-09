@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:provider/provider.dart';
 
 import '../../../data/data_providers/categories_data_provider.dart';
@@ -82,8 +81,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           PageView(
-            // physics: const NeverScrollableScrollPhysics(),
-
             controller: _pageController,
             onPageChanged: _onPageChanged,
             children: [

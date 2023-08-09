@@ -172,6 +172,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
           hadith: hadith,
           hadithIndex: hadithIndex,
           context: context,
+          themeManager: widget.themeManager,
         ),
       ],
     );

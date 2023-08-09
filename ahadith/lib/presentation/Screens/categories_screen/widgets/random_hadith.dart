@@ -38,6 +38,7 @@ class RandomHadith extends StatelessWidget {
             hadithIndex: hadithIndex,
             context: context,
             isRandom: true,
+            themeManager: themeManager,
           ),
         ],
       );

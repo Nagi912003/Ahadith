@@ -17,6 +17,7 @@ import '../../../../data/models/hadith.dart';
 import 'package:ahadith/presentation/Screens/saved/saved_ahadith_screen/UI/saved_ahadith_screen.dart';
 import 'package:ahadith/presentation/Screens/saved/saved_categories_screen/UI/saved_categories_screen.dart';
 import '../../../../theme/theme_manager.dart';
+import '../../azkar_screen/UI/azkar_screen.dart';
 import '../../hadith_detailed_screen/Widgets/hadith_detailed_screen_widgets.dart';
 import '../../saved/saved_detailed_hadith/UI/saved_detailed_hadith.dart';
 import '../widgets/categories_screen_widgets.dart';
@@ -57,7 +58,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     super.didChangeDependencies();
   }
 
-  bool _showingAll = false;
+  bool _showingAll = true;
   bool _showingSaved = false;
 
   final ExpansionTileController _savedExpansionTileController =
@@ -372,18 +373,34 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 child: Slider(
                   activeColor: widget.themeManager.appPrimaryColor200,
                   value: widget.themeManager.fontSize,
-                  min: -2,
-                  max: 2,
-                  divisions: 4,
+                  min: -10,
+                  max: 10,
+                  divisions: 20,
                   label: '${widget.themeManager.fontSize}',
                   onChanged: (double value) {
                     setState(() {
-                      widget.themeManager.fontSize = value;
                       widget.themeManager.toggleFontSize(value);
                     });
                   },
                 ),
               ),
+            ),
+          ),
+          Card(
+            child: ListTile(
+              title: Text('الأذكار',
+                style: TextStyle(
+                  fontSize: 20.sp,
+                  color: Theme.of(context).textTheme.bodySmall!.color,
+                ),
+              ),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => AzkarScreen(
+                    themeManager: widget.themeManager,
+                  ),
+                ));
+              },
             ),
           ),
           Card(
@@ -505,7 +522,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         hintStyle: const TextStyle(color: Colors.white30),
       ),
       style: TextStyle(
-        fontSize: 25.0,
+        fontSize: 25.0.sp ,
         fontFamily: Theme.of(context).textTheme.displaySmall!.fontFamily,
       ),
       autocorrect: true,

@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:ahadith/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 
 import 'hadith_detailed_screen_widgets.dart';
 import '../../../../data/models/hadith.dart';
@@ -9,10 +14,11 @@ Widget buildDetailedHadith(DetailedHadith hadith, bool isFavorite,
     BuildContext context, onPressed, int index, ThemeManager themeManager) {
   return Scaffold(
     appBar: AppBar(
-      foregroundColor: Colors.deepPurple.shade100,
+      foregroundColor: themeManager.appPrimaryColor200,
       title: Text(hadith.title!),
       centerTitle: true,
       titleTextStyle: Theme.of(context).textTheme.titleLarge,
+      actions: [SizedBox(width: 10.w)],
     ),
     body: SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -24,9 +30,10 @@ Widget buildDetailedHadith(DetailedHadith hadith, bool isFavorite,
             buildCard('', hadith.hadeeth! + hadith.attribution!, true, context,
                 themeManager),
             SizedBox(height: 20.h),
-            hadithGrade(hadith.grade!, context,themeManager),
+            hadithGrade(hadith.grade!, context, themeManager),
             SizedBox(height: 10.h),
-            buildCard('التفسير : ', hadith.explanation!, false, context,themeManager),
+            buildCard('التفسير : ', hadith.explanation!, false, context,
+                themeManager),
             if (hadith.wordsMeanings!.isNotEmpty) SizedBox(height: 10.h),
             if (hadith.wordsMeanings!.isNotEmpty &&
                 hadith.wordsMeanings.toString().length > 10)

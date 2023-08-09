@@ -55,7 +55,7 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
             ): Text(
               '${widget.hadith.categories!.first}: ${widget.hadithIndex}\n\n${widget.hadith.attribution!}',
               style: TextStyle(
-                fontSize: 20.sp,
+                fontSize: 20.sp  + widget.themeManager.fontSize,
                 color: Colors.white,
               ),
               textAlign: TextAlign.center,
@@ -97,7 +97,7 @@ class _BlurryBackgroundWidgetState extends State<BlurryBackgroundWidget> {
                   style: Theme.of(context).textTheme.displaySmall!.copyWith(
                     // overflow: TextOverflow.fade,
                     color: Colors.white,
-                    fontSize: 25.sp,
+                    fontSize: 25.sp + widget.themeManager.fontSize,
                     fontWeight: FontWeight.bold,
                     // fontFamily: Theme.of(context).textTheme.titleLarge?.fontFamily,
                   ),

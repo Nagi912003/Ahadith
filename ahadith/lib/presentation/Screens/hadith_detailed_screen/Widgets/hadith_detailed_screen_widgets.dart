@@ -3,12 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../theme/theme_manager.dart';
 
-AppBar appbar(BuildContext context, String title) {
+AppBar appbar(BuildContext context, String title, ThemeManager themeManager) {
   return AppBar(
+    foregroundColor: themeManager.appPrimaryColor200,
     title: Text(title, style: Theme.of(context).textTheme.titleLarge),
     // titleSpacing: 20,
     centerTitle: true,
     titleTextStyle: Theme.of(context).textTheme.titleLarge,
+    actions: [SizedBox(width: 10.w)],
   );
 }
 
@@ -60,7 +62,7 @@ Widget buildCard(
           text: title,
           style: TextStyle(
             fontFamily: Theme.of(context).textTheme.bodyLarge?.fontFamily,
-            fontSize: Theme.of(context).textTheme.bodySmall?.fontSize,
+            fontSize: Theme.of(context).textTheme.bodySmall!.fontSize! + themeManager.fontSize,
             fontWeight: FontWeight.bold,
             color: themeManager.appPrimaryColor200,
           ),
@@ -69,7 +71,7 @@ Widget buildCard(
               text: content,
               style: TextStyle(
                 fontFamily: isHadith? Theme.of(context).textTheme.bodyLarge?.fontFamily:Theme.of(context).textTheme.bodySmall?.fontFamily,
-                fontSize: isHadith ? 18.sp : 19.sp,
+                fontSize: isHadith ? 18.sp + themeManager.fontSize : 19.sp + themeManager.fontSize,
                 fontWeight: isHadith ? FontWeight.bold : FontWeight.normal,
                 color: isHadith
                     ? Colors.black
@@ -128,7 +130,7 @@ Function showReference(String reference, BuildContext context, ThemeManager them
           textAlign: TextAlign.center,
           style: TextStyle(
             color: themeManager.appPrimaryColor,
-            fontSize: 25.sp,
+            fontSize: 25.sp + themeManager.fontSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -136,7 +138,7 @@ Function showReference(String reference, BuildContext context, ThemeManager them
           reference,
           textAlign: TextAlign.end,
           style: TextStyle(
-            fontSize: 17.sp,
+            fontSize: 17.sp + themeManager.fontSize,
           ),
         ),
         actions: [
@@ -147,7 +149,7 @@ Function showReference(String reference, BuildContext context, ThemeManager them
             child: Text(
               'حسناً',
               style: TextStyle(
-                fontSize: 20.sp,
+                fontSize: 20.sp + themeManager.fontSize,
                 fontWeight: FontWeight.bold,
                 color: themeManager.appPrimaryColor,
               ),

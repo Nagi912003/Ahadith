@@ -27,10 +27,7 @@ class SavedAhadithScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        foregroundColor:
-            MediaQuery.of(context).platformBrightness == Brightness.light
-                ? Colors.deepPurple
-                : Colors.deepPurple.shade100,
+        foregroundColor: themeManager.appPrimaryColor200,
 
         title: Text(categoryTitle),
         // titleSpacing: 20,
