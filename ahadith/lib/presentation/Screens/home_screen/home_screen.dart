@@ -8,6 +8,7 @@ import '../../../data/repositories/categories_repository.dart';
 
 import '../../../business_logic/categories_cubit/categories_cubit.dart';
 
+import '../../../helpers/notification_service.dart';
 import '../../../theme/theme_manager.dart';
 import '../categories_screen/UI/categories_screen.dart';
 import '../favorites_screen/UI/favorites_screens.dart';
@@ -23,6 +24,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  NotificationsServices notificationsServices = NotificationsServices();
   int _currentIndex = 1;
   final PageController _pageController = PageController(initialPage: 1);
 
@@ -30,6 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     Provider.of<FavoritesAndSavedProvider>(context, listen: false)
         .buildInvertedIndex();
+    notificationsServices.initialiseNotifications();
     super.initState();
   }
 
