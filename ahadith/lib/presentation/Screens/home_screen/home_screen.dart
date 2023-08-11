@@ -32,6 +32,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     Provider.of<FavoritesAndSavedProvider>(context, listen: false)
         .buildInvertedIndex();
+    Provider.of<FavoritesAndSavedProvider>(context, listen: false)
+        .randomHadith;
     notificationsServices.initialiseNotifications();
     super.initState();
   }

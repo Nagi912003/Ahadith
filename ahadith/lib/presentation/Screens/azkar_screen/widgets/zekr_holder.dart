@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget zekrHolder(String zekr, color) {
+Widget zekrHolder(String zekr, color, context) {
   return Container(
     margin: const EdgeInsets.all(8.0),
     padding: const EdgeInsets.all(10.0),
@@ -14,7 +14,7 @@ Widget zekrHolder(String zekr, color) {
     ),
     child: Text(
       zekr,
-      style: const TextStyle(fontSize: 20),
+      style: TextStyle(fontSize: 20, fontFamily: Theme.of(context).textTheme.bodySmall!.fontFamily),
       textAlign: TextAlign.end,
     ),
   );

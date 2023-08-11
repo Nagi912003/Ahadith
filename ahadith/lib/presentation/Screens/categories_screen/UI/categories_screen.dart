@@ -1,3 +1,4 @@
+import 'package:ahadith/helpers/notification_service.dart';
 import 'package:ahadith/presentation/Screens/categories_screen/widgets/random_hadith.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

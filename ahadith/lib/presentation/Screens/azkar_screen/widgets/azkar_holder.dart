@@ -10,13 +10,17 @@ Widget AzkarHolder(context,String title,List azkar, color){
     iconColor: color,
     children: [
       SizedBox(
-        height: MediaQuery.of(context).size.height * 0.5,
-        child: ListView(
-          shrinkWrap: true,
-          // physics: const NeverScrollableScrollPhysics(),
-          children: [
-            ...azkar.map((e) => zekrHolder(e, color)).toList(),
-          ],
+        height: MediaQuery.of(context).size.height * 0.7,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            // shrinkWrap: true,
+            // physics: const NeverScrollableScrollPhysics(),
+            children: [
+              ...azkar.map((e) => zekrHolder(e, color, context)).toList(),
+            ],
+          ),
         ),
       ),
     ],
