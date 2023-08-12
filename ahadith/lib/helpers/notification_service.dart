@@ -16,7 +16,7 @@ class NotificationsServices {
     );
 
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    scheduleDailyNotifications('حديث اليوم', 'لا تنسى أذكار الصباح و المساء', 0, 17);
+    scheduleDailyNotifications('حديث اليوم', 'لا تنسى أذكار الصباح و المساء', 5, 17);
   }
 
   void sendNotification(String title, String body) async{
