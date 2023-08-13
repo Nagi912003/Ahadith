@@ -84,7 +84,7 @@ class NotificationsServices {
       importance: Importance.max,
       priority: Priority.high,
       playSound: true,
-      icon: 'logo',
+      // icon: 'logo',
       // sound: RawResourceAndroidNotificationSound('notification'),
     );
 
