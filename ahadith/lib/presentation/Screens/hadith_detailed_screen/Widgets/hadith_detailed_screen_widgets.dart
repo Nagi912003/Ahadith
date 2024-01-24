@@ -14,7 +14,8 @@ AppBar appbar(BuildContext context, String title, ThemeManager themeManager) {
   );
 }
 
-Widget hadithGrade(String hadithGrade, BuildContext context, ThemeManager themeManager,
+Widget hadithGrade(
+    String hadithGrade, BuildContext context, ThemeManager themeManager,
     {bool fullScreen = true}) {
   return Container(
     width: double.infinity,
@@ -24,7 +25,7 @@ Widget hadithGrade(String hadithGrade, BuildContext context, ThemeManager themeM
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          width: fullScreen? 300.w: 200.w,
+          width: fullScreen ? 300.w : 200.w,
           child: Text(
             hadithGrade,
             style: TextStyle(
@@ -50,46 +51,78 @@ Widget hadithGrade(String hadithGrade, BuildContext context, ThemeManager themeM
   );
 }
 
-Widget buildCard(
-    String title, String content, bool isHadith, BuildContext context, ThemeManager themeManager) {
+
+
+String cleanText(String text) {
+  text = text.replaceAll('[', '');
+  text = text.replaceAll(']', '');
+  text = text.replaceAll('-:', '-  :');
+
+  // if the text contains a ':' followed by a space, remove the space
+  if (text.contains('\n:')) {
+    text = text.replaceAll('\n: ', '');
+  }
+  return text;
+}
+Widget buildCard(String title, String content, bool isHadith,
+    BuildContext context, ThemeManager themeManager) {
   return Card(
-    color: isHadith ? themeManager.appPrimaryColor200 : Theme.of(context).cardColor,
+    color: isHadith
+        ? themeManager.appPrimaryColor200
+        : Theme.of(context).cardColor,
     child: Padding(
       padding: const EdgeInsets.all(12.0),
       child: RichText(
         textAlign: TextAlign.end,
-        text: TextSpan(
-          text: title,
-          style: TextStyle(
-            fontFamily: Theme.of(context).textTheme.bodyLarge?.fontFamily,
-            fontSize: Theme.of(context).textTheme.bodySmall!.fontSize! + themeManager.fontSize,
-            fontWeight: FontWeight.bold,
-            color: themeManager.appPrimaryColor200,
-          ),
-          children: [
+        text: WidgetSpan(
+          child: SelectableText.rich(
+            textDirection: TextDirection.rtl,
             TextSpan(
-              text: content,
+              text: title,
               style: TextStyle(
-                fontFamily: isHadith? Theme.of(context).textTheme.bodyLarge?.fontFamily:Theme.of(context).textTheme.bodySmall?.fontFamily,
-                fontSize: isHadith ? 18.sp + themeManager.fontSize : 19.sp + themeManager.fontSize,
-                fontWeight: isHadith ? FontWeight.bold : FontWeight.normal,
-                color: isHadith
-                    ? Colors.black
-                    : Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.color, //isHadith ? Colors.black : Colors.black87,
+                fontFamily: Theme.of(context).textTheme.bodyLarge?.fontFamily,
+                fontSize: Theme.of(context).textTheme.bodySmall!.fontSize! +
+                    themeManager.fontSize +
+                    2,
+                fontWeight: FontWeight.bold,
+                color: themeManager.appPrimaryColor200,
               ),
+              children: [
+                WidgetSpan(
+                  child: SelectableText.rich(
+                    textDirection: TextDirection.rtl,
+                    TextSpan(
+                      text: cleanText(content),
+                      style: TextStyle(
+                        fontFamily: isHadith
+                            ? Theme.of(context).textTheme.bodyLarge?.fontFamily
+                            : Theme.of(context).textTheme.bodySmall?.fontFamily,
+                        fontSize: isHadith
+                            ? 18.sp + themeManager.fontSize + 2
+                            : 19.sp + themeManager.fontSize + 2,
+                        fontWeight:
+                            isHadith ? FontWeight.bold : FontWeight.normal,
+                        color: isHadith
+                            ? Colors.black
+                            : Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.color, //isHadith ? Colors.black : Colors.black87,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     ),
   );
 }
 
-Widget buildButton(
-    String title, Icon icon, onPressed, bool hasText, BuildContext context,  ThemeManager themeManager) {
+Widget buildButton(String title, Icon icon, onPressed, bool hasText,
+    BuildContext context, ThemeManager themeManager) {
   return MaterialButton(
     padding: EdgeInsets.zero,
     onPressed: onPressed,
@@ -120,7 +153,8 @@ Widget buildButton(
   );
 }
 
-Function showReference(String reference, BuildContext context, ThemeManager themeManager) {
+Function showReference(
+    String reference, BuildContext context, ThemeManager themeManager) {
   return () {
     showDialog(
       context: context,
@@ -161,7 +195,8 @@ Function showReference(String reference, BuildContext context, ThemeManager them
   };
 }
 
-Widget _showSnakeBar(String message, BuildContext context, ThemeManager themeManager) {
+Widget _showSnakeBar(
+    String message, BuildContext context, ThemeManager themeManager) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       shape: RoundedRectangleBorder(
@@ -182,7 +217,8 @@ Widget _showSnakeBar(String message, BuildContext context, ThemeManager themeMan
   return Container();
 }
 
-Widget snakeBarFavoriteMessage(bool isFavorite, BuildContext context, ThemeManager themeManager) {
+Widget snakeBarFavoriteMessage(
+    bool isFavorite, BuildContext context, ThemeManager themeManager) {
   try {
     return !isFavorite
         ? _showSnakeBar('تمت اضافة الحديث الى المفضلة', context, themeManager)
@@ -193,7 +229,8 @@ Widget snakeBarFavoriteMessage(bool isFavorite, BuildContext context, ThemeManag
   }
 }
 
-Widget snakeBarSavedMessage(bool isSaved, BuildContext context, ThemeManager themeManager) {
+Widget snakeBarSavedMessage(
+    bool isSaved, BuildContext context, ThemeManager themeManager) {
   try {
     return isSaved
         ? _showSnakeBar('تمت اضافة الحديث الى المحفوظات', context, themeManager)
@@ -204,7 +241,8 @@ Widget snakeBarSavedMessage(bool isSaved, BuildContext context, ThemeManager the
   }
 }
 
-Icon favoriteIcon(bool isFavorite, BuildContext context,  ThemeManager themeManager) {
+Icon favoriteIcon(
+    bool isFavorite, BuildContext context, ThemeManager themeManager) {
   return Icon(
     isFavorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
     color: themeManager.appPrimaryColor200,

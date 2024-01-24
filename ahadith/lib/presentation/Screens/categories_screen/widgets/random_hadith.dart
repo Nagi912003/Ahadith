@@ -73,7 +73,7 @@ class RandomHadith extends StatelessWidget {
             },
             icon: Icon(
               Icons.share_outlined,
-              size: 35.w,
+              size: 35,
               color: themeManager.appPrimaryColor200,
             ),
           ),

@@ -16,7 +16,8 @@ class NotificationsServices {
     );
 
     await _flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    scheduleDailyNotifications('حديث اليوم', 'لا تنسى أذكار الصباح و المساء', 5, 17);
+    print('i\'m here trying sending notification');
+    scheduleDailyNotifications('حديث اليوم', 'صل على نبينا محمد - \nلا تنسى أذكار الصباح و المساء', 5, 17);
   }
 
   void sendNotification(String title, String body) async{
@@ -37,7 +38,7 @@ class NotificationsServices {
     );
 
     await _flutterLocalNotificationsPlugin.show(
-      0,
+      3,
       title,
       body,
       notificationDetails,
@@ -60,7 +61,7 @@ class NotificationsServices {
       android: androidNotificationDetails,
     );
 
-    await _flutterLocalNotificationsPlugin.periodicallyShow(0, title, body, RepeatInterval.daily
+    await _flutterLocalNotificationsPlugin.periodicallyShow(4, title, body, RepeatInterval.daily
         , notificationDetails);
   }
 
@@ -73,8 +74,8 @@ class NotificationsServices {
 
     // Calculate the time for the notifications
     tz.TZDateTime now = tz.TZDateTime.now(local);
-    tz.TZDateTime scheduledTimeMorning = tz.TZDateTime(local, now.year, now.month, now.day, firstHour);
-    // tz.TZDateTime scheduledTimeEvening = tz.TZDateTime(local, now.year, now.month, now.day, secondHour, 58);
+    // tz.TZDateTime scheduledTimeMorning = tz.TZDateTime(local, now.year, now.month, now.day, firstHour);
+    tz.TZDateTime scheduledTimeEvening = tz.TZDateTime(local, now.year, now.month, now.day, firstHour);
 
     // Schedule the notifications
     AndroidNotificationDetails androidNotificationDetails =
@@ -84,29 +85,27 @@ class NotificationsServices {
       importance: Importance.max,
       priority: Priority.high,
       playSound: true,
-      // icon: 'logo',
-      // sound: RawResourceAndroidNotificationSound('notification'),
+      icon: 'logo',
     );
 
     NotificationDetails notificationDetails = NotificationDetails(
       android: androidNotificationDetails,
     );
 
-    await _flutterLocalNotificationsPlugin.zonedSchedule(
-      0, title, body, scheduledTimeMorning, notificationDetails,
-      uiLocalNotificationDateInterpretation:
-      UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-    );
-
     // await _flutterLocalNotificationsPlugin.zonedSchedule(
-    //   1, title, body, scheduledTimeEvening, notificationDetails,
+    //   0, title, body, scheduledTimeMorning, notificationDetails,
     //   uiLocalNotificationDateInterpretation:
     //   UILocalNotificationDateInterpretation.absoluteTime,
     //   matchDateTimeComponents: DateTimeComponents.time,
     //   androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     // );
+    await _flutterLocalNotificationsPlugin.zonedSchedule(
+      1, title, body, scheduledTimeEvening, notificationDetails,
+      uiLocalNotificationDateInterpretation:
+      UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    );
   }
 
   void stopNotification() async{

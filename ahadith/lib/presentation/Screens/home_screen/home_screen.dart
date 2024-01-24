@@ -74,14 +74,16 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Stack(
         children: [
-          BlurredContainer(
-            child: SizedBox(
-              // color: Colors.black,
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: Image.asset(
-                widget.themeManager.bgImage,
-                fit: BoxFit.cover,
+          SingleChildScrollView(
+            child: BlurredContainer(
+              child: SizedBox(
+                // color: Colors.black,
+                height: MediaQuery.of(context).size.height*0.97,
+                width: MediaQuery.of(context).size.width,
+                child: Image.asset(
+                  widget.themeManager.bgImage,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),

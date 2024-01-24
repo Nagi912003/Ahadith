@@ -49,8 +49,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<CategoriesCubit>(context).getAllCategories();
-    // Provider.of<FavoritesAndSavedProvider>(context, listen: false)
-    //     .buildInvertedIndex();
   }
 
   @override
@@ -59,7 +57,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     super.didChangeDependencies();
   }
 
-  bool _showingAll = true;
+  bool _showingAll = false;
   bool _showingSaved = false;
 
   final ExpansionTileController _savedExpansionTileController =
@@ -146,7 +144,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           collapsedIconColor:
                               widget.themeManager.appPrimaryColorInverse,
                           title: Text(
-                            'المحفوظات',
+                            'الأحاديث المحفوظة',
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           children: [
@@ -178,44 +176,51 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           iconColor: widget.themeManager.appPrimaryColor200,
                           collapsedIconColor:
                               widget.themeManager.appPrimaryColor200,
-                          title: Row(
-                            children: [
-                              Text(
-                                'الفئات',
-                                style: Theme.of(context).textTheme.titleLarge,
+                          title: Container(
+                            width: 1.sw,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'فئات موسوعة الأحاديث',
+                                    style: Theme.of(context).textTheme.titleLarge,
+                                  ),
+                                  Text(
+                                    '          ',
+                                    // '         HadeethEnc.com      ',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12.sp,
+                                    ),
+                                  ),
+                                  OfflineBuilder(
+                                    connectivityBuilder: (
+                                      BuildContext context,
+                                      ConnectivityResult connectivity,
+                                      Widget child,
+                                    ) {
+                                      final bool connected =
+                                          connectivity != ConnectivityResult.none;
+                                      if (connected) {
+                                        return const Icon(
+                                          Icons.wifi,
+                                          color: Colors.green,
+                                        );
+                                      } else {
+                                        return Icon(
+                                          Icons.wifi_off_rounded,
+                                          color: Colors.red[200],
+                                        );
+                                      }
+                                    },
+                                    child: RefreshProgressIndicator(
+                                      color: widget.themeManager.appPrimaryColor,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                '         HadeethEnc.com      ',
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12.sp,
-                                ),
-                              ),
-                              OfflineBuilder(
-                                connectivityBuilder: (
-                                  BuildContext context,
-                                  ConnectivityResult connectivity,
-                                  Widget child,
-                                ) {
-                                  final bool connected =
-                                      connectivity != ConnectivityResult.none;
-                                  if (connected) {
-                                    return const Icon(
-                                      Icons.wifi,
-                                      color: Colors.green,
-                                    );
-                                  } else {
-                                    return Icon(
-                                      Icons.wifi_off_rounded,
-                                      color: Colors.red[200],
-                                    );
-                                  }
-                                },
-                                child: RefreshProgressIndicator(
-                                  color: widget.themeManager.appPrimaryColor,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                           children: [
                             OfflineBuilder(
@@ -454,6 +459,22 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   .toList(),
             ),
           ),
+          ListTile(
+            leading: IconButton(
+              icon: Icon(
+                Icons.notifications,
+                color: widget.themeManager.appPrimaryColor200,
+                size: 30.sp,
+              ),
+              onPressed: () {
+                NotificationsServices notificationsServices =
+                NotificationsServices();
+                // notificationsServices.sendNotification('حديث اليوم', 'لا تنسى أذكار الصباح و المساء');
+                notificationsServices.sendNotification('حديث اليوم', 'صل على نبينا محمد - \nلا تنسى أذكار الصباح و المساء');
+              },
+            ),
+            onTap: null,
+          ),
         ]),
       ),
     );
@@ -594,14 +615,14 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               items: [
                 PopupMenuItem(
                   value: 1,
-                  child: const Text('البحث في الكل'),
+                  child: Text('البحث عن فئة أحاديث', style: TextStyle(fontSize: 20+widget.themeManager.fontSize),),
                   onTap: () {
                     _startSearch(1);
                   },
                 ),
                 PopupMenuItem(
                   value: 2,
-                  child: const Text('البحث في المحفوظات'),
+                  child: Text('البحث عن حديث في المحفوظات' , style: TextStyle(fontSize: 20+widget.themeManager.fontSize),),
                   onTap: () {
                     _startSearch(2);
                   },
@@ -613,23 +634,29 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   }
 
   Widget OurAppbar() {
-    return Row(
-      children: [
-        Text(
-          HijriCalendar.now().toFormat("MMMM dd yyyy"),
-          style: TextStyle(
-            fontSize: 18.sp,
-            color: Theme.of(context).textTheme.bodySmall!.color,
-          ),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Container(
+        width: 0.75.sw,
+        child: Row(
+          children: [
+            Text(
+              HijriCalendar.now().toFormat('dd MMMM yyyy'),
+              style: TextStyle(
+                fontSize: 18.sp,
+                color: Theme.of(context).textTheme.bodySmall!.color,
+              ),
+            ),
+            const Spacer(),
+            Text(
+              appName,
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(width: 10),
+            _buildAppBarActions(),
+          ],
         ),
-        const Spacer(),
-        Text(
-          appName,
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        const Spacer(),
-        _buildAppBarActions(),
-      ],
+      ),
     );
   }
 

@@ -85,9 +85,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                 scaffoldKey.currentState!.openDrawer();
                 setState(() {});
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.menu,
-                size: 35.w,
+                size: 35,
               ),
             ),
           ),
@@ -105,7 +105,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               },
               icon: Icon(
                 Icons.keyboard_arrow_up_rounded,
-                size: 35.w,
+                size: 35,
                 color: widget.themeManager.appPrimaryColor200,
               ),
             ),
@@ -121,13 +121,13 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     },
                     icon: Icon(
                       Icons.share_outlined,
-                      size: 35.w,
+                      size: 35,
                       color: widget.themeManager.appPrimaryColor200,
                     ),
                   )
-                : Icon(
+                : const Icon(
                     Icons.share_outlined,
-                    size: 35.w,
+                    size: 35,
                     color: Colors.grey,
                   ),
           ),

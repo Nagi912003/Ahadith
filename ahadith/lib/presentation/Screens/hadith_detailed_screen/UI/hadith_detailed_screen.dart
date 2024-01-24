@@ -74,14 +74,14 @@ class _HadithDetailedScreenState extends State<HadithDetailedScreen> {
                       SizedBox(height: 10.h),
                     if (state.hadith.wordsMeanings!.isNotEmpty)
                       buildCard(
-                          ': معانى الكلمات\n ',
+                          'معانى الكلمات : ',
                           state.hadith.wordsMeanings!.toList().toString(),
                           false,
                           context,
                           widget.themeManager),
                     SizedBox(height: 10.h),
                     buildCard(
-                        ': الدروس المستفادة\n ',
+                        'الدروس المستفادة : ',
                         state.hadith.hints.toString(),
                         false,
                         context,

@@ -38,7 +38,7 @@ Widget buildDetailedHadith(DetailedHadith hadith, bool isFavorite,
             if (hadith.wordsMeanings!.isNotEmpty &&
                 hadith.wordsMeanings.toString().length > 10)
               buildCard(
-                  ': معانى الكلمات\n ',
+                  'معانى الكلمات : ',
                   hadith.wordsMeanings!.first.toString(),
                   false,
                   context,
@@ -46,7 +46,7 @@ Widget buildDetailedHadith(DetailedHadith hadith, bool isFavorite,
             if (hadith.hints != null && hadith.hints != [])
               SizedBox(height: 10.h),
             if (hadith.hints != null && hadith.hints != [])
-              buildCard(': الدروس المستفادة\n ', hadith.hints.toString(), false,
+              buildCard('الدروس المستفادة : ', hadith.hints.toString(), false,
                   context, themeManager),
             SizedBox(height: 10.h),
             isFavorite
@@ -58,7 +58,7 @@ Widget buildDetailedHadith(DetailedHadith hadith, bool isFavorite,
                     context,
                     themeManager)
                 : buildButton(
-                    'اضف للمفضله',
+                    'أضف للمفضلة',
                     favoriteIcon(isFavorite, context, themeManager),
                     onPressed,
                     true,
